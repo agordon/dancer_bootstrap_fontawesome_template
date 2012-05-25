@@ -25,28 +25,51 @@ Set this unofficial <a target="_blank" href="https://github.com/agordon/Dancer/b
 
 <div class="row">
 	<div class="span12">
-		<form class="form-horizontal">
+		<form class="form-horizontal" method="post" action="">
 			<fieldset>
 				<legend>Deployment Parameters</legend>
 				<div class="control-group">
 					<label class="control-label" for="input_hostname">Host name:</label>
 					<div class="controls">
-						<input type="text" class="input" id="input_hostname" value="[% hostname | html %]" />
+						<input type="text" class="input" id="input_hostname" name="input_hostname" value="[% hostname | html %]" />
 						<span class="help-inline"> (if you're running a virtual host)</span>
 					</div>
 					<br/>
 
-					<label class="control-label" for="input_source_directory">Project Directory:</label>
+					<label class="control-label" for="input_project_directory">Project Directory:</label>
 					<div class="controls">
-						<input type="text" class="input-xxlarge" id="input_source_directory" value="[% directory | html %]" />
+						<input type="text" class="input-xxlarge" id="input_project_directory" name="input_project_directory" value="[% directory | html %]" />
 					</div>
 					<br/>
 
 					<label class="control-label" for="input_proxy_port">Proxy port:</label>
 					<div class="controls">
-						<input type="text" class="input" id="input_proxy_port" value="[% proxy_port %]" />
+						<input type="text" class="input" id="input_proxy_port" name="input_proxy_port" value="[% proxy_port %]" />
 						<span class="help-inline"> (if you're using a proxy configuration)</span>
 					</div>
+
+					<label class="control-label" for="input_cgi_type">CGI type:</label>
+					<div class="controls">
+						<label class="radio">
+							<input type="radio" name="input_cgi_type" id="input_cgi_type1" value="fast" [% IF cgi_type=="fast" %]checked[% END %]/>
+								Fast-CGI
+						<span class="help-inline"> (if you're using a CGI configuration)</span>
+						</label>
+
+						<label class="radio">
+							<input type="radio" name="input_cgi_type" id="input_cgi_type1" value="standard" [% IF cgi_type=="standard" %]checked[% END %]/>
+								Standard
+						</label>
+					</div>
+
+					<label class="control-label" for="input_fast_static_files">Static files:</label>
+					<div class="controls">
+						<label class="checkbox">
+							<input type="checkbox" name="input_fast_static_files" id="input_fast_static_files" value="1" [% IF fast_static_files==1 %]checked[% END %] />
+							Bypass Dancer for static files
+							<span class="help-inline"> (much faster, but not supported on all server)</span>
+						</label>
+
 				</div>
 				<div class="form-actions">
 					<button type="submit" class="btn btn-primary">Update</button>
@@ -90,34 +113,41 @@ Set this unofficial <a target="_blank" href="https://github.com/agordon/Dancer/b
 
 	Alias / "[% directory | html %]"
         &lt;Directory "[% directory | html %]"&gt;
-                AddHandler cgi-script .cgi
+		[% IF cgi_type == "fast" %]
                 AddHandler fcgid-script .fcgi
+		[% ELSE %]
+                AddHandler cgi-script .cgi
+		[% END %]
                 AllowOverride None
                 Options +ExecCGI -MultiViews +SymLinksIfOwnerMatch
 
-		## TODO: choose between Fast-CGI and standard CGI - enable one of the two:
-                #DirectoryIndex dispatch.cgi
-                #DirectoryIndex dispatch.fcgi
+		[% IF cgi_type == "fast" %]
+                DirectoryIndex dispatch.fcgi
+		[% ELSE %]
+                DirectoryIndex dispatch.cgi
+		[% END %]
         &lt;/Directory&gt;
 
-	## Use the followings to let Apache server static content directly.
-
-	## TODO: Enable this if you're using standard CGI:
-	#ReWriteEngine On
-        #RewriteRule ^/dispatch\.cgi/images/(.*)      [% directory | html %]/images/$1 [L]
-        #RewriteRule ^/dispatch\.cgi/css/(.*)         [% directory | html %]/css/$1 [L]
-        #RewriteRule ^/dispatch\.cgi/javascripts/(.*) [% directory | html %]/javascripts/$1 [L]
-        #RewriteRule ^/dispatch\.cgi/bootstrap/(.*)   [% directory | html %]/bootstrap/$1 [L]
-        #RewriteRule ^/dispatch\.cgi/fontawesome/(.*) [% directory | html %]/fontawesome/$1 [L]
-
-	## TODO: Enable this if you're using Fast-CGI:
-	#ReWriteEngine On
-        #RewriteRule ^/dispatch\.fcgi/images/(.*)      [% directory | html %]/images/$1 [L]
-        #RewriteRule ^/dispatch\.fcgi/css/(.*)         [% directory | html %]/css/$1 [L]
-        #RewriteRule ^/dispatch\.fcgi/javascripts/(.*) [% directory | html %]/javascripts/$1 [L]
-        #RewriteRule ^/dispatch\.fcgi/bootstrap/(.*)   [% directory | html %]/bootstrap/$1 [L]
-        #RewriteRule ^/dispatch\.fcgi/fontawesome/(.*) [% directory | html %]/fontawesome/$1 [L]
 &lt;/VirtualHost&gt;
+
+	[% IF fast_static_files %]
+## Use the followings to let Apache server static content directly.
+# ReWriteEngine On
+	[% IF cgi_type == "fast" %]
+RewriteRule ^/dispatch\.fcgi/images/(.*)      [% directory | html %]/images/$1 [L]
+RewriteRule ^/dispatch\.fcgi/css/(.*)         [% directory | html %]/css/$1 [L]
+RewriteRule ^/dispatch\.fcgi/javascripts/(.*) [% directory | html %]/javascripts/$1 [L]
+RewriteRule ^/dispatch\.fcgi/bootstrap/(.*)   [% directory | html %]/bootstrap/$1 [L]
+RewriteRule ^/dispatch\.fcgi/fontawesome/(.*) [% directory | html %]/fontawesome/$1 [L]
+	[% ELSE %]
+RewriteRule ^/dispatch\.cgi/images/(.*)      [% directory | html %]/images/$1 [L]
+RewriteRule ^/dispatch\.cgi/css/(.*)         [% directory | html %]/css/$1 [L]
+RewriteRule ^/dispatch\.cgi/javascripts/(.*) [% directory | html %]/javascripts/$1 [L]
+RewriteRule ^/dispatch\.cgi/bootstrap/(.*)   [% directory | html %]/bootstrap/$1 [L]
+RewriteRule ^/dispatch\.cgi/fontawesome/(.*) [% directory | html %]/fontawesome/$1 [L]
+	[% END -%]
+	[% END # if fast-static-files -%]
+ 
 				</pre>
 			</div>
 		
