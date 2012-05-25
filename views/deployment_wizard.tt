@@ -1,0 +1,117 @@
+<!-- BootStrap NavBar -->
+<div class="navbar">
+  <div class="navbar-inner">
+    <div class="container">
+	<h3><a class="brand" href="http://perldancer.org"><img src="images/dancer_man.png"> Perl Dancer - Deployment Wizard</a></h3>
+    </div>
+  </div>
+</div>
+
+
+
+<!-- Main content -->
+
+
+<!-- HEADER line -->
+<div class="container">
+
+<div class="page-header">
+<h1>Deployment Wizard</h1>
+<br/>
+You will likely need to adjust these suggestions to match your server's settings.
+<br/>
+Set this unofficial <a target="_blank" href="https://github.com/agordon/Dancer/blob/topic/deployment_pod/lib/Dancer/Deployment.pod">Deployment POD</a> for more details and options.
+</div>
+
+<div class="row">
+	<div class="span12">
+		<form class="form-horizontal">
+			<fieldset>
+				<legend>Deployment Parameters</legend>
+				<div class="control-group">
+					<label class="control-label" for="input_hostname">Host name:</label>
+					<div class="controls">
+						<input type="text" class="input" id="input_hostname" value="[% hostname %]" />
+						<span class="help-inline"> (if you're running a virtual host)</span>
+					</div>
+					<br/>
+
+					<label class="control-label" for="input_source_directory">Project Directory:</label>
+					<div class="controls">
+						<input type="text" class="input-xxlarge" id="input_source_directory" value="[% directory %]" />
+					</div>
+					<br/>
+
+					<label class="control-label" for="input_proxy_port">Proxy port:</label>
+					<div class="controls">
+						<input type="text" class="input" id="input_proxy_port" value="[% proxy_port %]" />
+						<span class="help-inline"> (if you're using a proxy configuration)</span>
+					</div>
+				</div>
+				<div class="form-actions">
+					<button type="submit" class="btn btn-primary">Update</button>
+				</div>
+			</fieldset>
+		</form>
+	</div>
+</div>
+
+<hr/>
+
+<div class="row">
+	<div class="span4">
+		<h3>Choose Wisely:</h3>
+		<ul class="nav nav-pills nav-stacked" id="deployment_tabs">
+			<li class="active" ><a href="#apache_cgi" data-toggle="tab">Apache + CGI</a></li>
+			<li class=""><a href="#apache_mod_proxy" data-toggle="tab">Apache + mod_proxy</a></li>
+			<li class=""><a href="#apache_mod_rewrite" data-toggle="tab">Apache + mod_rewrite</a></li>
+			<li class=""><a href="#apache_mod_psgi" data-toggle="tab">Apache + mod_psgi</a></li>
+			<li class=""><a href="#apache_plack" data-toggle="tab">Apache + Plack::Handle</a></li>
+			<li class=""><a href="#lighttpd_cgi" data-toggle="tab">lighttpd + CGI</a></li>
+			<li class=""><a href="#lighttpd_proxy" data-toggle="tab">lighttpd + Proxy</a></li>
+			<li class=""><a href="#nginx_proxy" data-toggle="tab">nginx + Proxy</a></li>
+		</ul>
+	</div>
+
+	<div class="span8">
+		<br/>
+		<br/>
+		<br/>
+		<div class="tab-content" id="deployment_tab_content">
+			<div class="tab-pane active" id="apache_cgi">
+				Apache + CGI
+			</div>
+		
+			<div class="tab-pane" id="apache_mod_proxy">
+				Apache + mod_proxy
+			</div>
+
+			<div class="tab-pane" id="apache_mod_rewrite">
+				Apache + mod_rewrite
+			</div>
+
+			<div class="tab-pane" id="apache_mod_psgi">
+				Apache + mod_psgi
+			</div>
+
+			<div class="tab-pane" id="apache_plack">
+				Apache + plack
+			</div>
+
+			<div class="tab-pane" id="lighttpd_cgi">
+				lighttpd + cgi
+			</div>
+
+			<div class="tab-pane" id="lighttpd_proxy">
+				lighttpd + Proxy
+			</div>
+
+			<div class="tab-pane" id="nginx_proxy">
+				nginx + Proxy
+			</div>
+		</div>
+	</div>
+
+</div>
+
+</div> <!-- container -->
