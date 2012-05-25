@@ -147,6 +147,11 @@ $ ./bin/app.pl
 	</div>
 
 	<div class="span3">
+		<h2><i class="icon-road icon-large"></i> Deploy</h2>
+		Try the Dancing <a href="[% request.uri_base %]/deploy">Deployment wizard</a>.
+
+		<br/>
+		<br/>
 		<h2><i class="icon-github-sign icon-large"></i> Fork me</h2>
 		<a target="_blank" href="https://github.com/agordon/dancer_bootstrap_fontawesome_template">GitHub repository</a>
 

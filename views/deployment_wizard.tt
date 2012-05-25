@@ -31,14 +31,14 @@ Set this unofficial <a target="_blank" href="https://github.com/agordon/Dancer/b
 				<div class="control-group">
 					<label class="control-label" for="input_hostname">Host name:</label>
 					<div class="controls">
-						<input type="text" class="input" id="input_hostname" value="[% hostname %]" />
+						<input type="text" class="input" id="input_hostname" value="[% hostname | html %]" />
 						<span class="help-inline"> (if you're running a virtual host)</span>
 					</div>
 					<br/>
 
 					<label class="control-label" for="input_source_directory">Project Directory:</label>
 					<div class="controls">
-						<input type="text" class="input-xxlarge" id="input_source_directory" value="[% directory %]" />
+						<input type="text" class="input-xxlarge" id="input_source_directory" value="[% directory | html %]" />
 					</div>
 					<br/>
 
@@ -74,44 +74,90 @@ Set this unofficial <a target="_blank" href="https://github.com/agordon/Dancer/b
 	</div>
 
 	<div class="span8">
-		<br/>
-		<br/>
-		<br/>
+		<h4>Apache + CGI</h4>
 		<div class="tab-content" id="deployment_tab_content">
 			<div class="tab-pane active" id="apache_cgi">
-				Apache + CGI
+				<pre>
+
+&lt;VirtualHost *:80&gt;
+	ServerName [% hostname | html%]
+	ServerAdmin root@[%hostname | html%]
+
+	ErrorLog logs/[% hostname | html %]_error_log
+	TransferLog logs/[% hostname | html %]_access_log
+	LogLevel warn
+
+
+	Alias / "[% directory | html %]"
+        &lt;Directory "[% directory | html %]"&gt;
+                AddHandler cgi-script .cgi
+                AddHandler fcgid-script .fcgi
+                AllowOverride None
+                Options +ExecCGI -MultiViews +SymLinksIfOwnerMatch
+
+		## TODO: choose between Fast-CGI and standard CGI - enable one of the two:
+                #DirectoryIndex dispatch.cgi
+                #DirectoryIndex dispatch.fcgi
+        &lt;/Directory&gt;
+
+	## Use the followings to let Apache server static content directly.
+
+	## TODO: Enable this if you're using standard CGI:
+	#ReWriteEngine On
+        #RewriteRule ^/dispatch\.cgi/images/(.*)      [% directory | html %]/images/$1 [L]
+        #RewriteRule ^/dispatch\.cgi/css/(.*)         [% directory | html %]/css/$1 [L]
+        #RewriteRule ^/dispatch\.cgi/javascripts/(.*) [% directory | html %]/javascripts/$1 [L]
+        #RewriteRule ^/dispatch\.cgi/bootstrap/(.*)   [% directory | html %]/bootstrap/$1 [L]
+        #RewriteRule ^/dispatch\.cgi/fontawesome/(.*) [% directory | html %]/fontawesome/$1 [L]
+
+	## TODO: Enable this if you're using Fast-CGI:
+	#ReWriteEngine On
+        #RewriteRule ^/dispatch\.fcgi/images/(.*)      [% directory | html %]/images/$1 [L]
+        #RewriteRule ^/dispatch\.fcgi/css/(.*)         [% directory | html %]/css/$1 [L]
+        #RewriteRule ^/dispatch\.fcgi/javascripts/(.*) [% directory | html %]/javascripts/$1 [L]
+        #RewriteRule ^/dispatch\.fcgi/bootstrap/(.*)   [% directory | html %]/bootstrap/$1 [L]
+        #RewriteRule ^/dispatch\.fcgi/fontawesome/(.*) [% directory | html %]/fontawesome/$1 [L]
+&lt;/VirtualHost&gt;
+				</pre>
 			</div>
 		
 			<div class="tab-pane" id="apache_mod_proxy">
-				Apache + mod_proxy
+				<span class="label label-important">TODO:</span> Apache + mod_proxy
 			</div>
 
 			<div class="tab-pane" id="apache_mod_rewrite">
-				Apache + mod_rewrite
+				<span class="label label-important">TODO:</span> Apache + mod_rewrite
 			</div>
 
 			<div class="tab-pane" id="apache_mod_psgi">
-				Apache + mod_psgi
+				<span class="label label-important">TODO:</span> Apache + mod_psgi
 			</div>
 
 			<div class="tab-pane" id="apache_plack">
-				Apache + plack
+				<span class="label label-important">TODO:</span> Apache + plack
 			</div>
 
 			<div class="tab-pane" id="lighttpd_cgi">
-				lighttpd + cgi
+				<span class="label label-important">TODO:</span> lighttpd + cgi
 			</div>
 
 			<div class="tab-pane" id="lighttpd_proxy">
-				lighttpd + Proxy
+				<span class="label label-important">TODO:</span> lighttpd + Proxy
 			</div>
 
 			<div class="tab-pane" id="nginx_proxy">
-				nginx + Proxy
+				<span class="label label-important">TODO:</span> nginx + Proxy
 			</div>
 		</div>
 	</div>
 
 </div>
+
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
 
 </div> <!-- container -->
