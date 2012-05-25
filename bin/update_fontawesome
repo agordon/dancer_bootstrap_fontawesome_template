@@ -1,0 +1,45 @@
+#!/bin/sh
+
+SCRIPT=$(readlink -f "$0") || exit 1
+DANCER_BASE_DIR=$(dirname $(dirname "$SCRIPT")) || exit 1
+DANCER_PUBLIC="$DANCER_BASE_DIR/public"
+
+## Some sanity checks, make sure we're in a dancer directory
+if ! [ -e "$DANCER_BASE_DIR/config.yml" ]  ;
+then
+	echo "Error: directory '$DANCER_BASE_DIR' doesn't look like a Dancer directory (can't find 'config.yml' file." >&2
+	exit 1
+fi
+
+if ! [ -d "$DANCER_PUBLIC" ] ;
+then
+	echo "Error: can't find Dancer's 'public' directory in '$DANCER_PUBLIC'" >&2
+	exit 1
+fi
+
+
+cd "$DANCER_PUBLIC" || exit 1
+
+## Move aside the old "bootstrap" directory
+if [ -d "fontawesome" ]; then
+	echo "Moving aside old fontawesome directory..."
+	mv "fontawesome" "fontawesome.$(date +%F).old" || exit 1
+fi
+
+## delete the old fontawesome zipball, if exists
+rm -f "fontawesome"
+
+## Download the latest fontawesome
+echo "Downloading latest fontawesome"
+wget --quiet -O fontawesome.zip https://github.com/FortAwesome/Font-Awesome/zipball/master || exit 1
+echo "Unzipping..."
+unzip -q fontawesome.zip || exit 1
+
+## Hackish tweak: detect the name of the unzip'd directory, and rename it to a fixed name
+NEWDIR=$(ls -d FortAwesome-Font-Awesome-*) || exit 1
+mv "$NEWDIR" "fontawesome" || exit 1
+
+#delete the zipball
+rm fontawesome.zip || exit 1
+
+echo "Done - Font-Awesome is updated."

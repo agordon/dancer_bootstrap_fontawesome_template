@@ -1,0 +1,6 @@
+
+.*.swp
+*~
+
+public/bootstrap*
+public/fontawesome*

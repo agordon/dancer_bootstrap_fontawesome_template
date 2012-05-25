@@ -14,16 +14,10 @@ layout: "main"
 # about unicode within your app when this setting is set (recommended).
 charset: "UTF-8"
 
-# template engine
-# simple: default and very basic template engine
-# template_toolkit: TT
-
-template: "simple"
-
-# template: "template_toolkit"
-# engines:
-#   template_toolkit:
-#     encoding:  'utf8'
-#     start_tag: '[%'
-#     end_tag:   '%]'
+template: "template_toolkit"
+engines:
+   template_toolkit:
+     encoding:  'utf8'
+     start_tag: '[%'
+     end_tag:   '%]'
 
