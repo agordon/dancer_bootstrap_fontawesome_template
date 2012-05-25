@@ -75,7 +75,10 @@
 
 	<div class="span4">
 		<h2><i class="icon-music icon-large"></i> Dancer inside</h2>
-		What more could you ask for?
+		<a href="http://perldancer.org" target="_blank">What more could you ask for?
+		<br/>
+		<img src="images/dancer_star.png">
+		</a>
 	</div>
 
 	<div class="span4">
@@ -85,4 +88,79 @@
 	</div>
 </div>
 
+<br/>
+<br/>
+
+
+<div class="page-header">
+	<div class="row">
+		<div class="span12">
+			<h1>Technical Stuff</h1>
+		</div>
+	</div>
+</div>
+
+
+<div class="row">
+	<div class="span12">
+		<h2><i class="icon-share-alt icon-large"></i> Start here</h2>
+
+		<ol>
+			<li><a href="https://github.com/agordon/dancer_bootstrap_fontawesome_template/zipball/master">Download</a> the latest template files</li>
+			<li>Extract the files</li>
+			<li>run <code>update_bootstrap</code> and <code>update_fontawesome</code> to download the latest versions</li>
+			<li>run <code>./bin/app.pl</code> (in the usual Dancer way)</li>
+		</ol>
+
+		<pre>
+$ wget -O dancer.zip https://github.com/agordon/dancer_bootstrap_fontawesome_template/zipball/master
+$ unzip dancer.zip
+$ cd agordon-dancer_bootstrap_fontawesome_template-*
+$ ./bin/update_bootstrap
+$ ./bin/update_fontawesome
+$ ./bin/app.pl
+## and visit http://localhost:3000 to dance
+		</pre>
+	</div>
+</div>
+
+<br/>
+<br/>
+
+
+<div class="row">
+	<div class="span9">
+		<h2><i class="icon-question-sign icon-large"></i> How to</h2>
+		<ul>
+			<li>Learn about Dancer: <a target="_blank" href="http://perldancer.org">http://perldancer.org</a></li>
+			<li>Learn about Bootstrap's CSS: <a target="_blank" href="http://twitter.github.com/bootstrap/index.html">http://twitter.github.com/bootstrap/index.html</a></li>
+			<li>Learn about Font-Awesome: <a target="_blank" href="http://fortawesome.github.com/Font-Awesome">http://fortawesome.github.com/Font-Awesome</a></li>
+
+			<li>Override Bootstrap's CSS settings: change <code>&lt;dancer_directory&gt;/public/css/style.css</code> - it will be loaded <b>after</b> Bootstrap's CSS.</li>
+			<li>Tweak the CSS/JS loading: see <code>&lt;dancer_directory&gt;/views/layout/main.tt</code></li>
+			<li>Add Javascript code to be loaded when the document is ready: see <code>&lt;dancer_directory&gt;/views/layout/main.tt</code> (the <code>&lt;javascript&gt;</code> at the bottom).</li>
+			<li>Update bootstrap: run <code>&lt;dancer_directory&gt;/bin/update_bootstrap</code></li>
+			<li>Update Font-Awesome: run <code>&lt;dancer_directory&gt;/bin/update_fontawesome</code></li>
+			<li>Update JQuery: You'll have to do it manually. See the <a href="https://github.com/agordon/dancer_bootstrap_fontawesome_template/blob/master/README" target="_blank">README</a> file.</li>
+		</ul>
+
+	</div>
+
+	<div class="span3">
+		<h2><i class="icon-github-sign icon-large"></i> Fork me</h2>
+		<a target="_blank" href="https://github.com/agordon/dancer_bootstrap_fontawesome_template">GitHub repository</a>
+
+		<br/>
+		<br/>
+
+		<h2><i class="icon-envelope icon-large"></i> Email me</h2>
+		<a target="_blank" href="mailto: gordon at cshl dot edu">gordon at cshl dot edu</a>
+	</div>
+
+</div>
+
+<br/>
+<br/>
+<br/>
+<br/>
 </div>
