@@ -31,7 +31,7 @@ rm -f "fontawesome"
 
 ## Download the latest fontawesome
 echo "Downloading latest fontawesome"
-wget --quiet -O fontawesome.zip https://github.com/FortAwesome/Font-Awesome/zipball/master || exit 1
+wget --no-verbose --no-check-certificate -O fontawesome.zip https://github.com/FortAwesome/Font-Awesome/zipball/master || exit 1
 echo "Unzipping..."
 unzip -q fontawesome.zip || exit 1
 

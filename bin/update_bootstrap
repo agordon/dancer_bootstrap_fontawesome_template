@@ -31,7 +31,7 @@ rm -f "bootstrap.zip"
 
 ## Download the latest bootstrap
 echo "Downloading latest bootstrap..."
-wget --quiet http://twitter.github.com/bootstrap/assets/bootstrap.zip || exit 1
+wget --no-verbose --no-check-certificate http://twitter.github.com/bootstrap/assets/bootstrap.zip || exit 1
 echo "Unzipping..."
 unzip -q bootstrap.zip || exit 1
 
