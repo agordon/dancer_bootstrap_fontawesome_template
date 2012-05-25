@@ -10,18 +10,13 @@
 <title>dancer_bootstrap_fontawesome_template</title>
 
 <link rel="stylesheet" href="[% request.uri_base %]/bootstrap/css/bootstrap.css" >
-<link rel="stylesheet" href="[% request.uri_base %]/fontawesome/css/font-awesome.css">
+<link rel="stylesheet" href="[% request.uri_base %]/fontawesome/css/font-awesome.css" >
 <link rel="stylesheet" href="[% request.uri_base %]/css/style.css" >
 
 </head>
 <body>
 
 [% content %]
-
-<div id="footer">
-Powered by <a href="http://perldancer.org/">Dancer</a> [% dancer_version %]
-</div>
-
 
 <script src="custom/js/jquery-1.7.2.min.js"></script>
 <script src="bootstrap/js/bootstrap.min.js"></script>
