@@ -97,19 +97,13 @@ Set this unofficial <a target="_blank" href="https://github.com/agordon/Dancer/b
 	</div>
 
 	<div class="span8">
-		<h4>Apache + CGI</h4>
 		<div class="tab-content" id="deployment_tab_content">
 			<div class="tab-pane active" id="apache_cgi">
+				<h4>Apache + CGI</h4>
 				<pre>
 
 &lt;VirtualHost *:80&gt;
 	ServerName [% hostname | html%]
-	ServerAdmin root@[%hostname | html%]
-
-	ErrorLog logs/[% hostname | html %]_error_log
-	TransferLog logs/[% hostname | html %]_access_log
-	LogLevel warn
-
 
 	Alias / "[% directory | html %]"
         &lt;Directory "[% directory | html %]"&gt;
@@ -118,7 +112,6 @@ Set this unofficial <a target="_blank" href="https://github.com/agordon/Dancer/b
 		[% ELSE %]
                 AddHandler cgi-script .cgi
 		[% END %]
-                AllowOverride None
                 Options +ExecCGI -MultiViews +SymLinksIfOwnerMatch
 
 		[% IF cgi_type == "fast" %]
@@ -132,7 +125,7 @@ Set this unofficial <a target="_blank" href="https://github.com/agordon/Dancer/b
 
 	[% IF fast_static_files %]
 ## Use the followings to let Apache server static content directly.
-# ReWriteEngine On
+RewriteEngine On
 	[% IF cgi_type == "fast" %]
 RewriteRule ^/dispatch\.fcgi/images/(.*)      [% directory | html %]/images/$1 [L]
 RewriteRule ^/dispatch\.fcgi/css/(.*)         [% directory | html %]/css/$1 [L]
@@ -152,11 +145,60 @@ RewriteRule ^/dispatch\.cgi/fontawesome/(.*) [% directory | html %]/fontawesome/
 			</div>
 		
 			<div class="tab-pane" id="apache_mod_proxy">
-				<span class="label label-important">TODO:</span> Apache + mod_proxy
+				<h4>Apache + mod_proxy</h4>
+				<pre>
+
+&lt;VirtualHost *:80&gt;
+	ServerName [% hostname | html%]
+
+	Alias / "[% directory | html %]"
+        &lt;Directory "[% directory | html %]"&gt;
+                AllowOverride None
+        &lt;/Directory&gt;
+&lt;/VirtualHost&gt;
+
+ProxyPass / http://localhost:[% proxy_port | html %]/
+ProxyPassReverse / http://localhost:[% proxy_port | html %]/
+
+	[% IF fast_static_files %]
+## Use the followings to let Apache server static content directly.
+RewriteEngine On
+RewriteRule ^/images/(.*)      [% directory | html %]/images/$1 [L]
+RewriteRule ^/css/(.*)         [% directory | html %]/css/$1 [L]
+RewriteRule ^/javascripts/(.*) [% directory | html %]/javascripts/$1 [L]
+RewriteRule ^/bootstrap/(.*)   [% directory | html %]/bootstrap/$1 [L]
+RewriteRule ^/fontawesome/(.*) [% directory | html %]/fontawesome/$1 [L]
+	[% END # if fast-static-files -%]
+
+				</pre>
 			</div>
 
 			<div class="tab-pane" id="apache_mod_rewrite">
-				<span class="label label-important">TODO:</span> Apache + mod_rewrite
+				<h4>Apache + mod_rewrite</h4>
+				<pre>
+
+&lt;VirtualHost *:80&gt;
+	ServerName [% hostname | html%]
+
+	Alias / "[% directory | html %]"
+        &lt;Directory "[% directory | html %]"&gt;
+                AllowOverride None
+        &lt;/Directory&gt;
+&lt;/VirtualHost&gt;
+
+	[% IF fast_static_files %]
+## Use the followings to let Apache server static content directly.
+RewriteEngine On
+RewriteRule ^/images/(.*)      [% directory | html %]/images/$1 [L]
+RewriteRule ^/css/(.*)         [% directory | html %]/css/$1 [L]
+RewriteRule ^/javascripts/(.*) [% directory | html %]/javascripts/$1 [L]
+RewriteRule ^/bootstrap/(.*)   [% directory | html %]/bootstrap/$1 [L]
+RewriteRule ^/fontawesome/(.*) [% directory | html %]/fontawesome/$1 [L]
+	[% END # if fast-static-files -%]
+
+RewriteRule ^/(.*) http://localhost:[% proxy_port | html %]/$1 [P]
+
+				</pre>
 			</div>
 
 			<div class="tab-pane" id="apache_mod_psgi">
