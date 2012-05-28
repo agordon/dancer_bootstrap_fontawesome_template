@@ -86,8 +86,9 @@ Set this unofficial <a target="_blank" href="https://github.com/agordon/Dancer/b
 		<h3>Choose Wisely:</h3>
 		<ul class="nav nav-pills nav-stacked" id="deployment_tabs">
 			<li class="active" ><a href="#apache_cgi" data-toggle="tab">Apache + CGI</a></li>
+			<li class=""><a href="#apache_mod_rewrite_cgi" data-toggle="tab">Apache + mod_rewrite (CGI)</a></li>
 			<li class=""><a href="#apache_mod_proxy" data-toggle="tab">Apache + mod_proxy</a></li>
-			<li class=""><a href="#apache_mod_rewrite" data-toggle="tab">Apache + mod_rewrite</a></li>
+			<li class=""><a href="#apache_mod_rewrite_proxy" data-toggle="tab">Apache + mod_rewrite (Proxy)</a></li>
 			<li class=""><a href="#apache_mod_psgi" data-toggle="tab">Apache + mod_psgi</a></li>
 			<li class=""><a href="#apache_plack" data-toggle="tab">Apache + Plack::Handle</a></li>
 			<li class=""><a href="#lighttpd_cgi" data-toggle="tab">lighttpd + CGI</a></li>
@@ -142,6 +143,50 @@ RewriteRule ^/dispatch\.cgi/fontawesome/(.*) [% directory | html %]/public/fonta
 &lt;/VirtualHost&gt;
 				</pre>
 			</div>
+
+			<div class="tab-pane active" id="apache_mod_rewrite_cgi">
+				<h4>Apache + mod_rewrite (CGI)</h4>
+				<span class="label label-warnings">pros:</span> <code>/dispatch.cgi/XXXX/</code> will <b>not</b> be visible in the URL.<br/>
+				<br/>
+				
+				<pre>
+
+&lt;VirtualHost *:80&gt;
+	ServerName [% hostname | html%]
+
+	Alias / "[% directory | html %]/public/"
+        &lt;Directory "[% directory | html %]/public/"&gt;
+		AddHandler fcgid-script .fcgi
+		AddHandler cgi-script .cgi
+		Options +ExecCGI -MultiViews +SymLinksIfOwnerMatch
+[% IF cgi_type == "fast" -%]
+                DirectoryIndex dispatch.fcgi
+[% ELSE -%]
+		DirectoryIndex dispatch.cgi
+[% END -%]
+        &lt;/Directory&gt;
+
+## Use the followings to let Apache server static content directly.
+RewriteEngine On
+[% IF fast_static_files -%]
+RewriteRule ^/images/(.*)      [% directory | html %]/public/images/$1 [L]
+RewriteRule ^/css/(.*)         [% directory | html %]/public/css/$1 [L]
+RewriteRule ^/javascripts/(.*) [% directory | html %]/public/javascripts/$1 [L]
+RewriteRule ^/bootstrap/(.*)   [% directory | html %]/public/bootstrap/$1 [L]
+RewriteRule ^/fontawesome/(.*) [% directory | html %]/public/fontawesome/$1 [L]
+[% END # if fast-static-files -%]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+[% IF cgi_type == "fast" -%]
+RewriteRule ^/(.*) /home/gordon/projects/cshl_sso/public/dispatch.fcgi/$1 [QSA,L]
+[% ELSE -%]
+RewriteRule ^/(.*) /home/gordon/projects/cshl_sso/public/dispatch.cgi/$1 [QSA,L]
+[% END -%]
+
+ 
+&lt;/VirtualHost&gt;
+				</pre>
+			</div>
 		
 			<div class="tab-pane" id="apache_mod_proxy">
 				<h4>Apache + mod_proxy</h4>
@@ -172,8 +217,8 @@ RewriteRule ^/fontawesome/(.*) [% directory | html %]/public/fontawesome/$1 [L]
 				</pre>
 			</div>
 
-			<div class="tab-pane" id="apache_mod_rewrite">
-				<h4>Apache + mod_rewrite</h4>
+			<div class="tab-pane" id="apache_mod_rewrite_proxy">
+				<h4>Apache + mod_rewrite (Proxy)</h4>
 				<pre>
 
 &lt;VirtualHost *:80&gt;
