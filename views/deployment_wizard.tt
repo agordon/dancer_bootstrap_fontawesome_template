@@ -100,47 +100,46 @@ Set this unofficial <a target="_blank" href="https://github.com/agordon/Dancer/b
 		<div class="tab-content" id="deployment_tab_content">
 			<div class="tab-pane active" id="apache_cgi">
 				<h4>Apache + CGI</h4>
+				<span class="label label-info">pros:</span> Simple to setup and debug.<br/>
+				<span class="label label-warnings">cons:</span> <code>/dispatch.cgi/XXXX/</code> will be visible in the URL<br/>
+				<br/>
+				
 				<pre>
 
 &lt;VirtualHost *:80&gt;
 	ServerName [% hostname | html%]
 
-	Alias / "[% directory | html %]"
-        &lt;Directory "[% directory | html %]"&gt;
-		[% IF cgi_type == "fast" %]
-                AddHandler fcgid-script .fcgi
-		[% ELSE %]
-                AddHandler cgi-script .cgi
-		[% END %]
-                Options +ExecCGI -MultiViews +SymLinksIfOwnerMatch
-
-		[% IF cgi_type == "fast" %]
+	Alias / "[% directory | html %]/public/"
+        &lt;Directory "[% directory | html %]/public/"&gt;
+		AddHandler fcgid-script .fcgi
+		AddHandler cgi-script .cgi
+		Options +ExecCGI -MultiViews +SymLinksIfOwnerMatch
+[% IF cgi_type == "fast" -%]
                 DirectoryIndex dispatch.fcgi
-		[% ELSE %]
-                DirectoryIndex dispatch.cgi
-		[% END %]
+[% ELSE -%]
+		DirectoryIndex dispatch.cgi
+[% END -%]
         &lt;/Directory&gt;
 
-&lt;/VirtualHost&gt;
-
-	[% IF fast_static_files %]
+[% IF fast_static_files -%]
 ## Use the followings to let Apache server static content directly.
 RewriteEngine On
-	[% IF cgi_type == "fast" %]
-RewriteRule ^/dispatch\.fcgi/images/(.*)      [% directory | html %]/images/$1 [L]
-RewriteRule ^/dispatch\.fcgi/css/(.*)         [% directory | html %]/css/$1 [L]
-RewriteRule ^/dispatch\.fcgi/javascripts/(.*) [% directory | html %]/javascripts/$1 [L]
-RewriteRule ^/dispatch\.fcgi/bootstrap/(.*)   [% directory | html %]/bootstrap/$1 [L]
-RewriteRule ^/dispatch\.fcgi/fontawesome/(.*) [% directory | html %]/fontawesome/$1 [L]
-	[% ELSE %]
-RewriteRule ^/dispatch\.cgi/images/(.*)      [% directory | html %]/images/$1 [L]
-RewriteRule ^/dispatch\.cgi/css/(.*)         [% directory | html %]/css/$1 [L]
-RewriteRule ^/dispatch\.cgi/javascripts/(.*) [% directory | html %]/javascripts/$1 [L]
-RewriteRule ^/dispatch\.cgi/bootstrap/(.*)   [% directory | html %]/bootstrap/$1 [L]
-RewriteRule ^/dispatch\.cgi/fontawesome/(.*) [% directory | html %]/fontawesome/$1 [L]
-	[% END -%]
-	[% END # if fast-static-files -%]
+[% IF cgi_type == "fast" -%]
+RewriteRule ^/dispatch\.fcgi/images/(.*)      [% directory | html %]/public/images/$1 [L]
+RewriteRule ^/dispatch\.fcgi/css/(.*)         [% directory | html %]/public/css/$1 [L]
+RewriteRule ^/dispatch\.fcgi/javascripts/(.*) [% directory | html %]/public/javascripts/$1 [L]
+RewriteRule ^/dispatch\.fcgi/bootstrap/(.*)   [% directory | html %]/public/bootstrap/$1 [L]
+RewriteRule ^/dispatch\.fcgi/fontawesome/(.*) [% directory | html %]/public/fontawesome/$1 [L]
+[% ELSE -%]
+RewriteRule ^/dispatch\.cgi/images/(.*)      [% directory | html %]/public/images/$1 [L]
+RewriteRule ^/dispatch\.cgi/css/(.*)         [% directory | html %]/public/css/$1 [L]
+RewriteRule ^/dispatch\.cgi/javascripts/(.*) [% directory | html %]/public/javascripts/$1 [L]
+RewriteRule ^/dispatch\.cgi/bootstrap/(.*)   [% directory | html %]/public/bootstrap/$1 [L]
+RewriteRule ^/dispatch\.cgi/fontawesome/(.*) [% directory | html %]/public/fontawesome/$1 [L]
+[% END -%]
+[% END # if fast-static-files -%]
  
+&lt;/VirtualHost&gt;
 				</pre>
 			</div>
 		
@@ -151,25 +150,25 @@ RewriteRule ^/dispatch\.cgi/fontawesome/(.*) [% directory | html %]/fontawesome/
 &lt;VirtualHost *:80&gt;
 	ServerName [% hostname | html%]
 
-	Alias / "[% directory | html %]"
-        &lt;Directory "[% directory | html %]"&gt;
+	Alias / "[% directory | html %]/"
+        &lt;Directory "[% directory | html %]/"&gt;
                 AllowOverride None
         &lt;/Directory&gt;
-&lt;/VirtualHost&gt;
 
 ProxyPass / http://localhost:[% proxy_port | html %]/
 ProxyPassReverse / http://localhost:[% proxy_port | html %]/
 
-	[% IF fast_static_files %]
+[% IF fast_static_files -%]
 ## Use the followings to let Apache server static content directly.
 RewriteEngine On
-RewriteRule ^/images/(.*)      [% directory | html %]/images/$1 [L]
-RewriteRule ^/css/(.*)         [% directory | html %]/css/$1 [L]
-RewriteRule ^/javascripts/(.*) [% directory | html %]/javascripts/$1 [L]
-RewriteRule ^/bootstrap/(.*)   [% directory | html %]/bootstrap/$1 [L]
-RewriteRule ^/fontawesome/(.*) [% directory | html %]/fontawesome/$1 [L]
-	[% END # if fast-static-files -%]
+RewriteRule ^/images/(.*)      [% directory | html %]/public/images/$1 [L]
+RewriteRule ^/css/(.*)         [% directory | html %]/public/css/$1 [L]
+RewriteRule ^/javascripts/(.*) [% directory | html %]/public/javascripts/$1 [L]
+RewriteRule ^/bootstrap/(.*)   [% directory | html %]/public/bootstrap/$1 [L]
+RewriteRule ^/fontawesome/(.*) [% directory | html %]/public/fontawesome/$1 [L]
+[% END # if fast-static-files -%]
 
+&lt;/VirtualHost&gt;
 				</pre>
 			</div>
 
@@ -180,23 +179,24 @@ RewriteRule ^/fontawesome/(.*) [% directory | html %]/fontawesome/$1 [L]
 &lt;VirtualHost *:80&gt;
 	ServerName [% hostname | html%]
 
-	Alias / "[% directory | html %]"
-        &lt;Directory "[% directory | html %]"&gt;
+	Alias / "[% directory | html %]/"
+        &lt;Directory "[% directory | html %]/"&gt;
                 AllowOverride None
         &lt;/Directory&gt;
-&lt;/VirtualHost&gt;
 
-	[% IF fast_static_files %]
+[% IF fast_static_files -%]
 ## Use the followings to let Apache server static content directly.
 RewriteEngine On
-RewriteRule ^/images/(.*)      [% directory | html %]/images/$1 [L]
-RewriteRule ^/css/(.*)         [% directory | html %]/css/$1 [L]
-RewriteRule ^/javascripts/(.*) [% directory | html %]/javascripts/$1 [L]
-RewriteRule ^/bootstrap/(.*)   [% directory | html %]/bootstrap/$1 [L]
-RewriteRule ^/fontawesome/(.*) [% directory | html %]/fontawesome/$1 [L]
-	[% END # if fast-static-files -%]
+RewriteRule ^/images/(.*)      [% directory | html %]/public/images/$1 [L]
+RewriteRule ^/css/(.*)         [% directory | html %]/public/css/$1 [L]
+RewriteRule ^/javascripts/(.*) [% directory | html %]/public/javascripts/$1 [L]
+RewriteRule ^/bootstrap/(.*)   [% directory | html %]/public/bootstrap/$1 [L]
+RewriteRule ^/fontawesome/(.*) [% directory | html %]/public/fontawesome/$1 [L]
+[% END # if fast-static-files -%]
 
 RewriteRule ^/(.*) http://localhost:[% proxy_port | html %]/$1 [P]
+
+&lt;/VirtualHost&gt;
 
 				</pre>
 			</div>
