@@ -1,0 +1,107 @@
+#!/usr/bin/env perl
+use strict;
+use warnings;
+use Pod::Usage;
+use Getopt::Long;
+use LWP::UserAgent;
+use HTTP::Request;
+use HTTP::Response;
+use HTTP::Cookies;
+use Data::Dumper;
+use File::Temp qw/tempfile/;
+use URI::Escape;
+
+=pod
+This ugly hack of a script downloads a customized version of Twitter's Bootstrap:
+All Javascript components, and all CSS components EXCEPT glyphicons - we'll use Font-Awesome icons instead.
+
+The script is tightly coupled to the Bootstrap-server paramters, see here:
+	https://github.com/twitter/bootstrap-server
+
+Copyright (C) 2012, A. Gordon (gordon at cshl.edu)
+=cut
+
+my $user_agent ="github:agordon/dancer_bootstrap_fontawesome_template";
+my $bootstrap_download_server = "http://bootstrap.herokuapp.com/" ;
+
+## NOTE: the list of available bootstrap JS modules is tightly coupled to the bootstrap/bootstrap-server version.
+##       See the list here: https://github.com/twitter/bootstrap-server/blob/master/lib/js.js
+my @bootstrap_js = qw/
+bootstrap-transition.js
+bootstrap-modal.js
+bootstrap-dropdown.js
+bootstrap-scrollspy.js
+bootstrap-tab.js
+bootstrap-tooltip.js
+bootstrap-popover.js
+bootstrap-alert.js
+bootstrap-button.js
+bootstrap-collapse.js
+bootstrap-carousel.js
+bootstrap-typeahead.js/;
+
+## NOTE 1: the list of available CSS Bootstrap components is tightly coupled to the bootstrap/bootstrap-server version.
+##         See the list here:
+##
+## NOTE 2: The one CSS component being left out is "sprites.less" - These are the Bootstrap native ICONS.
+##         We don't want them - we'll use font-awesome's icons instead.
+my @bootstrap_css = qw/
+	variables.less
+	mixins.less
+	reset.less
+	scaffolding.less
+	grid.less
+	layouts.less
+	type.less
+	code.less
+	labels-badges.less
+	tables.less
+	forms.less
+	buttons.less
+	button-groups.less
+	navs.less
+	navbar.less
+	breadcrumbs.less
+	pagination.less
+	pager.less
+	thumbnails.less
+	alerts.less
+	progress-bars.less
+	hero-unit.less
+	tooltip.less
+	popovers.less
+	modals.less
+	dropdowns.less
+	accordion.less
+	carousel.less
+	wells.less
+	close.less
+	utilities.less
+	component-animations.less
+	responsive-1200px-min.less
+	responsive-767px-max.less
+	responsive-768px-979px.less
+	responsive-navbar.less
+	responsive-utilities.less
+	/;
+
+my $ua = LWP::UserAgent->new( agent=> $user_agent);
+
+my $req = HTTP::Request->new( POST => $bootstrap_download_server );
+$req->content_type('application/x-www-form-urlencoded');
+
+# NOTE: The Right Thing (tm) would be to use a proper JSON module, but I don't want to force the use to install any additional modules.
+my $js_param = "js=" . uri_escape( "[" . join(",", map { "\"$_\"" } @bootstrap_js ) . "]" ) ;
+my $css_param = "css=" . uri_escape ( "[" . join(",", map { "\"$_\"" } @bootstrap_css ) . "]" ) ;
+my $param = $js_param . "&" . $css_param ;
+$req->content($param);
+
+my $res = $ua->request($req);
+
+if (! $res->is_success ) {
+	print STDERR "Error: Failed to download customized bootstrap.zip file, error message = ", $res->status_line, "\n";
+	exit 1;
+}
+
+binmode STDOUT;
+print $res->content;

@@ -1,8 +1,11 @@
 #!/bin/sh
 
 SCRIPT=$(readlink -f "$0") || exit 1
+DOWNLOADER=$(dirname "$SCRIPT")"/download_customized_bootstrap" || exit 1
 DANCER_BASE_DIR=$(dirname $(dirname "$SCRIPT")) || exit 1
 DANCER_PUBLIC="$DANCER_BASE_DIR/public"
+
+[ -x "$DOWNLOADER" ] || { echo "Error: can't find bootstrap downloader script ($DOWNLOADER)" >&2 ; exit 1 ; }
 
 ## Some sanity checks, make sure we're in a dancer directory
 if ! [ -e "$DANCER_BASE_DIR/config.yml" ]  ;
@@ -31,9 +34,12 @@ rm -f "bootstrap.zip"
 
 ## Download the latest bootstrap
 echo "Downloading latest bootstrap..."
-wget --no-verbose --no-check-certificate http://twitter.github.com/bootstrap/assets/bootstrap.zip || exit 1
+"$DOWNLOADER" > bootstrap.zip || exit 1
 echo "Unzipping..."
-unzip -q bootstrap.zip || exit 1
+mkdir -p "bootstrap" || exit 1
+cd "bootstrap" || exit 1
+unzip -q ../bootstrap.zip || exit 1
+cd .. || exit 1
 
 #delete the zipball
 rm bootstrap.zip || exit 1
