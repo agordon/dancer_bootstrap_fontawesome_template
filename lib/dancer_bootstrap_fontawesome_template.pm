@@ -4,7 +4,6 @@ use strict;
 use warnings;
 use Cwd;
 use Sys::Hostname;
-use Data::Dump qw/dump/;
 
 our $VERSION = '0.1';
 

@@ -16,7 +16,6 @@ WriteMakefile(
         'YAML'       => 0,
         'Dancer'     => 1.3095,
         'Template'   => 0,
-        'Data::Dump' => 0,
     },
     dist                => { COMPRESS => 'gzip -9f', SUFFIX => 'gz', },
     clean               => { FILES => 'dancer_bootstrap_fontawesome_template-*' },
