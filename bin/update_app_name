@@ -1,0 +1,61 @@
+#!/bin/sh
+
+##
+## This script should be run ONCE, after instantiating a new project
+## based on the dancer/Bootstrap/FontAwesome template.
+##
+## It will rename the hard-coded "dancer_bootstrap_fontawesome_template"
+## To the given name.
+##
+NAME=$1
+if [ -z "$NAME" ]; then
+	echo "
+Dancer-Bootstrap-FontAwesome-Template name changer.
+
+Usage: $(basename $0) [NEW-NAME]
+
+This program will replace the hard-coded 'dancer_bootstrap_fontawesome_template'
+with NEW-NAME in all the right places.
+
+NOTE: This can't be undone, and you can't change the name again automatically.
+
+If you want to change it again, do so manually:
+  1. In 'config.xml':
+      Set 'appname' to NEWNAME
+  2. In directory 'lib':
+      Rename 'OLDNAME.pm' to 'NEWNAME.pm'
+  3. In 'bin/app/pl':
+      Change 'use OLDNAME.pm' to 'use NEWNAME.pm'
+  4. In 'Makefile.PL':
+      Change OLDNAME to NEWNAME.
+"
+	exit 1
+fi
+
+SAFE=$(echo "$NAME" | tr -cd [:alnum:]_)
+if [ "$SAFE" != "$NAME" ]; then
+	echo "Error: NEW NAME ($NAME) contains funky characters. Don't do that. Letters and Digits and Underscores only, please." >&2
+	exit 1
+fi
+
+SCRIPT=$(readlink -f "$0") || exit 1
+DANCER_BASE_DIR=$(dirname $(dirname "$SCRIPT")) || exit 1
+
+## Some sanity checks, make sure we're in a dancer directory
+if ! [ -e "$DANCER_BASE_DIR/config.yml" ]  ;
+then
+	echo "Error: directory '$DANCER_BASE_DIR' doesn't look like a Dancer directory (can't find 'config.yml' file." >&2
+	exit 1
+fi
+
+sed -i.bak "s/dancer_bootstrap_fontawesome_template/$NAME/g" \
+	"$DANCER_BASE_DIR/config.yml" \
+	"$DANCER_BASE_DIR/Makefile.PL" \
+	"$DANCER_BASE_DIR/bin/app.pl" \
+	"$DANCER_BASE_DIR/lib/dancer_bootstrap_fontawesome_template.pm" \
+	"$DANCER_BASE_DIR/MANIFEST" || exit 1
+mv lib/dancer_bootstrap_fontawesome_template.pm lib/$NAME.pm || exit 1
+
+echo
+echo "Renaming Done!"
+echo
