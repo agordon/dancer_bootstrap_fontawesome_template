@@ -2,7 +2,7 @@
 <div class="navbar">
   <div class="navbar-inner">
     <div class="container">
-	<h3><a class="brand" href="http://perldancer.org"><img src="images/dancer_man.png"> Perl Dancer</a></h3>
+	<h3><a class="brand" href="[% request.uri_base %]"><img src="images/dancer_man.png"> Perl Dancer</a></h3>
     </div>
   </div>
 </div>
