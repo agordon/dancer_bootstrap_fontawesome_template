@@ -109,6 +109,7 @@
 			<li><a href="https://github.com/agordon/dancer_bootstrap_fontawesome_template/zipball/master">Download</a> the latest template files</li>
 			<li>Extract the files</li>
 			<li>run <code>update_bootstrap</code> and <code>update_fontawesome</code> to download the latest versions</li>
+			<li>run <code>update_app_name</code> to set your application name (instead of the hardcoded <b>dancer_bootstrap_fontawesome_template</b>.</li>
 			<li>run <code>./bin/app.pl</code> (in the usual Dancer way)</li>
 		</ol>
 
@@ -118,6 +119,7 @@ $ unzip dancer.zip
 $ cd agordon-dancer_bootstrap_fontawesome_template-*
 $ ./bin/update_bootstrap
 $ ./bin/update_fontawesome
+$ ./bin/update_app_name MyNewApp  # or any name you like
 $ ./bin/app.pl
 ## and visit http://localhost:3000 to dance
 		</pre>
