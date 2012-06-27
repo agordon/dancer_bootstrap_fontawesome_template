@@ -8,7 +8,7 @@
 <meta name="description" content="">
 <meta name="author" content="">
 
-<title>dancer_bootstrap_fontawesome_template</title>
+<title>[% settings.appname %]</title>
 
 <link rel="stylesheet" href="[% request.uri_base %]/bootstrap/css/bootstrap.css" >
 <link rel="stylesheet" href="[% request.uri_base %]/fontawesome/css/font-awesome.css" >
