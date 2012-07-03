@@ -63,8 +63,14 @@ Logged in as <strong>[% username | html %]</strong>
 
 	<h3>Code Highlights</h3>
 	<ul>
-		<li>The Dancer code is in <code>./lib/examples/navbar_login.pm</code> .</li>
-		<li>This HTML tempate is in <code>./views/examples/navbar_login.tt</code></li>
+		<li>The Dancer code is in
+                    <a href="[% request.uri_for("/show_file",file => "navbar_login.pm", example => "NavBar-Login", url => request.uri_for("/navbar_login") ) %]">
+                    <code>./lib/examples/navbar_login.pm</code> <i class="icon-eye-open"></i> </a>.
+                </li>
+		<li>This HTML tempate is in
+                    <a href="[% request.uri_for("/show_file",file => "navbar_login.tt", example => "NavBar-Login", url => request.uri_for("/navbar_login") ) %]">
+                    <code>./views/examples/navbar_login.tt</code> <i class="icon-eye-open"></i> </a>.
+       	        </li>
 		<li>Inside the template, if the <code>logged_in</code> variable is TRUE, the user is considered logged in(and the template will render a slightly different HTML code).</li>
 	</ul>
 

@@ -27,8 +27,14 @@
 
 	<h3>Code Highlights</h3>
 	<ul>
-		<li>The Dancer code is in <code>./lib/examples/simple_form.pm</code> .</li>
-		<li>This HTML tempate is in <code>./views/examples/simple_form_entry.tt</code></li>
+		<li>The Dancer code is in
+                    <a href="[% request.uri_for("/show_file",file => "simple_form.pm", example => "SimpleForm", url => request.uri_for("/simple_form") ) %]">
+                    <code>./lib/examples/simple_form.pm</code> <i class="icon-eye-open"></i> </a>.
+                </li>
+		<li>This HTML tempate is in
+                    <a href="[% request.uri_for("/show_file",file => "simple_form_entry.tt", example => "SimpleForm", url => request.uri_for("/simple_form") ) %]">
+                    <code>./views/examples/simple_form_entry.tt</code> <i class="icon-eye-open"></i> </a>.
+       	        </li>
 		<li>Once you click <span class="label label-info">submit</span>, the HTTP POST request is handed in the dancer code.</li>
 		<li>If you enter <span class="label label-warning">gordon</span> as your name, you'll see a warning, using <a target="_blank" href="http://twitter.github.com/bootstrap/components.html#alerts">Bootstrap's Alerts</a></li>
 	</ul>

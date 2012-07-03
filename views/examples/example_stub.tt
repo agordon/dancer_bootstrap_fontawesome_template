@@ -41,8 +41,15 @@ To use it:
 
 	<h3>Code Highlights</h3>
 	<ul>
-		<li>The Dancer code is in <code>./lib/examples/TODO.pm</code> .</li>
-		<li>This HTML tempate is in <code>./views/examples/TODO.tt</code></li>
+		<li>The Dancer code is in
+                    <a href="[% request.uri_for("/show_file",file => "TODO-FILENAME.pm", example => "TODO-Example-NAME", url => request.uri_for("TODO-Example_URL") ) %]">
+                    <code>./lib/examples/TODO-FILENAME.pm</code> <i class="icon-eye-open"></i> </a>.
+                </li>
+
+		<li>This HTML tempate is in
+                    <a href="[% request.uri_for("/show_file",file => "TODO-Filename.tt", example => "TODO-Example-NAME", url => request.uri_for("TODO-Example_URL") ) %]">
+                    <code>./views/examples/TODO-FILENAME.tt</code> <i class="icon-eye-open"></i> </a>.
+                </li>
 		<li>TODO: mention any other important/interesting aspects of this example (dancer or bootstrap related)</li>
 	</ul>
 

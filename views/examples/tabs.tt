@@ -29,8 +29,15 @@ The tabs below show excerpts of several books. The content is set in the Dancer 
 
 	<h3>Code Highlights</h3>
 	<ul>
-		<li>The Dancer code is in <code>./lib/examples/tabs.pm</code> .</li>
-		<li>This HTML tempate is in <code>./views/examples/tabs.tt</code></li>
+		<li>The Dancer code is in
+                    <a href="[% request.uri_for("/show_file",file => "tabs.pm", example => "tabs", url => request.uri_for("/tabs") ) %]">
+                    <code>./lib/examples/tabs.pm</code> <i class="icon-eye-open"></i> </a>.
+                </li>
+
+		<li>This HTML tempate is in
+                    <a href="[% request.uri_for("/show_file",file => "tabs.tt", example => "tabs", url => request.uri_for("/tabs") ) %]">
+                    <code>./views/examples/tabs.tt</code> <i class="icon-eye-open"></i> </a>.
+                </li>
 		<li>The list of books is stored in the <code>@books</code> Perl variable.</li>
 		<li>Boostrap supports several UI types of tabs (tabs,pills,stacked/non-stacked) and switching between then is just a matter of changing a CSS class. See the <code>navtype</code> and <code>stacked</code> variables in the Dancer module and the Template file.</li>
 	</ul>
