@@ -10,8 +10,10 @@ The <FORM> entry template is "./views/examples/simple_form_entry.tt".
 If the user submitted a valid form, the results are showing using "./views/examples/simple_form_results.tt".
 =cut
 
+my @animals = qw/dogs cats camels mooses vogons/;
+
 get '/simple_form' => sub {
-	template 'examples/simple_form_entry';
+	template 'examples/simple_form_entry', { animals => \@animals };
 };
 
 post '/simple_form' => sub {
@@ -26,10 +28,14 @@ post '/simple_form' => sub {
 	$username =~ s/^\s*//;
 	$username =~ s/\s*$//;
 	if (length($username)==0) {
-		return template 'examples/simple_form_entry', { show_warning => "Throw me a bone here, give me a name!" };
+		return template 'examples/simple_form_entry', {
+			show_warning => "Throw me a bone here, give me a name!",
+			animals => \@animals };
 	}
 	if ($username eq "gordon") {
-		return template 'examples/simple_form_entry', { show_warning => "Can't use that name. Try another." };
+		return template 'examples/simple_form_entry', {
+			show_warning => "Can't use that name. Try another.",
+			animals => \@animals };
 	}
 
 	## If all OK, show the result of the <form>

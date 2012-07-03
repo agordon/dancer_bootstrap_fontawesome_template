@@ -65,10 +65,10 @@
 		<label class="control-label" for="animal">Your favorite Animal</label> 
 		<div class="controls"> 
 			<select id="animal" name="animal"> 
-				<option>dogs</option> 
-				<option>cats</option> 
-				<option>camels</option> 
-				<option>Mooses</option> 
+[%#### the "animals" list is set by the Dancer module, allows dynamic <form> creation #### %]
+[% FOREACH animal IN animals %]
+				<option>[% animal %]</option> 
+[% END %]
 			</select> 
 		</div> 
 	</div> 
