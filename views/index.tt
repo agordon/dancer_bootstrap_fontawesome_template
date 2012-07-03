@@ -82,9 +82,11 @@
 	</div>
 
 	<div class="span4">
-		<h2><i class="icon-gift icon-large"></i> One more random icon</h2>
-		With some lorem ipsum for completeness:<br/>
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris ultricies risus non metus pulvinar adipiscing. Nullam euismod, massa et imperdiet lacinia, purus mi tincidunt sem, in convallis augue dolor id elit. Proin convallis velit a ipsum mattis in tristique arcu bibendum. Praesent luctus urna ut lacus gravida convallis. Proin sit amet lacus at sapien fringilla euismod. Pellentesque at sapien eget justo sagittis porta eu et nunc. In volutpat pulvinar nunc in rhoncus.
+		<h2><i class="icon-gift icon-large"></i> Working Examples</h2>
+		Don't re-invernt the wheel! Here are ready-to-use examples, just copy,paste,adapt to code &amp; templates to your needs:
+		<ul>
+			<li><a href="[% request.uri_for("/simple_form")%]">Simple &lt;FORM&gt; processing</a></li>
+		</ul>
 	</div>
 </div>
 

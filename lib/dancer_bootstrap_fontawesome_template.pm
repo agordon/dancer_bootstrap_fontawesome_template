@@ -4,6 +4,7 @@ use strict;
 use warnings;
 use Cwd;
 use Sys::Hostname;
+use examples::simple_form;
 
 our $VERSION = '0.1';
 
