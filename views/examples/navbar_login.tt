@@ -1,0 +1,72 @@
+<!-- BootStrap NavBar -->
+<div class="navbar">
+  <div class="navbar-inner">
+    <div class="container">
+	<h3><a class="brand" href="[% request.uri_base %]"><img src="images/dancer_man.png"> Perl Dancer</a></h3>
+
+[% IF not logged_in %]
+[% ###### Embedded Login form in the Nav-Bar ####### %]
+<form class="navbar-form pull-left" method="post">
+Username: <input type="text" class="span2" name="username">
+Password: <input type="password" class="span2" name="password">
+<input type="submit" class="btn" value="Login" name="login">
+</form>
+[% ELSE %]
+[% ###### Use is logged, in, show the user name ###### %]
+<div class="pull-left">
+Logged in as <strong>[% username | html %]</strong>
+</div>
+[% END %]
+
+    </div>
+  </div>
+</div>
+
+<!-- HEADER line -->
+<div class="container">
+
+<div class="page-header">
+	<div class="row">
+		<div class="span12">
+			<h2>Dancer + Bootstrap Exapmles<//h2>
+			<h1>Navigation Bar with embedded Login Form</h1>
+		</div>
+	</div>
+</div>
+
+<div class="row">
+	<div class="span12">
+
+[% ####### Show any login warning (set by Dancer) ####### %]
+[% IF show_warning %]
+<div class="alert alert-error">
+<button type="button" class="close" data-dismiss="alert">&times;</button> 
+<strong>Hey!</strong> [% show_warning %]
+</div>
+[% END %]
+
+[% IF not logged_in %]
+	<strong>Look Up!</strong> embedded in the black navigation bar (above) is the login form.
+	<br/>
+	Try to login with any username and password <span class="label label-info">12345</span> (or, try with other passwords to see login error messages).
+[% ELSE %]
+	Hello, <span class="label label-warning">[% username | html %]</span>, you've successfully logged in (look at the nav-bar above, it doesn't show the login form any more).
+	<br/>
+	<br/>
+	<br/>
+	Now <a class="btn btn-primary" href="[% request.uri_for("/navbar_login") %]">Try it again</a>.
+[% END %]
+
+	<br/>
+	<br/>
+	<br/>
+
+	<h3>Code Highlights</h3>
+	<ul>
+		<li>The Dancer code is in <code>./lib/examples/navbar_login.pm</code> .</li>
+		<li>This HTML tempate is in <code>./views/examples/navbar_login.tt</code></li>
+		<li>Inside the template, if the <code>logged_in</code> variable is TRUE, the user is considered logged in(and the template will render a slightly different HTML code).</li>
+	</ul>
+
+	</div>
+</div>

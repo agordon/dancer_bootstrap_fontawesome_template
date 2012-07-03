@@ -5,6 +5,7 @@ use warnings;
 use Cwd;
 use Sys::Hostname;
 use examples::simple_form;
+use examples::navbar_login;
 
 our $VERSION = '0.1';
 
