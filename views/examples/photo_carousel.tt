@@ -28,8 +28,8 @@
 	<h3>Code Highlights</h3>
 	<ul>
 		<li>The Dancer code is in
-                    <a href="[% request.uri_for("/show_file",file => "photo_carousel.pm", example => "photo carousel", url => request.uri_for("/photo_carousel") ) %]">
-                    <code>./lib/examples/phot_carousel.pm</code> <i class="icon-eye-open"></i> </a>.
+                    <a href="[% request.uri_for("/show_file",file => "photo_gallery.pm", example => "photo carousel", url => request.uri_for("/photo_carousel") ) %]">
+                    <code>./lib/examples/photo_gallery.pm</code> <i class="icon-eye-open"></i> </a>.
                 </li>
 
 		<li>This HTML tempate is in

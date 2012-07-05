@@ -89,6 +89,7 @@
 			<li><a href="[% request.uri_for("/navbar_login")%]">Login form embedded in a NavBar</a></li>
 			<li><a href="[% request.uri_for("/tabs")%]">Tabs/Pills</a></li>
 			<li><a href="[% request.uri_for("/photo_carousel")%]">Photo Gallery Carousel</a></li>
+			<li><a href="[% request.uri_for("/photo_grid")%]">Photo Gallery Grid / Thumbnails</a></li>
 		</ul>
 	</div>
 </div>

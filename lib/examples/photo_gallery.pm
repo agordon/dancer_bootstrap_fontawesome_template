@@ -1,10 +1,10 @@
-package examples::photo_carousel;
+package examples::photo_gallery;
 use Dancer ':syntax';
 use strict;
 use warnings;
 
 =pod
-Example of using Bootstrap's Photo-Carousel component.
+Example of using Bootstrap's Photo-Carousel and Thumbnails components.
 
 NOTE:
   The images are stored in "./public/images/gallery",
@@ -47,6 +47,10 @@ my @photos = (
 
 get '/photo_carousel' => sub {
 	template 'examples/photo_carousel', { photos => \@photos };
+};
+
+get '/photo_grid' => sub {
+	template 'examples/photo_grid', { photos => \@photos };
 };
 
 true;
