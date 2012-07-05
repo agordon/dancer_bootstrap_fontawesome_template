@@ -8,6 +8,7 @@ use examples::simple_form;
 use examples::navbar_login;
 use examples::tabs;
 use examples::show_file;
+use examples::photo_carousel;
 
 our $VERSION = '0.1';
 

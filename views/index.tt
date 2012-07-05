@@ -88,6 +88,7 @@
 			<li><a href="[% request.uri_for("/simple_form")%]">Simple &lt;FORM&gt; processing</a></li>
 			<li><a href="[% request.uri_for("/navbar_login")%]">Login form embedded in a NavBar</a></li>
 			<li><a href="[% request.uri_for("/tabs")%]">Tabs/Pills</a></li>
+			<li><a href="[% request.uri_for("/photo_carousel")%]">Photo Gallery Carousel</a></li>
 		</ul>
 	</div>
 </div>
