@@ -9,6 +9,7 @@ use examples::navbar_login;
 use examples::tabs;
 use examples::show_file;
 use examples::photo_gallery;
+use examples::markdown;
 
 our $VERSION = '0.1';
 
