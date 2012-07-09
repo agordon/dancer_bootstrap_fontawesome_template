@@ -10,6 +10,7 @@ use examples::tabs;
 use examples::show_file;
 use examples::photo_gallery;
 use examples::markdown;
+use examples::template_plugins;
 
 our $VERSION = '0.1';
 
