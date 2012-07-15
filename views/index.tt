@@ -86,7 +86,7 @@
 		Don't re-invernt the wheel! Here are ready-to-use examples, just copy,paste,adapt to code &amp; templates to your needs:
 		<ul>
 			<li><a href="[% request.uri_for("/simple_form")%]">Simple &lt;FORM&gt; processing</a></li>
-			<li><a href="[% request.uri_for("/navbar_login")%]">Login form embedded in a NavBar</a></li>
+			<li><a href="[% request.uri_for("/navbar_login")%]">Login Form and NavBar Dropdown Menu</a></li>
 			<li><a href="[% request.uri_for("/tabs")%]">Tabs/Pills</a></li>
 			<li><a href="[% request.uri_for("/photo_carousel")%]">Photo Gallery Carousel</a></li>
 			<li><a href="[% request.uri_for("/photo_grid")%]">Photo Gallery Grid / Thumbnails</a></li>

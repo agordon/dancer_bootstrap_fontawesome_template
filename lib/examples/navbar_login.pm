@@ -1,7 +1,5 @@
 package examples::navbar_login;
 use Dancer ':syntax';
-use strict;
-use warnings;
 
 =pod
 This is a minimal example of using Bootstrap's Nav-Bar with embedded login-form.
@@ -15,14 +13,12 @@ The dancer implemetation is severely lacking:
 1. A proper authentication method should be used.
 2. Login should be done over HTTPS (or another protected method)
 3. Once the user is logged in, you most likely want to use Dancer's Sessions
-   To store the user's information (and mae the log-in persistant access
+   To store the user's information (and make the log-in persistant access
    Dancer calls).
 
 =cut
 
-get '/navbar_login' => sub {
-	template 'examples/navbar_login', { logged_in => 0 };
-};
+get '/navbar_login' => sub { template 'examples/navbar_login' };
 
 post '/navbar_login' => sub {
 	## Get the <FORM> CGI parameters
@@ -35,21 +31,21 @@ post '/navbar_login' => sub {
 	$username =~ s/^\s*//;
 	$username =~ s/\s*$//;
 	if (length($username)==0) {
-		return template 'examples/navbar_login', {
+		return template 'examples/navbar_login' => {
 			show_warning => "Missing username",
-			logged_in => 0 };
+		};
 	}
 
 	## do you think this is safe?
 	if ($password ne "12345") {
-		return template 'examples/navbar_login', {
+		return template 'examples/navbar_login' => {
 			show_warning => "Wrong username or password",
-			logged_in => 0 };
+		};
 	}
 
-	return template 'examples/navbar_login', {
-		logged_in => 1,
-		username => $username };
+	return template 'examples/navbar_login' => {
+		username => $username
+	};
 };
 
 true;
