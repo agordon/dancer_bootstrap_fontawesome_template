@@ -19,8 +19,8 @@
 
 [% content %]
 
-<script src="javascripts/jquery-1.7.2.min.js"></script>
-<script src="bootstrap/js/bootstrap.min.js"></script>
+<script src="[% request.uri_base %]/javascripts/jquery-1.7.2.min.js"></script>
+<script src="[% request.uri_base %]/bootstrap/js/bootstrap.min.js"></script>
 <script>
   $(document).ready(function()
       {
