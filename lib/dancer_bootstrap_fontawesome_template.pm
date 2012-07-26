@@ -11,6 +11,7 @@ use examples::show_file;
 use examples::photo_gallery;
 use examples::markdown;
 use examples::template_plugins;
+use examples::error_handling;
 
 our $VERSION = '0.1';
 

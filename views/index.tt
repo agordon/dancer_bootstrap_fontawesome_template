@@ -92,6 +92,7 @@
 			<li><a href="[% request.uri_for("/photo_grid")%]">Photo Gallery Grid / Thumbnails</a></li>
 			<li><a href="[% request.uri_for("/markdown")%]">Markdown Text Rendering</a></li>
 			<li><a href="[% request.uri_for("/template_plugins")%]">Template::Toolkit plugins</a></li>
+			<li><a href="[% request.uri_for("/error_handling")%]">Dancer's Error Handling</a></li>
 		</ul>
 	</div>
 </div>
