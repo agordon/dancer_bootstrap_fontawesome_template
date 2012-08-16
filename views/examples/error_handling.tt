@@ -17,7 +17,7 @@ This page demonstrates Dancer's stack-trace error handling in development mode.
 <div class="page-header">
 	<div class="row">
 		<div class="span12">
-			<h2>Dancer + Bootstrap Exapmles<//h2>
+			<h2>Dancer + Bootstrap Examples</h2>
 			<h1>Dancer's Error Handling</h1>
 		</div>
 	</div>

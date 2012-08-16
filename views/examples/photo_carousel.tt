@@ -12,7 +12,7 @@
 <div class="page-header">
 	<div class="row">
 		<div class="span12">
-			<h2>Dancer + Bootstrap Exapmles<//h2>
+			<h2>Dancer + Bootstrap Examples</h2>
 			<h1>Photo Gallery - Carousel</h1>
 		</div>
 	</div>
@@ -36,7 +36,7 @@
                     <a href="[% request.uri_for("/show_file",file => "photo_carousel.tt", example => "photo carousel", url => request.uri_for("/photo_carousel") ) %]">
                     <code>./views/examples/photo_carousel.tt</code> <i class="icon-eye-open"></i> </a>.
                 </li>
-		<li>The photos to display are degined in the <code>@photos</code> variable in the Dancer module.</li>
+		<li>The photos to display are defined in the <code>@photos</code> variable in the Dancer module.</li>
 	</ul>
 
 	</div>
@@ -72,5 +72,6 @@
 	<!-- Carousel's Next/Prev buttons -->
 	<a class="left carousel-control" href="#dancing_carousel" data-slide="prev">&lsaquo;</a>
         <a class="right carousel-control" href="#dancing_carousel" data-slide="next">&rsaquo;</a>
+</div>
 </div>
 </div>
