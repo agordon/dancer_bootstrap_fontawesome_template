@@ -28,7 +28,7 @@
 	<div class="span4">
 		<h2><i class="icon-twitter-sign icon-large"></i> Twitter Bootstrap</h2>
 		<p>
-		Twitter's <a target="_blank" href="http://twitter.github.com/bootstrap/index.html">bootstrap</a> is a simple and flexible HTML, CSS, and Javascript for popular user interface components and interactions.
+		Twitter's <a target="_blank" href="http://twitter.github.com/bootstrap/index.html">bootstrap</a> is simple and flexible HTML, CSS, and Javascript for popular user interface components and interactions.
 		</p>
 		<p>
 		This <b>Dancer</b> template is pre-configured to use bootstrap, and contains a script to easily upgrade to the latest bootstrap version.
@@ -46,12 +46,12 @@
 	</div>
 
 	<div class="span4">
-		<h2><i class="icon-cogs icon-large"></i> JQuery-1.7.2</h2>
+		<h2><i class="icon-cogs icon-large"></i> jQuery-1.7.2</h2>
 		<p>
 		<a target="_blank" href="http://jquery.com/">jQuery</a> is a fast and concise JavaScript Library that simplifies HTML document traversing, event handling, animating, and Ajax interactions for rapid web development.
 		</p>
 		<p>
-		Dancer always used JQuery by default, so there's nothing really new here, except upgrading to 1.7.2 (and not using CDN).
+		Dancer always used jQuery by default, so there's nothing really new here, except upgrading to 1.7.2 (and not using CDN).
 		</p>
 	</div>
 </div>
@@ -66,7 +66,7 @@
 		Dancer always worked with Template::Toolkit, so there's nothing really new here, except:
 		<ul>
 			<li>Dancer's default template was <a href="https://metacpan.org/module/Template::Simple" target="_blank">Template::Simple</a>, and in this template it's changed to the more powerful Template::Toolkit.</li>
-			<li>Dancer's default tags were <span class="label">&lt;%</span> and <span class="label">%&gt;</span>,<br/>and in this template there are changed to <span class="label">[&#37;</span> and <span class="label">&#37;]</span>,
+			<li>Dancer's default tags were <span class="label">&lt;%</span> and <span class="label">%&gt;</span>,<br/>and in this template there are changed to <span class="label">[&#37;</span> and <span class="label">&#37;]</span>.</li>
 		</ul>
 
 		</p>
@@ -83,7 +83,7 @@
 
 	<div class="span4">
 		<h2><i class="icon-gift icon-large"></i> Working Examples</h2>
-		Don't re-invernt the wheel! Here are ready-to-use examples, just copy,paste,adapt to code &amp; templates to your needs:
+		Don't re-invent the wheel! Here are ready-to-use examples, just copy, paste &amp; adapt the code &amp; templates to your needs:
 		<ul>
 			<li><a href="[% request.uri_for("/simple_form")%]">Simple &lt;FORM&gt; processing</a></li>
 			<li><a href="[% request.uri_for("/navbar_login")%]">Login Form and NavBar Dropdown Menu</a></li>
@@ -118,7 +118,7 @@
 			<li><a href="https://github.com/agordon/dancer_bootstrap_fontawesome_template/zipball/master">Download</a> the latest template files</li>
 			<li>Extract the files</li>
 			<li>run <code>update_bootstrap</code> and <code>update_fontawesome</code> to download the latest versions</li>
-			<li>run <code>update_app_name</code> to set your application name (instead of the hardcoded <b>dancer_bootstrap_fontawesome_template</b>.</li>
+			<li>run <code>update_app_name</code> to set your application name (instead of the hardcoded <b>dancer_bootstrap_fontawesome_template</b>).</li>
 			<li>run <code>./bin/app.pl</code> (in the usual Dancer way)</li>
 		</ol>
 
@@ -152,7 +152,7 @@ $ ./bin/app.pl
 			<li>Add Javascript code to be loaded when the document is ready: see <code>&lt;dancer_directory&gt;/views/layout/main.tt</code> (the <code>&lt;javascript&gt;</code> at the bottom).</li>
 			<li>Update bootstrap: run <code>&lt;dancer_directory&gt;/bin/update_bootstrap</code></li>
 			<li>Update Font-Awesome: run <code>&lt;dancer_directory&gt;/bin/update_fontawesome</code></li>
-			<li>Update JQuery: You'll have to do it manually. See the <a href="https://github.com/agordon/dancer_bootstrap_fontawesome_template/blob/master/README" target="_blank">README</a> file.</li>
+			<li>Update jQuery: You'll have to do it manually. See the <a href="https://github.com/agordon/dancer_bootstrap_fontawesome_template/blob/master/README" target="_blank">README</a> file.</li>
 		</ul>
 
 	</div>

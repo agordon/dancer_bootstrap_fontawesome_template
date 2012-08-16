@@ -23,7 +23,7 @@ the installation of those plugins to run the basic Dancer/Bootstrap website.
 <div class="page-header">
 	<div class="row">
 		<div class="span12">
-			<h2>Template::Toolkit<//h2>
+			<h2>Template::Toolkit</h2>
 			<h1>Template Plugin Examples</h1>
 		</div>
 	</div>
