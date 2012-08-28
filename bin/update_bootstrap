@@ -1,6 +1,6 @@
 #!/bin/sh
 
-SCRIPT=$(readlink -f "$0") || exit 1
+SCRIPT=$(perl -MCwd -e '$f=Cwd::realpath($ARGV[0]); die unless -e $f; print $f' "$0") || exit 1;
 DOWNLOADER=$(dirname "$SCRIPT")"/download_customized_bootstrap" || exit 1
 DANCER_BASE_DIR=$(dirname $(dirname "$SCRIPT")) || exit 1
 DANCER_PUBLIC="$DANCER_BASE_DIR/public"

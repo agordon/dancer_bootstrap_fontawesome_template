@@ -38,7 +38,7 @@ if [ "$SAFE" != "$NAME" ]; then
 	exit 1
 fi
 
-SCRIPT=$(readlink -f "$0") || exit 1
+SCRIPT=$(perl -MCwd -e '$f=Cwd::realpath($ARGV[0]); die unless -e $f; print $f' "$0") || exit 1;
 DANCER_BASE_DIR=$(dirname $(dirname "$SCRIPT")) || exit 1
 
 ## Some sanity checks, make sure we're in a dancer directory
