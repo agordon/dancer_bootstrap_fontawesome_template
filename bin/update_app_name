@@ -38,7 +38,13 @@ if [ "$SAFE" != "$NAME" ]; then
 	exit 1
 fi
 
-SCRIPT=$(readlink -f "$0") || exit 1
+if [ `uname` == 'Darwin' ] ;
+then
+	SCRIPT=$(greadlink -f "$0") || exit 1
+else
+	SCRIPT=$(readlink -f "$0")  || exit 1
+fi
+
 DANCER_BASE_DIR=$(dirname $(dirname "$SCRIPT")) || exit 1
 
 ## Some sanity checks, make sure we're in a dancer directory
