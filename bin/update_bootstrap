@@ -1,6 +1,12 @@
 #!/bin/sh
 
-SCRIPT=$(readlink -f "$0") || exit 1
+if [ `uname` == 'Darwin' ] ;
+then
+	SCRIPT=$(greadlink -f "$0") || exit 1
+else
+	SCRIPT=$(readlink -f "$0")  || exit 1
+fi
+
 DOWNLOADER=$(dirname "$SCRIPT")"/download_customized_bootstrap" || exit 1
 DANCER_BASE_DIR=$(dirname $(dirname "$SCRIPT")) || exit 1
 DANCER_PUBLIC="$DANCER_BASE_DIR/public"
