@@ -54,7 +54,7 @@ sed -i.bak "s/dancer_bootstrap_fontawesome_template/$NAME/g" \
 	"$DANCER_BASE_DIR/bin/app.pl" \
 	"$DANCER_BASE_DIR/lib/dancer_bootstrap_fontawesome_template.pm" \
 	"$DANCER_BASE_DIR/MANIFEST" || exit 1
-mv lib/dancer_bootstrap_fontawesome_template.pm lib/$NAME.pm || exit 1
+mv $DANCER_BASE_DIR/lib/dancer_bootstrap_fontawesome_template.pm $DANCER_BASE_DIR/lib/$NAME.pm || exit 1
 
 echo
 echo "Renaming Done!"
