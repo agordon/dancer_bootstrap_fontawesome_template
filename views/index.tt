@@ -93,6 +93,7 @@
 			<li><a href="[% request.uri_for("/markdown")%]">Markdown Text Rendering</a></li>
 			<li><a href="[% request.uri_for("/template_plugins")%]">Template::Toolkit plugins</a></li>
 			<li><a href="[% request.uri_for("/error_handling")%]">Dancer's Error Handling</a></li>
+			<li><a href="[% request.uri_for("/dynamic_content")%]">Generate Dynamic Content</a></li>
 		</ul>
 	</div>
 </div>

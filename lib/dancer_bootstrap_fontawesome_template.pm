@@ -12,6 +12,7 @@ use examples::photo_gallery;
 use examples::markdown;
 use examples::template_plugins;
 use examples::error_handling;
+use examples::dynamic_content;
 
 our $VERSION = '0.1';
 
