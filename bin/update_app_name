@@ -53,6 +53,8 @@ sed -i.bak "s/dancer_bootstrap_fontawesome_template/$NAME/g" \
 	"$DANCER_BASE_DIR/Makefile.PL" \
 	"$DANCER_BASE_DIR/bin/app.pl" \
 	"$DANCER_BASE_DIR/lib/dancer_bootstrap_fontawesome_template.pm" \
+	"$DANCER_BASE_DIR/t/001_base.t" \
+	"$DANCER_BASE_DIR/t/002_index_route.t" \
 	"$DANCER_BASE_DIR/MANIFEST" || exit 1
 mv $DANCER_BASE_DIR/lib/dancer_bootstrap_fontawesome_template.pm $DANCER_BASE_DIR/lib/$NAME.pm || exit 1
 
