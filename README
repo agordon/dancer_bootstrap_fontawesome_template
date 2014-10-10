@@ -10,7 +10,7 @@ TODO when you start a new application:
 
 
 
-TODO when updating Tweeter's bootstrap:
+TODO when updating Twitter's bootstrap:
  Quickest way:
     $ cd /path/to/your/dancer/project
     $ ./bin/update_bootstrap
