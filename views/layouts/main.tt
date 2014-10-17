@@ -11,7 +11,7 @@
 <title>[% settings.appname %]</title>
 
 <link rel="stylesheet" href="[% request.uri_base %]/bootstrap/css/bootstrap.css" >
-<link rel="stylesheet" href="[% request.uri_base %]/fontawesome/css/font-awesome.css" >
+<link rel="stylesheet" href="[% request.uri_base %]/font-awesome/css/font-awesome.css" >
 <link rel="stylesheet" href="[% request.uri_base %]/css/style.css" >
 
 </head>
