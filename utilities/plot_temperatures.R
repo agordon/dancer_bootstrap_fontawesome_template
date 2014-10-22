@@ -8,22 +8,22 @@ temp = temp[rev(1:dim(temp)[1]),];
 day_count = 1;
 
 while (dim(temp)[2] > 0) {
-	print(dim(temp));
 	if (dim(temp)[1] >= 1440) {
-		# this_day = temp[c((dim(temp)[1]-1440):dim(temp)[1]),];
-		# temp = temp[-c((dim(temp)[1]-1440):dim(temp)[1]),];
 		this_day = temp[1:1440,];
 		temp = temp[-c(1:1440),];
 	} else {
 		this_day = temp;
 		temp = temp[-c(1:dim(temp)[1])];
 	}
-	print(dim(this_day));
+	
+	plot_width = 10*(dim(this_day)[1]/1440);
+	if (plot_width < 1) {
+		plot_width = 1;
+	}
 
-	svg(sprintf('day%02d.svg',day_count));
-	par(bty='n', mgp=c(1.5,0.5,0));
-	plot(this_day[,2],ylim=c(32,85),typ='l',col='green',ylab='Temperature',xlab='Time');
-	lines(this_day[,3],col='red');
+	svg(sprintf('%s/day%02d.svg',args[2], day_count),width=plot_width);
+	par(bty='n', mgp=c(1.5,0.5,0),mar=c(2.5,2.5,0,0));
+	plot(this_day[,2],ylim=c(32,85),typ='l',col='green',ylab='Temperature',xlab='Time (min ago)');
 
 	mylims <- par("usr");
 
@@ -35,7 +35,9 @@ while (dim(temp)[2] > 0) {
 		}
 	}
 
+	lines(this_day[,5],col='blue',lwd=3);
 	lines(this_day[,2],col='green',lwd=3);
+	lines(this_day[,3],col='red',lwd=3);
 	
 	lines(mylims[1:2],c(32,32),col=rgb(0.83,0.94,1,0.75),lwd=3);
 
