@@ -11,6 +11,13 @@
 	</div>
 </div>
 
+<h1>Freezer Temp: [% freezer_temp %]</h1>
+<h1>Outside Temp: [% outside_temp %]</h1>
+<h1>Target Temp: [% target_temp %]</h1>
+<font color= [% relay_color %]><h1>Relay: [% relay_status %]</h1></font>
 
+[% FOREACH i_name IN image_set %]
+	<img src='images/[% i_name %]'><br/>
+[% END %]
 
 </div>
