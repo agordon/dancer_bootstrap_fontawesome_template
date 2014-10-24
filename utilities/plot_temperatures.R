@@ -13,7 +13,6 @@ while (dim(temp)[2] > 0) {
 		temp = temp[-c(1:1440),];
 	} else {
 		this_day = temp;
-		temp = temp[-c(1:dim(temp)[1])];
 	}
 	
 	plot_width = 10*(dim(this_day)[1]/1440);
@@ -23,7 +22,8 @@ while (dim(temp)[2] > 0) {
 
 	svg(sprintf('%s/day%02d.svg',args[2], day_count),width=plot_width);
 	par(bty='n', mgp=c(1.5,0.5,0),mar=c(2.5,2.5,0,0));
-	plot(this_day[,2],ylim=c(32,85),typ='l',col='green',ylab='Temperature',xlab='Time (min ago)');
+	plot(this_day[,2],ylim=c(32,85),typ='l',col='green',
+		 ylab='Temperature (\u00B0F)',xlab='Time (min ago)');
 
 	mylims <- par("usr");
 
@@ -35,13 +35,21 @@ while (dim(temp)[2] > 0) {
 		}
 	}
 
+	lines(c(0,dim(this_day)[1]),c(32,32),col=rgb(0.83,0.94,1,0.75),lwd=3);
 	lines(this_day[,5],col='blue',lwd=3);
 	lines(this_day[,2],col='green',lwd=3);
 	lines(this_day[,3],col='red',lwd=3);
-	
-	lines(mylims[1:2],c(32,32),col=rgb(0.83,0.94,1,0.75),lwd=3);
 
 	graphics.off();
+	
+	system(sprintf('convert -strip -interlace Plane -quality 85%% %s/day%02d.svg %s/day%02d.jpg', args[2], day_count, args[2], day_count));
 
 	day_count = day_count + 1;
+
+	#for some reason the while loop isn't working with longer data sets, this
+	#is my hacky fix
+
+	if (dim(temp)[1] == dim(this_day)[1]) {
+		break;
+	}
 }
