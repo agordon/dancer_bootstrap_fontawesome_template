@@ -11,7 +11,7 @@ use Data::Dumper;
 our $VERSION = '0.1';
 
 get '/' => sub {
-	my @image_set = <../public/images/*>;
+	my @image_set = <../public/images/*.jpg>;
 	@image_set = map { basename($_) } @image_set;
 
 	my $parser = Text::CSV::Simple->new;
