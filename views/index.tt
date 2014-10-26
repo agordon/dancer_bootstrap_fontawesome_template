@@ -20,21 +20,18 @@
 		<font color= [% relay_color %]><h2>Relay: [% relay_status %]</h2></font>
 	</div>
 	<div class="col-md-6">
-
 		<h1>Freezer Controls</h1>
-		<form role="form">
+		<form role="form" method="post">
 			<div class="form-group">
-
 				<label for="mode">Temp Control Mode</label>
-				<select id="mode" class="form-control">
+				<select id="mode" class="form-control" name="mode">
 					<option>Constant</option>
 					<option>Ramp</option>
 				</select>
-
 			</div>
 			<div class="form-group">
 				<label for="targetTemp">Target Temperature</label>
-				<input type="text" class="form-control" id="targetTemp">
+				<input type="text" class="form-control" id="targetTemp" name="targetTemp">
 			</div>
 			<div class="form-group">
 				<label for="rampStart">Ramp Start Temperature</label>
@@ -49,10 +46,10 @@
 				<input type="text" class="form-control" id="rampTime">
 			</div>
 			<div class="form-group">
-				<label for="exampleInputPassword1">Password</label>
-				<input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+				<label for="password">Password</label>
+				<input type="password" class="form-control" id="password" name="password">
 			</div>
-			<button type="submit" class="btn btn-default">Submit</button>
+			<button type="submit" class="btn btn-default" value="Post">Submit</button>
 		</form>
 	</div>
 </div>
@@ -61,8 +58,8 @@
 	<h1>Historic Temperature Readings</h1>
 	Legend: <font color="green">Freezer Temp</font>, <font color="blue">Target Temp</font>, 
 	<font color="red">Outside Temp</font>
-
 </div>	
+
 <div class="row">
 [% FOREACH i_name IN image_set %]
 	<img src='images/[% i_name %]'>
