@@ -3,7 +3,7 @@
 #the first and only argument should be the file with the temperature data
 args <- commandArgs(TRUE);
 
-temp = read.csv(args[1],header=F);
+temp = read.csv(args[1],header=T);
 temp = temp[rev(1:dim(temp)[1]),];
 day_count = 1;
 
@@ -22,23 +22,23 @@ while (dim(temp)[2] > 0) {
 
 	svg(sprintf('%s/day%02d.svg',args[2], day_count),width=plot_width);
 	par(bty='n', mgp=c(1.5,0.5,0),mar=c(2.5,2.5,0,0));
-	plot(this_day[,2],ylim=c(32,85),typ='l',col='green',
+	plot(this_day$Freezer_temp,ylim=c(32,85),typ='l',col='green',
 		 ylab='Temperature (\u00B0F)',xlab='Time (min ago)');
 
 	mylims <- par("usr");
 
 	relay_on_y = c(mylims[3],mylims[4],mylims[4],mylims[3]);
-
+	
 	for (i in 1:dim(this_day)[1]) {
-		if (this_day[i,4]) {
-			polygon(c(i-0.5,i+0.5,i+0.5,i-0.5),relay_on_y,col=rgb(0.25,0.25,0.25,0.25),density=NA);
+		if (this_day$Relay[i]) {
+			polygon(c(i-0.5,i-0.5,i+0.5,i+0.5),relay_on_y,col=rgb(0.25,0.25,0.25,0.25),density=NA);
 		}
 	}
 
 	lines(c(0,dim(this_day)[1]),c(32,32),col=rgb(0.83,0.94,1,0.75),lwd=3);
-	lines(this_day[,5],col='blue',lwd=3);
-	lines(this_day[,2],col='green',lwd=3);
-	lines(this_day[,3],col='red',lwd=3);
+	lines(this_day$Target_temp,col='blue',lwd=3);
+	lines(this_day$Freezer_temp,col='green',lwd=3);
+	lines(this_day$Outside_Temp,col='red',lwd=3);
 
 	graphics.off();
 	

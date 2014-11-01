@@ -3,6 +3,8 @@
 use strict;
 use JSON;
 use Config::Simple;
+use Data::Dumper;
+use Text::CSV::Simple;
 
 ###############################################################################
 # Variables and Setup
@@ -13,26 +15,44 @@ my $cfg = new Config::Simple('spark_core_info.cfg');
 my $device_ID = $cfg->param('device_ID');
 my $access_token = $cfg->param('access_token');
 
+my $target_file = "temperature_data.csv"; 
+
 ###############################################################################
 # Main
 ###############################################################################
 
-my $temp_json = `curl -m 10 --silent "https://api.spark.io/v1/devices/$device_ID/temp?access_token=$access_token"`;
+my $all_json = `curl -m 10 --silent "https://api.spark.io/v1/devices/$device_ID/tempInfo?access_token=$access_token"`;
 
 #If there was no response from the server, this string will be empty
-if ($temp_json eq '') {
+if ($all_json eq '') {
+	#if no response, then we want to put in a line of NA's
+	my $parser = Text::CSV::Simple->new;
+	my @data = $parser->read_file($target_file);
+	my $column_count = scalar(@{$data[0]});
+	
+	my $out_str = 'NA';
+	for (2..$column_count) {
+		$out_str .= ",NA";
+	}
+	$out_str .= "\n";
+			
+	open OUTPUT, ">>$target_file";
+	print OUTPUT $out_str;
+	close OUTPUT;
+	
 	exit;
 }
 
-my $temp_out_json = `curl --silent "https://api.spark.io/v1/devices/$device_ID/tempOut?access_token=$access_token"`;
-my $relay_on_json = `curl --silent "https://api.spark.io/v1/devices/$device_ID/relayOn?access_token=$access_token"`;
-my $tarTemp_on_json = `curl --silent "https://api.spark.io/v1/devices/$device_ID/tarTemp?access_token=$access_token"`;
+my %all_data = %{decode_json $all_json};
+my %temp_data = %{decode_json $all_data{result}};
 
-my %temp_data = %{decode_json $temp_json};
-my %temp_out_data = %{decode_json $temp_out_json};
-my %relay_on_data = %{decode_json $relay_on_json};
-my %tarTempData = %{decode_json $tarTemp_on_json};
 
-open OUTPUT, ">>temperature_data.csv";
-print OUTPUT "$temp_data{coreInfo}{last_heard},$temp_data{result},$temp_out_data{result},$relay_on_data{result},$tarTempData{result}\n";
+if (! -e $target_file) {
+	open OUTPUT, ">>$target_file";
+	print OUTPUT "Time,Freezer_temp,Outside_Temp,Relay,Target_temp\n";
+	close OUTPUT;
+}
+
+open OUTPUT, ">>$target_file";
+print OUTPUT "$all_data{coreInfo}{last_heard},$temp_data{temp},$temp_data{tempOut},$temp_data{relayOn},$temp_data{targetTemp}\n";
 close OUTPUT;
