@@ -30,7 +30,7 @@ while (dim(temp)[2] > 0) {
 	relay_on_y = c(mylims[3],mylims[4],mylims[4],mylims[3]);
 	
 	for (i in 1:dim(this_day)[1]) {
-		if (this_day$Relay[i]) {
+		if (!is.na(this_day$Relay[i]) && this_day$Relay[i]) {
 			polygon(c(i-0.5,i-0.5,i+0.5,i+0.5),relay_on_y,col=rgb(0.25,0.25,0.25,0.25),density=NA);
 		}
 	}
