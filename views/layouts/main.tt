@@ -2,6 +2,8 @@
 <html lang=en">
 <head>
 
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 <meta http-equiv="Content-type" content="text/html; charset=[% settings.charset %]" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="">
@@ -18,7 +20,7 @@
 
 [% content %]
 
-<script src="[% request.uri_base %]/javascripts/jquery-1.7.2.min.js"></script>
+<script src="[% request.uri_base %]/javascripts/jquery-latest.min.js"></script>
 <script src="[% request.uri_base %]/bootstrap/js/bootstrap.min.js"></script>
 <script>
   $(document).ready(function()
