@@ -21,7 +21,7 @@ get '/' => sub {
 	@image_set = map { basename($_) } @image_set;
 
 	my $parser = Text::CSV::Simple->new;
-	my @data = $parser->read_file('../utilities/temperature_data.csv');
+	my @data = $parser->read_file('../utilities/last_min.csv');
 	
 	my @last_data = @{$data[-1]};
 	
@@ -48,7 +48,7 @@ post '/' => sub {
 	@image_set = map { basename($_) } @image_set;
 
 	my $parser = Text::CSV::Simple->new;
-	my @data = $parser->read_file('../utilities/temperature_data.csv');
+	my @data = $parser->read_file('../utilities/last_min.csv');
 	
 	my @last_data = @{$data[-1]};
 	
