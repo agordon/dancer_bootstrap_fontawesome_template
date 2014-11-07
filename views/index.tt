@@ -11,7 +11,10 @@
 	[% IF alert_message %]
 	<div class="row">
 		<div class="col-md-12">
-			<div class="alert [% alert_class %]" role="alert"><h2>[% alert_message %]</h2></div>
+			<div data-dismiss="alert" class="alert [% alert_class %] alert-dismissible fade in" role="alert">
+			<button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+			[% alert_message %]
+			</div>
 		</div>
 	</div>
 	[% END %]
@@ -37,19 +40,19 @@
 				</div>
 				<div class="form-group">
 					<label for="targetTemp">Target Temperature</label>
-					<input type="text" class="form-control" id="targetTemp" name="targetTemp">
+					<input data-toggle="tooltip" data-placement="right" title="32&deg-78&deg" type="text" class="form-control" id="targetTemp" name="targetTemp">
 				</div>
 				<div class="form-group">
 					<label for="rampStart">Ramp Start Temperature</label>
-					<input type="text" class="form-control" id="rampStart" name="rampStart">
+					<input data-toggle="tooltip" data-placement="right" title="32&deg-78&deg" type="text" class="form-control" id="rampStart" name="rampStart">
 				</div>
 				<div class="form-group">
 					<label for="rampEnd">Ramp End Temperature</label>
-					<input type="text" class="form-control" id="rampEnd" name="rampEnd">
+					<input data-toggle="tooltip" data-placement="right" title="32&deg-78&deg" type="text" class="form-control" id="rampEnd" name="rampEnd">
 				</div>
 				<div class="form-group">
 					<label for="rampTime">Ramp Time (days)</label>
-					<input type="text" class="form-control" id="rampTime" name="rampTime">
+					<input data-toggle="tooltip" data-placement="right" title="Fractional Days Fine" type="text" class="form-control" id="rampTime" name="rampTime">
 				</div>
 				<div class="form-group">
 					<label for="password">Password</label>
@@ -58,7 +61,8 @@
 				<button type="submit" class="btn btn-default" value="Post">Submit</button>
 			</form>
 		</div>
-		<div class="col-md-3"></div>
+		<div class="col-md-3">
+		</div>
 	</div>
 
 	<div class="row">
