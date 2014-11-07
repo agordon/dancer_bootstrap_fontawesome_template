@@ -56,3 +56,7 @@ if (! -e $target_file) {
 open OUTPUT, ">>$target_file";
 print OUTPUT "$all_data{coreInfo}{last_heard},$temp_data{temp},$temp_data{tempOut},$temp_data{relayOn},$temp_data{targetTemp}\n";
 close OUTPUT;
+
+open OUTPUT, ">last_min.csv";
+print OUTPUT "$all_data{coreInfo}{last_heard},$temp_data{temp},$temp_data{tempOut},$temp_data{relayOn},$temp_data{targetTemp}\n";
+close OUTPUT;
