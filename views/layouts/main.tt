@@ -23,20 +23,19 @@
 <script src="[% request.uri_base %]/javascripts/jquery-latest.min.js"></script>
 <script src="[% request.uri_base %]/bootstrap/js/bootstrap.min.js"></script>
 <script>
-$(document).ready(function()
-		{
+$(document).ready(function() {
 		$("[data-toggle='tooltip']").tooltip();
 		$('#ramp-controls').hide();
 		$('#mode').change(function(){
 			if($('#mode').val() == 'Ramp') {
-				$('#ramp-controls').show(); 
-				$('#const-controls').hide(); 
+			$('#ramp-controls').show(); 
+			$('#const-controls').hide(); 
 			} else {
-				$('#ramp-controls').hide(); 
-				$('#const-controls').show(); 
+			$('#ramp-controls').hide(); 
+			$('#const-controls').show(); 
 			} 
+			});
 		});
-	});
 </script>
 
 
