@@ -31,33 +31,45 @@
 		</div>
 		<div class="col-md-4">
 			<h1>Freezer Controls</h1>
-			<form role="form" method="post">
+			<form class="form-horizontal" role="form" method="post">
 				<div class="form-group">
-					<label for="mode">Temp Control Mode</label>
-					<select id="mode" class="form-control" name="mode">
-						<option>Constant</option>
-						<option>Ramp</option>
-					</select>
+					<label for="mode" class="col-sm-6 control-label">Temp Control Mode</label>
+					<div class="col-sm-6">
+						<select id="mode" class="form-control" name="mode">
+							<option>Constant</option>
+							<option>Ramp</option>
+						</select>
+					</div>
 				</div>
 				<div class="form-group">
-					<label for="targetTemp">Target Temperature</label>
-					<input data-toggle="tooltip" data-placement="right" title="32&deg-78&deg" type="text" class="form-control" id="targetTemp" name="targetTemp">
+					<label for="targetTemp" class="col-sm-6 control-label">Target Temperature</label>
+					<div class="col-sm-6">
+						<input data-toggle="tooltip" data-placement="right" title="32&deg-78&deg" type="text" class="form-control" id="targetTemp" name="targetTemp">
+					</div>
 				</div>
 				<div class="form-group">
-					<label for="rampStart">Ramp Start Temperature</label>
-					<input data-toggle="tooltip" data-placement="right" title="32&deg-78&deg" type="text" class="form-control" id="rampStart" name="rampStart">
+					<label for="rampStart" class="col-sm-6 control-label">Ramp Start Temperature</label>
+					<div class="col-sm-6">
+						<input data-toggle="tooltip" data-placement="right" title="32&deg-78&deg" type="text" class="form-control" id="rampStart" name="rampStart">
+					</div>
 				</div>
 				<div class="form-group">
-					<label for="rampEnd">Ramp End Temperature</label>
-					<input data-toggle="tooltip" data-placement="right" title="32&deg-78&deg" type="text" class="form-control" id="rampEnd" name="rampEnd">
+					<label for="rampEnd" class="col-sm-6 control-label">Ramp End Temperature</label>
+					<div class="col-sm-6">
+						<input data-toggle="tooltip" data-placement="right" title="32&deg-78&deg" type="text" class="form-control" id="rampEnd" name="rampEnd">
+					</div>
 				</div>
 				<div class="form-group">
-					<label for="rampTime">Ramp Time (days)</label>
-					<input data-toggle="tooltip" data-placement="right" title="Fractional Days Fine" type="text" class="form-control" id="rampTime" name="rampTime">
+					<label for="rampTime" class="col-sm-6 control-label">Ramp Time (days)</label>
+					<div class="col-sm-6">
+						<input data-toggle="tooltip" data-placement="right" title="Fractional Days Fine" type="text" class="form-control" id="rampTime" name="rampTime">
+					</div>
 				</div>
 				<div class="form-group">
-					<label for="password">Password</label>
-					<input type="password" class="form-control" id="password" name="password">
+					<label for="password" class="col-sm-6 control-label">Password</label>
+					<div class="col-sm-6">
+						<input type="password" class="form-control" id="password" name="password">
+					</div>
 				</div>
 				<button type="submit" class="btn btn-default" value="Post">Submit</button>
 			</form>
