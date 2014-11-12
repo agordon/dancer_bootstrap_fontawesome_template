@@ -113,14 +113,31 @@ post '/' => sub {
 		'freezer_temp' => $last_data[1],
 		'outside_temp' => $last_data[2],
 		'target_temp' => $last_data[4],
+		'last_time' => $dt->month() . "/" . $dt->day() ." " . $dt->hms,
 		'relay_status' => $relay_status,
 		'relay_color' => $relay_color,
 		'image_set' => \@image_set,
 		'alert_message' => $settings_update_msg,
 		'alert_class' => $alert_class,
-		'last_time' => $dt->month() . "/" . $dt->day() ." " . $dt->hms,
 	};
 };
+
+get '/archive' => sub {
+
+	my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = localtime(time);
+	#mon is returned as 0-11, so bump it up by one for the filename
+	$mon++;
+	
+	#year is stored as years since 1900
+	$year += 1900;
+	
+    template 'archive', {
+		'suggested_name' => "BEER_NAME_$year-$mon-$mday.zip"
+	};
+};
+
+post '/archive' => sub {
+}; 
 
 ###############################################################################
 # Functions
