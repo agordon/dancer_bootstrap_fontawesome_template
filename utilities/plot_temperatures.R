@@ -1,11 +1,18 @@
 #!/usr/bin/Rscript --vanilla
 
-#the first and only argument should be the file with the temperature data
+#Two parameters are expected:
+#	-1st: file with data
+#	-2nd: folder to put images
 args <- commandArgs(TRUE);
+
+if (length(args) != 2) {
+	print("Expected two parameters: data file and target folder");
+	quit();
+}
 
 temp = read.csv(args[1],header=T);
 temp = temp[rev(1:dim(temp)[1]),];
-day_count = 1;
+day_count = ceiling(dim(temp)[1]/1440);
 
 while (dim(temp)[2] > 0) {
 	if (dim(temp)[1] >= 1440) {
@@ -44,7 +51,7 @@ while (dim(temp)[2] > 0) {
 	
 	system(sprintf('convert -strip -interlace Plane -quality 85%% %s/day%02d.svg %s/day%02d.jpg', args[2], day_count, args[2], day_count));
 
-	day_count = day_count + 1;
+	day_count = day_count - 1;
 
 	#for some reason the while loop isn't working with longer data sets, this
 	#is my hacky fix
