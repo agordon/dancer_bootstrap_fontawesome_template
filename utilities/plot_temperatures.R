@@ -50,6 +50,7 @@ while (dim(temp)[2] > 0) {
 	graphics.off();
 	
 	system(sprintf('convert -strip -interlace Plane -quality 85%% %s/day%02d.svg %s/day%02d.jpg', args[2], day_count, args[2], day_count));
+	system(sprintf('chmod a+wrx %s/day%02d.svg %s/day%02d.jpg', args[2], day_count, args[2], day_count));
 
 	day_count = day_count - 1;
 
