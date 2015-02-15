@@ -13,6 +13,10 @@ use Data::Dumper;
 use Config::Simple;
 use DateTime::Format::ISO8601;
 
+#Other pages/functions in the rest of the app
+use shared_functions;
+use Archive;
+
 our $VERSION = '0.1';
 
 my $cfg = new Config::Simple('../utilities/spark_core_info.cfg');
@@ -48,7 +52,6 @@ hook 'before' => sub {
 };
 
 get '/' => sub {
-	
     template 'index', { 
 		'freezer_temp' => vars->{last_data}[1],
 		'outside_temp' => vars->{last_data}[2],
@@ -96,77 +99,6 @@ post '/' => sub {
 	};
 };
 
-get '/archive' => sub {
-	my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = localtime(time);
-	#mon is returned as 0-11, so bump it up by one for the filename
-	$mon++;
-	
-	#year is stored as years since 1900
-	$year += 1900;
-	
-	my @archive_set = <archive/*.zip>;
-	map s/^archive\///, @archive_set;
-
-    template 'archive', {
-		'suggested_name' => "BEER_NAME_$year-$mon-$mday.zip",
-		'archive_set' => \@archive_set,
-	};
-};
-
-post '/archive' => sub {
-	my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = localtime(time);
-	#mon is returned as 0-11, so bump it up by one for the filename
-	$mon++;
-	
-	#year is stored as years since 1900
-	$year += 1900;
-	
-	my $zip_target = param('archiveName');
-	my $folder_name = param('archiveName');
-	$folder_name =~ s/\.zip//g;
-	
-	my @image_set = <../public/images/*>;
-	my @data_files = <../utilities/*.csv>;
-	
-	my $cfg = new Config::Simple('../lib/password.cfg') or die "$!";
-	my %password_info = &verifyPassword(params->{'password'}, $cfg->param('hash_pass'));
-	
-	if ($password_info{match}) {
-		if (param('reset')) {
-			for (@image_set) { unlink $_ or warning $!; }
-			for (@data_files) { unlink $_; }
-			$password_info{update_message} = "Success, current data cleared.";
-		} else {
-			mkdir($folder_name);
-			
-			for (@image_set) { move($_, $folder_name) }
-			for (@data_files) { move($_, $folder_name); }
-
-			system("zip -r $zip_target $folder_name");
-
-			if (! -w 'archive') {
-				mkdir('archive');
-			}
-			
-			rmtree($folder_name);
-			move($zip_target, 'archive');
-			$password_info{update_message} = "Success, current data saved.";
-		}
-	} else {
-		$password_info{update_message} = "Password doesn't match, no changes made.";
-	}
-	
-	my @archive_set = <archive/*.zip>;
-	map s/^archive\///, @archive_set;
-
-    template 'archive', {
-		'suggested_name' => "BEER_NAME_$year-$mon-$mday.zip",
-		'archive_set' => \@archive_set,
-		'alert_message' => $password_info{update_message},
-		'alert_class' => $password_info{alert_class},
-	};
-}; 
-
 ###############################################################################
 # Functions
 ###############################################################################
@@ -209,26 +141,6 @@ sub makeSparkFuncRequest {
 		$command .= " -d 'args=junk'";
 	}
 	return $command;
-}
-
-#######################################
-# Others
-#######################################
-sub verifyPassword {
-	my $submited_password = $_[0]; 
-	my $password_hash = $_[1]; 
-	
-	my %password_info;
-	
-	if (passphrase($submited_password)->matches($password_hash)) {
-		$password_info{match} = 1;
-		$password_info{alert_class} = "alert-success";
-	} else {
-		$password_info{match} = 0;
-		$password_info{alert_class} = "alert-danger";
-	}
-
-	return %password_info;
 }
 
 true;
