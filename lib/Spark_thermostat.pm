@@ -21,6 +21,7 @@ my %spark_core_props = (device_ID => $cfg->param('device_ID'),
 get '/' => sub {
 	my @image_set = <../public/images/*.jpg>;
 	@image_set = reverse map { basename($_) } @image_set;
+	@image_set = @image_set[0];
 
 	my $parser = Text::CSV::Simple->new;
 	my @data = $parser->read_file('../utilities/last_min.csv');
@@ -53,6 +54,7 @@ get '/' => sub {
 post '/' => sub {
 	my @image_set = <../public/images/*.jpg>;
 	@image_set = reverse map { basename($_) } @image_set;
+	@image_set = @image_set[0];
 
 	my $parser = Text::CSV::Simple->new;
 	my @data = $parser->read_file('../utilities/last_min.csv');
