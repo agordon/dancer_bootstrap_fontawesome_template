@@ -138,9 +138,9 @@ post '/archive' => sub {
 			$password_info{update_message} = "Success, current data cleared.";
 		} else {
 			mkdir($folder_name);
-
-			for (@image_set) { copy($_, $folder_name); }
-			for (@data_files) { copy($_, $folder_name); }
+			
+			for (@image_set) { move($_, $folder_name) }
+			for (@data_files) { move($_, $folder_name); }
 
 			system("zip -r $zip_target $folder_name");
 
