@@ -6,6 +6,7 @@ use Cwd;
 use Sys::Hostname;
 use File::Basename;
 use File::Copy;
+use File::Path;
 use Text::CSV::Simple;
 use Dancer::Plugin::Passphrase;
 use Data::Dumper;
@@ -18,88 +19,55 @@ my $cfg = new Config::Simple('../utilities/spark_core_info.cfg');
 my %spark_core_props = (device_ID => $cfg->param('device_ID'), 
 	access_token => $cfg->param('access_token'));
 
-get '/' => sub {
+hook 'before' => sub {
 	my @image_set = <../public/images/*.jpg>;
 	@image_set = reverse map { basename($_) } @image_set;
 	@image_set = @image_set[0];
-
+	var image_set => \@image_set;
+	
 	my $parser = Text::CSV::Simple->new;
 	my @data = $parser->read_file('../utilities/last_min.csv');
 	
 	my @last_data = @{$data[-1]};
-
-	my $relay_status = 'Off';
-	$relay_status = 'On' if ($last_data[3]);
 	
-	my $relay_color = '"red"';
-	if ($relay_status eq 'On') {
-		$relay_color = '"Green"';
+	var last_data => \@last_data;
+
+	var relay_status => 'Off';
+	var relay_status => 'On' if ($last_data[3]);
+
+	var relay_color => '"red"';
+	if (vars->{relay_status} eq 'On') {
+		var relay_color => '"Green"';
 	}
 
 	my $dt = DateTime::Format::ISO8601->parse_datetime($last_data[0]);	
 	$dt->set_time_zone('UTC');
 	$dt->set_time_zone('EST');
+
+	var last_time => $dt->month() . "/" . $dt->day() ." " . $dt->hms;
+};
+
+get '/' => sub {
 	
     template 'index', { 
-		'freezer_temp' => $last_data[1],
-		'outside_temp' => $last_data[2],
-		'target_temp' => $last_data[4],
-		'relay_status' => $relay_status,
-		'relay_color' => $relay_color,
-		'image_set' => \@image_set,
-		'last_time' => $dt->month() . "/" . $dt->day() ." " . $dt->hms,
+		'freezer_temp' => vars->{last_data}[1],
+		'outside_temp' => vars->{last_data}[2],
+		'target_temp' => vars->{last_data}[4],
+		'relay_status' => vars->{relay_status},
+		'relay_color' => vars->{relay_color},
+		'image_set' => vars->{image_set},
+		'last_time' => vars->{last_time},
 	};
 };
 
 post '/' => sub {
-	my @image_set = <../public/images/*.jpg>;
-	@image_set = reverse map { basename($_) } @image_set;
-	@image_set = @image_set[0];
-
-	my $parser = Text::CSV::Simple->new;
-	my @data = $parser->read_file('../utilities/last_min.csv');
-	
-	my @last_data = @{$data[-1]};
-	
-	my $relay_status = 'Off';
-	$relay_status = 'On' if ($last_data[3]);
-	
-	my $relay_color = '"red"';
-	if ($relay_status eq 'On') {
-		$relay_color = '"Green"';
-	}
-	
-	my $dt = DateTime::Format::ISO8601->parse_datetime($last_data[0]);	
-	$dt->set_time_zone('UTC');
-	$dt->set_time_zone('EST');
-	
 	#Relay Control
 	my $cfg = new Config::Simple('../lib/password.cfg') or die "$!";
 	
-	my $settings_update_msg = '';
-	my $alert_class = '';
-	my $password_match = 0;
-
-	if (not(passphrase(params->{'password'})->matches($cfg->param('hash_pass')))) {
-		$settings_update_msg .= 'Password doesn\'t match, no change made in settings.<br/>';
-		$alert_class = "alert-danger";
-	} else {
-		$settings_update_msg .= 'Success, mode updated.';
-		$alert_class = "alert-success";
-		$password_match = 1;
-	}
+	my %password_info = &verifyPassword(params->{'password'}, $cfg->param('hash_pass'));
 	
-	# if (params->{'mode'} eq 'Constant') {
-	# 	if (params->{'targetTemp'} < 32) {
-	# 		$settings_update_msg .= 'Can\'t set temperature below 32.<br/>';
-	# 	}
-	# } elsif (params->{'mode'} eq 'Ramp') {
-	# 	if (params->{'rampTime'} < 0.5) {
-	# 		$settings_update_msg .= 'Can\'t set temperature below 32.<br/>';
-	# 	}
-	# }
-	
-	if ($password_match) {
+	if ($password_info{match}) {
+		$password_info{update_message} = 'Success, mode updated.';
 		if (params->{'mode'} eq 'Constant') {
 			if (not(params->{'targetTemp'} eq '')) {
 				&setConstMode(params->{'targetTemp'});
@@ -110,18 +78,21 @@ post '/' => sub {
 				&setRampMode(params->{'rampStart'},params->{'rampEnd'},params->{'rampTime'});
 			}
 		}
+	} else {
+		$password_info{update_message} = 'Password doesn\'t match, no change made in settings.<br/>';
 	}
 
     template 'index', { 
-		'freezer_temp' => $last_data[1],
-		'outside_temp' => $last_data[2],
-		'target_temp' => $last_data[4],
-		'last_time' => $dt->month() . "/" . $dt->day() ." " . $dt->hms,
-		'relay_status' => $relay_status,
-		'relay_color' => $relay_color,
-		'image_set' => \@image_set,
-		'alert_message' => $settings_update_msg,
-		'alert_class' => $alert_class,
+		'freezer_temp' => vars->{last_data}[1],
+		'outside_temp' => vars->{last_data}[2],
+		'target_temp' => vars->{last_data}[4],
+		'relay_status' => vars->{relay_status},
+		'relay_color' => vars->{relay_color},
+		'image_set' => vars->{image_set},
+		'last_time' => vars->{last_time},
+		
+		'alert_message' => $password_info{update_message},
+		'alert_class' => $password_info{alert_class},
 	};
 };
 
@@ -150,38 +121,49 @@ post '/archive' => sub {
 	#year is stored as years since 1900
 	$year += 1900;
 	
-	my @archive_set = <archive/*.zip>;
-	map s/^archive\///, @archive_set;
-	
-
 	my $zip_target = param('archiveName');
 	my $folder_name = param('archiveName');
 	$folder_name =~ s/\.zip//g;
 	
-	mkdir($folder_name);
-	
 	my @image_set = <../public/images/*>;
-	
-	for (@image_set) {
-		copy($_, $folder_name);
-	}
-
 	my @data_files = <../utilities/*.csv>;
-	for (@data_files) {
-		copy($_, $folder_name);
-	}
-
-	system("zip -r $zip_target $folder_name");
 	
-	if (! -w 'archive') {
-		mkdir('archive');
-	}
+	my $cfg = new Config::Simple('../lib/password.cfg') or die "$!";
+	my %password_info = &verifyPassword(params->{'password'}, $cfg->param('hash_pass'));
+	
+	if ($password_info{match}) {
+		if (param('reset')) {
+			for (@image_set) { unlink $_ or warning $!; }
+			for (@data_files) { unlink $_; }
+			$password_info{update_message} = "Success, current data cleared.";
+		} else {
+			mkdir($folder_name);
 
-	move($zip_target, 'archive');
+			for (@image_set) { copy($_, $folder_name); }
+			for (@data_files) { copy($_, $folder_name); }
+
+			system("zip -r $zip_target $folder_name");
+
+			if (! -w 'archive') {
+				mkdir('archive');
+			}
+			
+			rmtree($folder_name);
+			move($zip_target, 'archive');
+			$password_info{update_message} = "Success, current data saved.";
+		}
+	} else {
+		$password_info{update_message} = "Password doesn't match, no changes made.";
+	}
+	
+	my @archive_set = <archive/*.zip>;
+	map s/^archive\///, @archive_set;
 
     template 'archive', {
 		'suggested_name' => "BEER_NAME_$year-$mon-$mday.zip",
 		'archive_set' => \@archive_set,
+		'alert_message' => $password_info{update_message},
+		'alert_class' => $password_info{alert_class},
 	};
 }; 
 
@@ -189,7 +171,9 @@ post '/archive' => sub {
 # Functions
 ###############################################################################
 
-#Constant mode setting functions
+#######################################
+# Spark Control Functions
+#######################################
 sub setConstMode {
 	my $temp_target = shift;
 	
@@ -202,7 +186,6 @@ sub setConstMode {
 	system("$command > /dev/null 2> /dev/null");
 }
 
-#Ramp mode setting functions
 sub setRampMode {
 	my ($rampStartTemp,$rampEndTemp,$rampDays) = @_;
 	
@@ -226,6 +209,26 @@ sub makeSparkFuncRequest {
 		$command .= " -d 'args=junk'";
 	}
 	return $command;
+}
+
+#######################################
+# Others
+#######################################
+sub verifyPassword {
+	my $submited_password = $_[0]; 
+	my $password_hash = $_[1]; 
+	
+	my %password_info;
+	
+	if (passphrase($submited_password)->matches($password_hash)) {
+		$password_info{match} = 1;
+		$password_info{alert_class} = "alert-success";
+	} else {
+		$password_info{match} = 0;
+		$password_info{alert_class} = "alert-danger";
+	}
+
+	return %password_info;
 }
 
 true;
