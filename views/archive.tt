@@ -26,7 +26,7 @@
 			This form archives the raw data and the associated visualizations from the current brew. It also turns off data recording.<br/><br/>
 			<form class="form-horizontal" role="form" method="post">
 				<div class="form-group">
-					<label for="targetTemp" class="col-sm-3 control-label">Archive File</label>
+					<label for="archiveName" class="col-sm-3 control-label">Archive File</label>
 					<div class="col-sm-9">
 						<input data-toggle="tooltip" data-placement="bottom" title="" type="text" class="form-control" id="archiveName" name="archiveName" value="[% suggested_name %]">
 					</div>

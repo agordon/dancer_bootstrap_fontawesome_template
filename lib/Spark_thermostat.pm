@@ -5,6 +5,7 @@ use warnings;
 use Cwd;
 use Sys::Hostname;
 use File::Basename;
+use File::Copy;
 use Text::CSV::Simple;
 use Dancer::Plugin::Passphrase;
 use Data::Dumper;
@@ -123,7 +124,6 @@ post '/' => sub {
 };
 
 get '/archive' => sub {
-
 	my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = localtime(time);
 	#mon is returned as 0-11, so bump it up by one for the filename
 	$mon++;
@@ -131,12 +131,56 @@ get '/archive' => sub {
 	#year is stored as years since 1900
 	$year += 1900;
 	
+	my @archive_set = <archive/*.zip>;
+	map s/^archive\///, @archive_set;
+
     template 'archive', {
-		'suggested_name' => "BEER_NAME_$year-$mon-$mday.zip"
+		'suggested_name' => "BEER_NAME_$year-$mon-$mday.zip",
+		'archive_set' => \@archive_set,
 	};
 };
 
 post '/archive' => sub {
+	my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = localtime(time);
+	#mon is returned as 0-11, so bump it up by one for the filename
+	$mon++;
+	
+	#year is stored as years since 1900
+	$year += 1900;
+	
+	my @archive_set = <archive/*.zip>;
+	map s/^archive\///, @archive_set;
+	
+
+	my $zip_target = param('archiveName');
+	my $folder_name = param('archiveName');
+	$folder_name =~ s/\.zip//g;
+	
+	mkdir($folder_name);
+	
+	my @image_set = <../public/images/*>;
+	
+	for (@image_set) {
+		copy($_, $folder_name);
+	}
+
+	my @data_files = <../utilities/*.csv>;
+	for (@data_files) {
+		copy($_, $folder_name);
+	}
+
+	system("zip -r $zip_target $folder_name");
+	
+	if (! -w 'archive') {
+		mkdir('archive');
+	}
+
+	move($zip_target, 'archive');
+
+    template 'archive', {
+		'suggested_name' => "BEER_NAME_$year-$mon-$mday.zip",
+		'archive_set' => \@archive_set,
+	};
 }; 
 
 ###############################################################################
