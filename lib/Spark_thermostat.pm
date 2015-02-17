@@ -31,8 +31,9 @@ hook 'before' => sub {
 	
 	my $parser = Text::CSV::Simple->new;
 	my @last_data;
-	if (-e '../utilities/last_min.csv') {
+	if (&isRecordingEnabled && -e '../utilities/last_min.csv') {
 		@last_data = $parser->read_file('../utilities/last_min.csv');
+		@last_data = @{$last_data[0]};
 		var recordingEnabled => 1;
 	} else {
 		#Fake data for the cases when there isn't a data file available, format:
@@ -50,8 +51,8 @@ hook 'before' => sub {
 	if (vars->{relay_status} eq 'On') {
 		var relay_color => '"Green"';
 	}
-
-	my $dt = DateTime::Format::ISO8601->parse_datetime($last_data[0]);	
+	
+	my $dt = DateTime::Format::ISO8601->parse_datetime($last_data[0]) or die $!;	
 	$dt->set_time_zone('UTC');
 	$dt->set_time_zone('EST');
 
@@ -79,7 +80,7 @@ post '/' => sub {
 	
 	if ($password_info{match}) {
 		if (defined params->{'enableRecording'}) {
-			&enableRecording;
+			# &enableRecording;
 		} else {
 			if (params->{'mode'} eq 'Constant') {
 				if (not(params->{'targetTemp'} eq '')) {
