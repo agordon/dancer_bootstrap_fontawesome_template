@@ -4,9 +4,10 @@ use warnings;
 use Cwd;
 use Dancer::Plugin::Passphrase;
 use Data::Dumper;
+use Config::Crontab;
 
 use Exporter 'import';
-our @EXPORT  = qw(verifyPassword);
+our @EXPORT  = qw(verifyPassword enableRecording);
 
 ###############################################################################
 # Functions
@@ -28,3 +29,24 @@ sub verifyPassword {
 
 	return %password_info;
 }
+
+sub enableRecording {
+	my $ct = new Config::Crontab; $ct->read;
+
+	#The command which records the temp is called record_temperature, the plotting command is 
+	$_->active(1) for $ct->select(-command_re => 'record_temperature.pl');
+	$_->active(1) for $ct->select(-command_re => 'plot_temperatures.R');
+	
+	$ct->write;
+}
+
+sub disableRecording {
+	my $ct = new Config::Crontab; $ct->read;
+
+	#The command which records the temp is called record_temperature, the plotting command is 
+	$_->active(0) for $ct->select(-command_re => 'record_temperature.pl');
+	$_->active(0) for $ct->select(-command_re => 'plot_temperatures.R');
+	
+	$ct->write;
+}
+

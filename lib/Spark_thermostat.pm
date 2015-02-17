@@ -26,13 +26,20 @@ my %spark_core_props = (device_ID => $cfg->param('device_ID'),
 hook 'before' => sub {
 	my @image_set = <../public/images/*.jpg>;
 	@image_set = reverse map { basename($_) } @image_set;
-	@image_set = @image_set[0];
+	@image_set = $image_set[0];
 	var image_set => \@image_set;
 	
 	my $parser = Text::CSV::Simple->new;
-	my @data = $parser->read_file('../utilities/last_min.csv');
-	
-	my @last_data = @{$data[-1]};
+	my @last_data;
+	if (-e '../utilities/last_min.csv') {
+		@last_data = $parser->read_file('../utilities/last_min.csv');
+		var recordingEnabled => 1;
+	} else {
+		#Fake data for the cases when there isn't a data file available, format:
+		#	-Date,Freezer Temp,Outside Temp,Relay Status,Target Temp
+		@last_data = ("2015-01-06T19:13:01.629Z","NA","NA",0,"NA");
+		var recordingEnabled => 0;
+	}
 	
 	var last_data => \@last_data;
 
@@ -60,6 +67,7 @@ get '/' => sub {
 		'relay_color' => vars->{relay_color},
 		'image_set' => vars->{image_set},
 		'last_time' => vars->{last_time},
+		recordingEnabled => vars->{recordingEnabled},
 	};
 };
 
@@ -70,17 +78,21 @@ post '/' => sub {
 	my %password_info = &verifyPassword(params->{'password'}, $cfg->param('hash_pass'));
 	
 	if ($password_info{match}) {
-		$password_info{update_message} = 'Success, mode updated.';
-		if (params->{'mode'} eq 'Constant') {
-			if (not(params->{'targetTemp'} eq '')) {
-				&setConstMode(params->{'targetTemp'});
-			}
-		} elsif (params->{'mode'} eq 'Ramp') {
-			if (not(params->{'rampStart'} eq '') && not(params->{'rampEnd'} eq '') &&
-				not(params->{'rampTime'} eq '')) {
-				&setRampMode(params->{'rampStart'},params->{'rampEnd'},params->{'rampTime'});
+		if (defined params->{'enableRecording'}) {
+			&enableRecording;
+		} else {
+			if (params->{'mode'} eq 'Constant') {
+				if (not(params->{'targetTemp'} eq '')) {
+					&setConstMode(params->{'targetTemp'});
+				}
+			} elsif (params->{'mode'} eq 'Ramp') {
+				if (not(params->{'rampStart'} eq '') && not(params->{'rampEnd'} eq '') &&
+					not(params->{'rampTime'} eq '')) {
+					&setRampMode(params->{'rampStart'},params->{'rampEnd'},params->{'rampTime'});
+				}
 			}
 		}
+		$password_info{update_message} = 'Success, mode updated.';
 	} else {
 		$password_info{update_message} = 'Password doesn\'t match, no change made in settings.<br/>';
 	}
