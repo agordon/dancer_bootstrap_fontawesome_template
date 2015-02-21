@@ -80,7 +80,7 @@ post '/' => sub {
 	
 	if ($password_info{match}) {
 		if (defined params->{'enableRecording'}) {
-			# &enableRecording;
+			&enableRecording;
 		} else {
 			if (params->{'mode'} eq 'Constant') {
 				if (not(params->{'targetTemp'} eq '')) {

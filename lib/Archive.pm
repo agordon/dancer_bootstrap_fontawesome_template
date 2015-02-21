@@ -1,4 +1,4 @@
-package Spark_thermostat;
+package Archive;
 use Dancer ':syntax';
 use strict;
 use warnings;
@@ -57,7 +57,7 @@ post '/archive' => sub {
 		} else {
 			mkdir($folder_name);
 			
-			for (@image_set) { move($_, $folder_name) }
+			for (@image_set) { move($_, $folder_name); }
 			for (@data_files) { move($_, $folder_name); }
 
 			system("zip -r $zip_target $folder_name");
