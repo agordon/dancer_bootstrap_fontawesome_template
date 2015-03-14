@@ -1,3 +1,19 @@
+<script>
+$(document).ready(function() {
+		$("[data-toggle='tooltip']").tooltip();
+		$('#ramp-controls').hide();
+		$('#mode').change(function(){
+			if($('#mode').val() == 'Ramp') {
+				$('#ramp-controls').show(); 
+				$('#const-controls').hide(); 
+			} else {
+				$('#ramp-controls').hide(); 
+				$('#const-controls').show(); 
+			} 
+			});
+		});
+</script>
+
 <div class="container-fluid">
 
 	<div class="page-header">
