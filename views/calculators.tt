@@ -40,11 +40,27 @@
 					</div>
 				</div>
 			</form>
-			<p>The ABV is: {{(startGrav - endGrav)*131.25| number:1}}%</p>
-
+			<h2>The ABV is: {{(startGrav - endGrav)*131.25| number:1}}%</h2>
 
 		</div>
 		<div class="col-md-4">
+			<h2><div class="ABV">Refratometer ABV: </div></h2>
+			<form class="form-horizontal" role="form">
+				<div class="form-group">
+					<label for="startGrav" class="col-sm-4 control-label">Starting Gravity</label>
+					<div class="col-sm-6">
+						<input type="text" class="form-control" id="startGravRefract" name="startGrav" ng-model="startGravRefract" placeholder="in brix">
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="endGrav" class="col-sm-4 control-label">Ending Gravity</label>
+					<div class="col-sm-6">
+						<input type="text" class="form-control" id="endGrav" name="endGrav" ng-model="endGravRefract" placeholder='in brix'>
+					</div>
+				</div>
+			</form>
+			<h2>The FG is: {{1.001843 - 0.002318474*startGravRefract - 0.000007775*startGravRefract*startGravRefract - 0.000000034*startGravRefract*startGravRefract*startGravRefract + 0.00574*endGravRefract + 0.00003344*endGravRefract*endGravRefract + 0.000000086*endGravRefract*endGravRefract*endGravRefract| number:3}}</h2>
+
 		</div>
 		<div class="col-md-3">
 		</div>
