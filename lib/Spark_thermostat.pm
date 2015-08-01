@@ -16,10 +16,11 @@ use DateTime::Format::ISO8601;
 #Other pages/functions in the rest of the app
 use shared_functions;
 use Archive;
+use Calculators;
 
 our $VERSION = '0.1';
 
-my $cfg = new Config::Simple('../utilities/spark_core_info.cfg');
+my $cfg = new Config::Simple('../utilities/spark_core_info.cfg') or die $!;
 my %spark_core_props = (device_ID => $cfg->param('device_ID'), 
 	access_token => $cfg->param('access_token'));
 

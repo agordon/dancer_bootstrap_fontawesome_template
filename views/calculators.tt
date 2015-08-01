@@ -1,0 +1,53 @@
+
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.3/angular.min.js"></script>
+
+<div class="container-fluid">
+
+	<div class="page-header">
+		<div class="row">
+			<div class="col-md-12">
+				<h1>Beer Calculators</h1>
+			</div>
+		</div>
+	</div>
+	
+	[% IF alert_message %]
+	<div class="row">
+		<div class="col-md-12">
+			<div data-dismiss="alert" class="alert [% alert_class %] alert-dismissible fade in" role="alert">
+			<button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+			[% alert_message %]
+			</div>
+		</div>
+	</div>
+	[% END %]
+
+	<div class="row">
+		<div class="col-md-1"></div>
+		<div class="col-md-4">
+			<h2><div class="ABV">ABV: </div></h2>
+			<form class="form-horizontal" role="form">
+				<div class="form-group">
+					<label for="startGrav" class="col-sm-4 control-label">Starting Gravity</label>
+					<div class="col-sm-6">
+						<input type="text" class="form-control" id="startGrav" name="startGrav" ng-model="startGrav">
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="endGrav" class="col-sm-4 control-label">Ending Gravity</label>
+					<div class="col-sm-6">
+						<input type="text" class="form-control" id="endGrav" name="endGrav" ng-model="endGrav">
+					</div>
+				</div>
+			</form>
+			<p>The ABV is: {{(startGrav - endGrav)*131.25| number:1}}%</p>
+
+
+		</div>
+		<div class="col-md-4">
+		</div>
+		<div class="col-md-3">
+		</div>
+	</div>
+
+</div>
