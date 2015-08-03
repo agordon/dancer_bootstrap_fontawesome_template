@@ -44,7 +44,7 @@
 
 		</div>
 		<div class="col-md-4">
-			<h2><div class="ABV">Refratometer ABV: </div></h2>
+			<h2><div class="ABV">Refractometer Correction: </div></h2>
 			<form class="form-horizontal" role="form">
 				<div class="form-group">
 					<label for="startGrav" class="col-sm-4 control-label">Starting Gravity</label>
@@ -62,6 +62,38 @@
 			<h2>The FG is: {{1.001843 - 0.002318474*startGravRefract - 0.000007775*startGravRefract*startGravRefract - 0.000000034*startGravRefract*startGravRefract*startGravRefract + 0.00574*endGravRefract + 0.00003344*endGravRefract*endGravRefract + 0.000000086*endGravRefract*endGravRefract*endGravRefract| number:3}}</h2>
 
 		</div>
+		<div class="col-md-3">
+		</div>
+	</div>
+	
+	<div class="row">
+		<div class="col-md-1"></div>
+		<div class="col-md-4">
+			<h2><div class="ABV">Gravity to Brix: </div></h2>
+			<form class="form-horizontal" role="form">
+				<div class="form-group">
+					<label for="startGrav" class="col-sm-4 control-label">Starting Gravity</label>
+					<div class="col-sm-6">
+						<input type="text" class="form-control" id="gravToBrix" name="gravToBrix" ng-model="gravToBrix">
+					</div>
+				</div>
+			</form>
+			<h2>The Brix is: {{ (((182.4601 * gravToBrix -775.6821) * gravToBrix +1262.7794) * gravToBrix -669.5622)| number:1}}</h2>
+		</div>
+
+		<div class="col-md-4">
+			<h2><div class="ABV">Brix to Gravity: </div></h2>
+			<form class="form-horizontal" role="form">
+				<div class="form-group">
+					<label for="startGrav" class="col-sm-4 control-label">Starting Gravity</label>
+					<div class="col-sm-6">
+						<input type="text" class="form-control" id="brixToGrav" name="brixToGrav" ng-model="brixToGrav">
+					</div>
+				</div>
+			</form>
+			<h2>The Gravity is: {{ (brixToGrav / (258.6-((brixToGrav / 258.2)*227.1))) + 1| number:3}}</h2>
+		</div>
+
 		<div class="col-md-3">
 		</div>
 	</div>
