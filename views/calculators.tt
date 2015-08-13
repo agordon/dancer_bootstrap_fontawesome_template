@@ -1,7 +1,46 @@
 
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.3/angular.min.js"></script>
+<script>
+angular.module('beerCalcs', [])
+.controller('CalcsController', function() {
 
-<div class="container-fluid" ng-app>
+	this.gravToABV = function gravToABV() {
+		if (this.startGrav > 1.5 || this.endGrav > 1.5) {
+			return (this.startGrav/1000 - this.endGrav/1000)*131.25;
+		} else {
+			return (this.startGrav - this.endGrav)*131.25;
+		}
+	};
+	
+	this.correctRefract = function correctRefract() {
+		var fGrav = 1.001843 - 0.002318474*this.startGravRefract - 
+			0.000007775*Math.pow(this.startGravRefract,2) - 
+			0.000000034*Math.pow(this.startGravRefract,3) + 
+			0.00574*this.endGravRefract + 
+			0.00003344*Math.pow(this.endGravRefract,2) + 
+			0.000000086*Math.pow(this.endGravRefract,3);
+		return fGrav;
+	};
+	
+	this.convertToBrix = function convertToBrix() {
+		var grav = this.gravToBrix;
+		if (grav > 1.5) {
+			grav = 1 + grav/1000;
+		}
+		var brix = grav * (1262.7794 + grav * (182.4601 * grav - 775.6821)) - 669.5622;
+		return brix;
+	};
+
+	this.convertToGrav = function convertToGrav() {
+		var brix = this.brixToGrav
+		var grav = (brix / (258.6-((brix / 258.2)*227.1))) + 1;
+		return grav;
+	};
+
+});
+</script>
+
+<div class="container-fluid" ng-app ="beerCalcs" ng-controller="CalcsController as calcs">
 
 	<div class="page-header">
 		<div class="row">
@@ -30,17 +69,17 @@
 				<div class="form-group">
 					<label for="startGrav" class="col-sm-4 control-label">Starting Gravity</label>
 					<div class="col-sm-6">
-						<input type="text" class="form-control" id="startGrav" name="startGrav" ng-model="startGrav">
+						<input type="text" class="form-control" id="startGrav" name="startGrav" ng-model="calcs.startGrav">
 					</div>
 				</div>
 				<div class="form-group">
 					<label for="endGrav" class="col-sm-4 control-label">Ending Gravity</label>
 					<div class="col-sm-6">
-						<input type="text" class="form-control" id="endGrav" name="endGrav" ng-model="endGrav">
+						<input type="text" class="form-control" id="endGrav" name="endGrav" ng-model="calcs.endGrav">
 					</div>
 				</div>
 			</form>
-			<h2>The ABV is: {{(startGrav - endGrav)*131.25| number:1}}%</h2>
+			<h2>The ABV is: {{calcs.gravToABV() | number:1}}%</h2>
 
 		</div>
 		<div class="col-md-4">
@@ -49,17 +88,17 @@
 				<div class="form-group">
 					<label for="startGrav" class="col-sm-4 control-label">Starting Gravity</label>
 					<div class="col-sm-6">
-						<input type="text" class="form-control" id="startGravRefract" name="startGrav" ng-model="startGravRefract" placeholder="in brix">
+						<input type="text" class="form-control" id="startGravRefract" ng-model="calcs.startGravRefract" placeholder="in brix">
 					</div>
 				</div>
 				<div class="form-group">
 					<label for="endGrav" class="col-sm-4 control-label">Ending Gravity</label>
 					<div class="col-sm-6">
-						<input type="text" class="form-control" id="endGrav" name="endGrav" ng-model="endGravRefract" placeholder='in brix'>
+						<input type="text" class="form-control" id="endGrav" ng-model="calcs.endGravRefract" placeholder='in brix'>
 					</div>
 				</div>
 			</form>
-			<h2>The FG is: {{1.001843 - 0.002318474*startGravRefract - 0.000007775*startGravRefract*startGravRefract - 0.000000034*startGravRefract*startGravRefract*startGravRefract + 0.00574*endGravRefract + 0.00003344*endGravRefract*endGravRefract + 0.000000086*endGravRefract*endGravRefract*endGravRefract| number:3}}</h2>
+			<h2>The FG is: {{calcs.correctRefract() | number:3}}</h2> 
 
 		</div>
 		<div class="col-md-3">
@@ -72,26 +111,26 @@
 			<h2><div class="ABV">Gravity to Brix: </div></h2>
 			<form class="form-horizontal" role="form">
 				<div class="form-group">
-					<label for="startGrav" class="col-sm-4 control-label">Starting Gravity</label>
+					<label for="startGrav" class="col-sm-4 control-label">Gravity</label>
 					<div class="col-sm-6">
-						<input type="text" class="form-control" id="gravToBrix" name="gravToBrix" ng-model="gravToBrix">
+						<input type="text" class="form-control" id="gravToBrix" name="gravToBrix" ng-model="calcs.gravToBrix">
 					</div>
 				</div>
 			</form>
-			<h2>The Brix is: {{ (((182.4601 * gravToBrix -775.6821) * gravToBrix +1262.7794) * gravToBrix -669.5622)| number:1}}</h2>
+			<h2>The Brix is: {{ calcs.convertToBrix() | number:1}}</h2>
 		</div>
 
 		<div class="col-md-4">
 			<h2><div class="ABV">Brix to Gravity: </div></h2>
 			<form class="form-horizontal" role="form">
 				<div class="form-group">
-					<label for="startGrav" class="col-sm-4 control-label">Starting Gravity</label>
+					<label for="startGrav" class="col-sm-4 control-label">Brix</label>
 					<div class="col-sm-6">
-						<input type="text" class="form-control" id="brixToGrav" name="brixToGrav" ng-model="brixToGrav">
+						<input type="text" class="form-control" id="brixToGrav" name="brixToGrav" ng-model="calcs.brixToGrav">
 					</div>
 				</div>
 			</form>
-			<h2>The Gravity is: {{ (brixToGrav / (258.6-((brixToGrav / 258.2)*227.1))) + 1| number:3}}</h2>
+			<h2>The Gravity is: {{ calcs.convertToGrav() | number:3}}</h2>
 		</div>
 
 		<div class="col-md-3">
