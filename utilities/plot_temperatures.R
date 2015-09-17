@@ -14,7 +14,9 @@ temp = read.csv(args[1],header=T);
 temp = temp[rev(1:dim(temp)[1]),];
 day_count = ceiling(dim(temp)[1]/1440);
 
-while (dim(temp)[2] > 0) {
+days_to_plot = 10;
+
+while (dim(temp)[2] > 0 && days_to_plot > 0) {
 	if (dim(temp)[1] >= 1440) {
 		this_day = temp[1:1440,];
 		temp = temp[-c(1:1440),];
@@ -26,10 +28,13 @@ while (dim(temp)[2] > 0) {
 	if (plot_width < 1) {
 		plot_width = 1;
 	}
+	
+	svg_file = sprintf('%s/day%04d.svg',args[2], day_count); 
+	jpg_file = sprintf('%s/day%04d.jpg',args[2], day_count); 
 
-	svg(sprintf('%s/day%02d.svg',args[2], day_count),width=plot_width);
+	svg(sprintf('%s/day%04d.svg',args[2], day_count),width=plot_width);
 	par(bty='n', mgp=c(1.5,0.5,0),mar=c(2.5,2.5,0,0));
-	plot(this_day$Freezer_temp,ylim=c(32,85),typ='l',col='green',
+	plot(this_day$Freezer_temp,ylim=c(32,100),typ='l',col='green',
 		 ylab='Temperature (\u00B0F)',xlab='Time (min ago)');
 
 	mylims <- par("usr");
@@ -49,15 +54,17 @@ while (dim(temp)[2] > 0) {
 
 	graphics.off();
 	
-	system(sprintf('convert -strip -interlace Plane -quality 85%% %s/day%02d.svg %s/day%02d.jpg', args[2], day_count, args[2], day_count));
-	system(sprintf('chmod a+wrx %s/day%02d.svg %s/day%02d.jpg', args[2], day_count, args[2], day_count));
+	system(sprintf('convert -strip -interlace Plane -quality 85%% %s %s', svg_file, jpg_file));
+	system(sprintf('chmod a+wrx %s %s', svg_file, jpg_file));
 
 	day_count = day_count - 1;
-
+	
 	#for some reason the while loop isn't working with longer data sets, this
 	#is my hacky fix
 
 	if (dim(temp)[1] == dim(this_day)[1]) {
 		break;
 	}
+
+	days_to_plot = days_to_plot - 1;
 }
