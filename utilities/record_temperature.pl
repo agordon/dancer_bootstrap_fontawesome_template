@@ -27,7 +27,7 @@ my $all_json = `curl -m 10 --silent "https://api.spark.io/v1/devices/$device_ID/
 if ($all_json eq '') {
 	#if no response, then we want to put in a line of NA's
 	my $parser = Text::CSV::Simple->new;
-	my @data = $parser->read_file($target_file);
+	my @data = $parser->read_file("last_min.csv");
 	my $column_count = scalar(@{$data[0]});
 	
 	my $out_str = 'NA';
@@ -35,7 +35,7 @@ if ($all_json eq '') {
 		$out_str .= ",NA";
 	}
 	$out_str .= "\n";
-			
+	
 	open OUTPUT, ">>$target_file";
 	print OUTPUT $out_str;
 	close OUTPUT;
@@ -60,3 +60,8 @@ close OUTPUT;
 open OUTPUT, ">last_min.csv";
 print OUTPUT "$all_data{coreInfo}{last_heard},$temp_data{temp},$temp_data{tempOut},$temp_data{relayOn},$temp_data{targetTemp}\n";
 close OUTPUT;
+
+system("head -n 1 $target_file > last_min_test.csv");
+system("tail -n 1 $target_file >> last_min_test.csv");
+system("head -n 1 $target_file > last_hour_test.csv");
+system("tail -n 60 $target_file >> last_hour_test.csv");
