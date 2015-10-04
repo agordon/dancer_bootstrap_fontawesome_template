@@ -25,9 +25,10 @@ my %spark_core_props = (device_ID => $cfg->param('device_ID'),
 	access_token => $cfg->param('access_token'));
 
 hook 'before' => sub {
-	my @image_set = <../public/images/*.jpg>;
+	my @image_set = <../public/images/day*.jpg>;
 	@image_set = reverse map { basename($_) } @image_set;
 	@image_set = $image_set[0];
+	@image_set[2] = "week.jpg";
 	var image_set => \@image_set;
 	
 	my $parser = Text::CSV::Simple->new;
