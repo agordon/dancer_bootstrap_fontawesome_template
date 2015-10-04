@@ -17,9 +17,6 @@ use shared_functions;
 
 our $VERSION = '0.1';
 
-hook 'before' => sub {
-};
-
 get '/calculators' => sub {
 	template 'calculators';
 };
