@@ -57,11 +57,7 @@ open OUTPUT, ">>$target_file";
 print OUTPUT "$all_data{coreInfo}{last_heard},$temp_data{temp},$temp_data{tempOut},$temp_data{relayOn},$temp_data{targetTemp}\n";
 close OUTPUT;
 
-open OUTPUT, ">last_min.csv";
-print OUTPUT "$all_data{coreInfo}{last_heard},$temp_data{temp},$temp_data{tempOut},$temp_data{relayOn},$temp_data{targetTemp}\n";
-close OUTPUT;
-
-system("head -n 1 $target_file > last_min_test.csv");
-system("tail -n 1 $target_file >> last_min_test.csv");
-system("head -n 1 $target_file > last_hour_test.csv");
-system("tail -n 60 $target_file >> last_hour_test.csv");
+system("head -n 1 $target_file > last_min.csv");
+system("tail -n 1 $target_file >> last_min.csv");
+system("head -n 1 $target_file > last_hour.csv");
+system("tail -n 60 $target_file >> last_hour.csv");
