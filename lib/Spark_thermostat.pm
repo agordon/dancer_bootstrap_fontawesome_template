@@ -55,7 +55,7 @@ hook 'before' => sub {
 	
 	my $dt = DateTime::Format::ISO8601->parse_datetime($last_data[0]) or die $!;	
 	$dt->set_time_zone('UTC');
-	$dt->set_time_zone('EST');
+	$dt->set_time_zone('local');
 
 	var last_time => $dt->month() . "/" . $dt->day() ." " . $dt->hms;
 };
