@@ -10,6 +10,8 @@ if (length(args) != 2) {
 	quit();
 }
 
+dir.create(args[2], showWarnings = FALSE)
+
 temp = read.csv(args[1],header=T);
 temp = temp[rev(1:dim(temp)[1]),];
 day_count = ceiling(dim(temp)[1]/1440);
