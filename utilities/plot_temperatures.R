@@ -16,6 +16,44 @@ temp = read.csv(args[1],header=T);
 temp = temp[rev(1:dim(temp)[1]),];
 day_count = ceiling(dim(temp)[1]/1440);
 
+###############################################################################
+#Week Plot
+###############################################################################
+
+this_week = temp[1:(7*24*60),];
+
+svg_file = sprintf('%s/week.svg',args[2]); 
+jpg_file = sprintf('%s/week.jpg',args[2]); 
+
+svg(svg_file,width=10);
+par(bty='n', mgp=c(1.5,0.5,0),mar=c(2.5,2.5,0,0));
+plot(this_week$Freezer_temp,ylim=c(32,100),typ='l',col='green',
+		ylab='Temperature (\u00B0F)',xlab='Time (min ago)');
+
+mylims <- par("usr");
+
+relay_on_y = c(mylims[3],mylims[4],mylims[4],mylims[3]);
+
+for (i in 1:dim(this_week)[1]) {
+	if (!is.na(this_week$Relay[i]) && this_week$Relay[i]) {
+		polygon(c(i-0.5,i-0.5,i+0.5,i+0.5),relay_on_y,col=rgb(0.25,0.25,0.25,0.25),density=NA);
+	}
+}
+
+lines(c(0,dim(this_week)[1]),c(32,32),col=rgb(0.83,0.94,1,0.75),lwd=3);
+lines(this_week$Target_temp,col='blue',lwd=3);
+lines(this_week$Freezer_temp,col='green',lwd=3);
+lines(this_week$Outside_Temp,col='red',lwd=3);
+
+graphics.off();
+
+system(sprintf('convert -strip -interlace Plane -quality 85%% %s %s', svg_file, jpg_file));
+system(sprintf('chmod a+wrx %s %s', svg_file, jpg_file));
+
+###############################################################################
+#Day Plots
+###############################################################################
+
 days_to_plot = 10;
 
 while (dim(temp)[2] > 0 && days_to_plot > 0) {
