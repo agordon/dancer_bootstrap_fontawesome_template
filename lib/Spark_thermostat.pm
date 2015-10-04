@@ -28,14 +28,14 @@ hook 'before' => sub {
 	my @image_set = <../public/images/day*.jpg>;
 	@image_set = reverse map { basename($_) } @image_set;
 	@image_set = $image_set[0];
-	@image_set[2] = "week.jpg";
+	$image_set[2] = "week.jpg";
 	var image_set => \@image_set;
 	
 	my $parser = Text::CSV::Simple->new;
 	my @last_data;
 	if (&isRecordingEnabled && -e '../utilities/last_min.csv') {
 		@last_data = $parser->read_file('../utilities/last_min.csv');
-		@last_data = @{$last_data[0]};
+		@last_data = @{$last_data[-1]};
 		var recordingEnabled => 1;
 	} else {
 		#Fake data for the cases when there isn't a data file available, format:
