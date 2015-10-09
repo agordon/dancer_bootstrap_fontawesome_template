@@ -28,7 +28,7 @@ hook 'before' => sub {
 	my @image_set = <../public/images/day*.jpg>;
 	@image_set = reverse map { basename($_) } @image_set;
 	@image_set = $image_set[0];
-	$image_set[2] = "week.jpg";
+	$image_set[1] = "week.jpg";
 	var image_set => \@image_set;
 	
 	my $parser = Text::CSV::Simple->new;
