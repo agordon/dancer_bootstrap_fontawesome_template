@@ -1,8 +1,7 @@
 
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.3/angular.min.js"></script>
 <script>
-angular.module('beerCalcs', [])
-.controller('CalcsController', function() {
+angular.module('beerCalcs', []).controller('CalcsController', function() {
 
 	this.gravToABV = function gravToABV() {
 		if (this.startGrav > 1.5 || this.endGrav > 1.5) {
@@ -36,11 +35,21 @@ angular.module('beerCalcs', [])
 		var grav = (brix / (258.6-((brix / 258.2)*227.1))) + 1;
 		return grav;
 	};
+	
+	this.BIAB = function BIAB() {
+		var grain = this.grainAmount;
+		var waterVol = this.waterVol;
+		var grainTemp = this.grainTempStart;
+		var targetTemp = this.targetTemp;
+		var R = 0.2/((waterVol*4.0)/grain); 
+		var strike = R*(targetTemp - grainTemp) + Number(targetTemp); 
+		return strike;
+	};
 
 });
 </script>
 
-<div class="container-fluid" ng-app ="beerCalcs" ng-controller="CalcsController as calcs">
+<div class="container-fluid" ng-app="beerCalcs" ng-controller="CalcsController as calcs">
 
 	<div class="page-header">
 		<div class="row">
@@ -105,6 +114,8 @@ angular.module('beerCalcs', [])
 		</div>
 	</div>
 	
+	<hr>
+
 	<div class="row">
 		<div class="col-md-1"></div>
 		<div class="col-md-4">
@@ -132,6 +143,50 @@ angular.module('beerCalcs', [])
 			</form>
 			<h2>The Gravity is: {{ calcs.convertToGrav() | number:3}}</h2>
 		</div>
+
+		<div class="col-md-3">
+		</div>
+	</div>
+	
+	<hr>
+
+	<div class="row">
+		<div class="col-md-1"></div>
+		<div class="col-md-4">
+			<h2><div class="ABV">Brew in a Bag: </div></h2>
+			<form class="form-horizontal" role="form">
+				<div class="form-group">
+					<label for="startGrav" class="col-sm-4 control-label">Grain Amount</label>
+					<div class="col-sm-6">
+						<input type="text" class="form-control" id="grainAmount" 
+						       name="grainAmount" ng-model="calcs.grainAmount" placeholder="in lb" value=10>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="startGrav" class="col-sm-4 control-label">Water Volume</label>
+					<div class="col-sm-6">
+						<input type="text" class="form-control" id="waterVol" 
+						       name="waterVol" ng-model="calcs.waterVol" placeholder="in gallons">
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="startGrav" class="col-sm-4 control-label">Grain Start Temp</label>
+					<div class="col-sm-6">
+						<input type="text" class="form-control" id="grainTempStart" 
+						       name="grainTempStart" ng-model="calcs.grainTempStart" placeholder="in F">
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-4 control-label">Target Temp</label>
+					<div class="col-sm-6">
+						<input type="text" class="form-control" id="targetTemp" 
+						       name="targetTemp" ng-model="calcs.targetTemp" placeholder="in F">
+					</div>
+				</div>
+			</form>
+			<h2>The Strike Temp is: {{ calcs.BIAB() | number:1}}</h2>
+		</div>
+
 
 		<div class="col-md-3">
 		</div>
