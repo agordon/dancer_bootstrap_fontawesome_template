@@ -33,7 +33,7 @@ hook 'before' => sub {
 	
 	my $parser = Text::CSV::Simple->new;
 	my @last_data;
-	if (&isRecordingEnabled && -e '../utilities/last_min.csv') {
+	if (-e '../utilities/last_min.csv') {
 		@last_data = $parser->read_file('../utilities/last_min.csv');
 		@last_data = @{$last_data[-1]};
 		var recordingEnabled => 1;
