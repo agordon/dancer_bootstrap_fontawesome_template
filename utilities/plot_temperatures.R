@@ -28,7 +28,9 @@ jpg_file = sprintf('%s/week.jpg',args[2]);
 svg(svg_file,width=10);
 par(bty='n', mgp=c(1.5,0.5,0),mar=c(2.5,2.5,0,0));
 plot(this_week$Freezer_temp,ylim=c(32,100),typ='l',col='green',
-		ylab='Temperature (\u00B0F)',xlab='Time (min ago)');
+		ylab='Temperature (\u00B0F)',xlab='Time (days ago)',xaxt='n');
+
+axis(1,at=0:7*1440,labels=0:7);
 
 mylims <- par("usr");
 
@@ -36,7 +38,8 @@ relay_on_y = c(mylims[3],mylims[4],mylims[4],mylims[3]);
 
 for (i in 1:dim(this_week)[1]) {
 	if (!is.na(this_week$Relay[i]) && this_week$Relay[i]) {
-		polygon(c(i-0.5,i-0.5,i+0.5,i+0.5),relay_on_y,col=rgb(0.25,0.25,0.25,0.25),density=NA);
+		polygon(c(i-0.5,i-0.5,i+0.5,i+0.5),relay_on_y,
+				col=rgb(0.25,0.25,0.25,0.25),density=NA);
 	}
 }
 
@@ -75,7 +78,9 @@ while (dim(temp)[2] > 0 && days_to_plot > 0) {
 	svg(sprintf('%s/day%04d.svg',args[2], day_count),width=plot_width);
 	par(bty='n', mgp=c(1.5,0.5,0),mar=c(2.5,2.5,0,0));
 	plot(this_day$Freezer_temp,ylim=c(32,100),typ='l',col='green',
-		 ylab='Temperature (\u00B0F)',xlab='Time (min ago)');
+		 ylab='Temperature (\u00B0F)',xlab='Time (hours ago)',xaxt='n');
+
+	axis(1,at=0:24*60,labels = 0:24);
 
 	mylims <- par("usr");
 
