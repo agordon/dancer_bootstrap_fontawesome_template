@@ -44,9 +44,9 @@ for (i in 1:dim(this_week)[1]) {
 }
 
 lines(c(0,dim(this_week)[1]),c(32,32),col=rgb(0.83,0.94,1,0.75),lwd=3);
-lines(this_week$Target_temp,col='blue',lwd=3);
-lines(this_week$Freezer_temp,col='green',lwd=3);
-lines(this_week$Outside_Temp,col='red',lwd=3);
+lines(this_week$Target_temp,col=rgb(0,0,1,0.75),lwd=3);
+lines(this_week$Freezer_temp,col=rgb(0,1,0,0.75),lwd=3);
+lines(this_week$Outside_Temp,col=rgb(1,0,0,0.75),lwd=3);
 
 graphics.off();
 
@@ -93,9 +93,9 @@ while (dim(temp)[2] > 0 && days_to_plot > 0) {
 	}
 
 	lines(c(0,dim(this_day)[1]),c(32,32),col=rgb(0.83,0.94,1,0.75),lwd=3);
-	lines(this_day$Target_temp,col='blue',lwd=3);
-	lines(this_day$Freezer_temp,col='green',lwd=3);
-	lines(this_day$Outside_Temp,col='red',lwd=3);
+	lines(this_week$Target_temp,col=rgb(0,0,1,0.75),lwd=3);
+	lines(this_week$Freezer_temp,col=rgb(0,1,0,0.75),lwd=3);
+	lines(this_week$Outside_Temp,col=rgb(1,0,0,0.75),lwd=3);
 
 	graphics.off();
 	
