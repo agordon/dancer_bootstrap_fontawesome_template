@@ -43,6 +43,7 @@ $(document).ready(function() {
 				<h2>Freezer Temp: [% freezer_temp %]</h2>
 				<h2>Outside Temp: [% outside_temp %]</h2>
 				<h2>Target Temp: [% target_temp %]</h2>
+				<h2>Hour Average Temp: [% hourMean %]</h2>
 				<h2>Last Time: [% last_time %]</h2>
 				<font color= [% relay_color %]><h2>Relay: [% relay_status %]</h2></font>
 			[% ELSE %]

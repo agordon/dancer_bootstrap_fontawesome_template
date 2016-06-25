@@ -12,6 +12,7 @@ use Dancer::Plugin::Passphrase;
 use Data::Dumper;
 use Config::Simple;
 use DateTime::Format::ISO8601;
+use Statistics::Descriptive;
 
 #Other pages/functions in the rest of the app
 use shared_functions;
@@ -44,6 +45,19 @@ hook 'before' => sub {
 		var recordingEnabled => 0;
 	}
 	
+	$parser = Text::CSV::Simple->new;
+	my @last_hour;
+	if (-e '../utilities/last_hour.csv') {
+		@last_hour = $parser->read_file('../utilities/last_hour.csv');
+		my $stat = Statistics::Descriptive::Full->new();
+		foreach my $i (1..$#last_hour) {
+			$stat->add_data($last_hour[$i][1]);
+		}
+		var hourMean => sprintf('%0.1f',$stat->mean);
+	} else {
+		var hourMean => "NA";
+	}
+	
 	var last_data => \@last_data;
 
 	var relay_status => 'Off';
@@ -63,13 +77,14 @@ hook 'before' => sub {
 
 get '/' => sub {
     template 'index', { 
-		'freezer_temp' => vars->{last_data}[1],
-		'outside_temp' => vars->{last_data}[2],
-		'target_temp' => vars->{last_data}[4],
-		'relay_status' => vars->{relay_status},
-		'relay_color' => vars->{relay_color},
-		'image_set' => vars->{image_set},
-		'last_time' => vars->{last_time},
+		freezer_temp => vars->{last_data}[1],
+		outside_temp => vars->{last_data}[2],
+		target_temp => vars->{last_data}[4],
+		relay_status => vars->{relay_status},
+		relay_color => vars->{relay_color},
+		image_set => vars->{image_set},
+		last_time => vars->{last_time},
+		hourMean => vars->{hourMean},
 		recordingEnabled => vars->{recordingEnabled},
 	};
 };
@@ -101,16 +116,17 @@ post '/' => sub {
 	}
 
     template 'index', { 
-		'freezer_temp' => vars->{last_data}[1],
-		'outside_temp' => vars->{last_data}[2],
-		'target_temp' => vars->{last_data}[4],
-		'relay_status' => vars->{relay_status},
-		'relay_color' => vars->{relay_color},
-		'image_set' => vars->{image_set},
-		'last_time' => vars->{last_time},
+		freezer_temp => vars->{last_data}[1],
+		outside_temp => vars->{last_data}[2],
+		target_temp => vars->{last_data}[4],
+		relay_status => vars->{relay_status},
+		relay_color => vars->{relay_color},
+		image_set => vars->{image_set},
+		last_time => vars->{last_time},
+		hourMean => vars->{hourMean},
 		
-		'alert_message' => $password_info{update_message},
-		'alert_class' => $password_info{alert_class},
+		alert_message => $password_info{update_message},
+		alert_class => $password_info{alert_class},
 	};
 };
 
