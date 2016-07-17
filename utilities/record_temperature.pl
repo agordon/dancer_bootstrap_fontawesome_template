@@ -61,3 +61,5 @@ system("head -n 1 $target_file > last_min.csv");
 system("tail -n 1 $target_file >> last_min.csv");
 system("head -n 1 $target_file > last_hour.csv");
 system("tail -n 60 $target_file >> last_hour.csv");
+system("head -n 1 $target_file > last_week.csv");
+system("tail -n 10080 $target_file >> last_week.csv");
