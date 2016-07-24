@@ -32,11 +32,10 @@ tempPlot = ggplot(temp,aes(x=Time)) +
   scale_color_brewer("",type = "qual",palette = "Dark2") +
   ylab('Temperature (°F)') +
   theme_berginski() +
-  coord_cartesian(ylim=c(30,100)) + 
-  scale_x_discrete("Time (Days Ago)", breaks = as.character(c(0:7))) +
-  theme(legend.position = "bottom",legend.margin = unit(-0.5, "cm"))
+  coord_cartesian(ylim=c(30,100)) +
+  scale_x_continuous("Time (days ago",breaks = c(0:7))
 
-ggsave(file.path(args[1],'week.svg'),tempPlot,width=6,height=3)
+ggsave(file.path(args[1],'week.svg'),tempPlot,width=7,height=3)
 convertSVGtoTarget(file.path(args[1],'week.svg'),target = 'jpg')
 
 tempDay = subset(temp, Time < 1);
@@ -45,7 +44,7 @@ tempDay$Relay = tempDay$Relay * 24;
 
 tempPlotDay = tempPlot %+% tempDay;
 tempPlotDay = tempPlotDay + 
-  scale_x_discrete("Time (hours ago)", breaks = as.character(c(0:24)))
+  scale_x_continuous("Time (hours ago)", breaks = c(0:24))
 
-ggsave(file.path(args[1],'day.svg'),tempPlotDay,width=6,height=3)
+ggsave(file.path(args[1],'day.svg'),tempPlotDay,width=7,height=3)
 convertSVGtoTarget(file.path(args[1],'day.svg'),target = 'jpg')
