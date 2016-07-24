@@ -5,7 +5,7 @@
 args <- commandArgs(TRUE);
 
 if (length(args) != 1) {
-	print("Expected two parameters: data file and target folder");
+	print("Expected one parameter: a target folder");
 	quit();
 }
 
@@ -33,10 +33,10 @@ tempPlot = ggplot(temp,aes(x=Time)) +
   ylab('Temperature (°F)') +
   theme_berginski() +
   coord_cartesian(ylim=c(30,100)) +
-  scale_x_continuous("Time (days ago",breaks = c(0:7))
+  scale_x_continuous("Time (days ago",breaks = c(0:7)) +
+  theme(text = element_text(size=6))
 
-ggsave(file.path(args[1],'week.svg'),tempPlot,width=7,height=3)
-convertSVGtoTarget(file.path(args[1],'week.svg'),target = 'jpg')
+ggsave(file.path(args[1],'week.jpg'),tempPlot,width=4.25,height=2)
 
 tempDay = subset(temp, Time < 1);
 tempDay$Time = seq(along=tempDay$Time,from=24,to=0)
@@ -46,5 +46,4 @@ tempPlotDay = tempPlot %+% tempDay;
 tempPlotDay = tempPlotDay + 
   scale_x_continuous("Time (hours ago)", breaks = c(0:24))
 
-ggsave(file.path(args[1],'day.svg'),tempPlotDay,width=7,height=3)
-convertSVGtoTarget(file.path(args[1],'day.svg'),target = 'jpg')
+ggsave(file.path(args[1],'day.jpg'),tempPlotDay,width=4.25,height=2)
