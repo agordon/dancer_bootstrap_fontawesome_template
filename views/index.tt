@@ -123,8 +123,6 @@ $(document).ready(function() {
 	<div class="row">
 		<div class="col-md-12">
 			<h1>Historic Temperature Readings</h1>
-			Legend: <font color="green">Freezer Temp</font>, <font color="blue">Target Temp</font>, 
-			<font color="red">Outside Temp</font>
 		</div>
 	</div>	
 
