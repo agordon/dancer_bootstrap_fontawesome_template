@@ -184,7 +184,7 @@ angular.module('beerCalcs', []).controller('CalcsController', function() {
 					</div>
 				</div>
 			</form>
-			<h2>The Strike Temp is: {{ calcs.BIAB() | number:1}}</h2>
+			<h2>Strike Temp: {{ calcs.BIAB() | number:1}}</h2>
 		</div>
 
 
