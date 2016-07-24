@@ -1,115 +1,51 @@
 #!/usr/bin/Rscript --vanilla
 
-#Two parameters are expected:
-#	-1st: file with data
-#	-2nd: folder to put images
+#One parameter ais expected:
+#	-1st: folder to put images
 args <- commandArgs(TRUE);
 
-if (length(args) != 2) {
+if (length(args) != 1) {
 	print("Expected two parameters: data file and target folder");
 	quit();
 }
 
-dir.create(args[2], showWarnings = FALSE)
+dir.create(args[1], showWarnings = FALSE)
 
-temp = read.csv(args[1],header=T);
-temp = temp[rev(1:dim(temp)[1]),];
-day_count = ceiling(dim(temp)[1]/1440);
+library(ggplot2)
+library(BerginskiRMisc)
+library(grid)
 
-###############################################################################
-#Week Plot
-###############################################################################
+temp = read.csv('last_week.csv');
+temp$Time = seq(along=temp$Time,from=7,to=0);
 
-this_week = temp[1:(7*24*60),];
+#missing values throw an error with ggplot, replacing missing vals with 0
+temp$Relay[is.na(temp$Relay)] = 0;
+temp$Relay = temp$Relay * temp$Time;
 
-svg_file = sprintf('%s/week.svg',args[2]); 
-jpg_file = sprintf('%s/week.jpg',args[2]); 
+lineWidth = temp$Time[1] - temp$Time[2]
 
-svg(svg_file,width=10);
-par(bty='n', mgp=c(1.5,0.5,0),mar=c(2.5,2.5,0,0));
-plot(this_week$Freezer_temp,ylim=c(32,100),typ='l',col='green',
-		ylab='Temperature (\u00B0F)',xlab='Time (days ago)',xaxt='n');
+tempPlot = ggplot(temp,aes(x=Time)) + 
+  geom_vline(aes(xintercept = Relay),size=0.1,alpha=0.25) +
+  geom_line(aes(y=Target_temp,color="Target"),alpha=0.5) +
+  geom_line(aes(y=Freezer_temp,color="Freezer"),alpha=0.9) +
+  geom_line(aes(y=Outside_Temp,color="Outside"),alpha=0.9) + 
+  scale_color_brewer("",type = "qual",palette = "Dark2") +
+  ylab('Temperature (°F)') +
+  theme_berginski() +
+  coord_cartesian(ylim=c(30,100)) + 
+  scale_x_discrete("Time (Days Ago)", breaks = as.character(c(0:7))) +
+  theme(legend.position = "bottom",legend.margin = unit(-0.5, "cm"))
 
-axis(1,at=0:7*1440,labels=0:7);
+ggsave(file.path(args[1],'week.svg'),tempPlot,width=6,height=3)
+convertSVGtoTarget(file.path(args[1],'week.svg'),target = 'jpg')
 
-mylims <- par("usr");
+tempDay = subset(temp, Time < 1);
+tempDay$Time = seq(along=tempDay$Time,from=24,to=0)
+tempDay$Relay = tempDay$Relay * 24;
 
-relay_on_y = c(mylims[3],mylims[4],mylims[4],mylims[3]);
+tempPlotDay = tempPlot %+% tempDay;
+tempPlotDay = tempPlotDay + 
+  scale_x_discrete("Time (hours ago)", breaks = as.character(c(0:24)))
 
-for (i in 1:dim(this_week)[1]) {
-	if (!is.na(this_week$Relay[i]) && this_week$Relay[i]) {
-		polygon(c(i-0.5,i-0.5,i+0.5,i+0.5),relay_on_y,
-				col=rgb(0.25,0.25,0.25,0.25),density=NA);
-	}
-}
-
-lines(c(0,dim(this_week)[1]),c(32,32),col=rgb(0.83,0.94,1,0.75),lwd=3);
-lines(this_week$Target_temp,col=rgb(0,0,1,0.75),lwd=3);
-lines(this_week$Freezer_temp,col=rgb(0,1,0,0.75),lwd=3);
-lines(this_week$Outside_Temp,col=rgb(1,0,0,0.75),lwd=3);
-
-graphics.off();
-
-system(sprintf('convert -strip -interlace Plane -quality 85%% %s %s', svg_file, jpg_file));
-system(sprintf('chmod a+wrx %s %s', svg_file, jpg_file));
-
-###############################################################################
-#Day Plots
-###############################################################################
-
-days_to_plot = 10;
-
-while (dim(temp)[2] > 0 && days_to_plot > 0) {
-	if (dim(temp)[1] >= 1440) {
-		this_day = temp[1:1440,];
-		temp = temp[-c(1:1440),];
-	} else {
-		this_day = temp;
-	}
-	
-	plot_width = 10*(dim(this_day)[1]/1440);
-	if (plot_width < 1) {
-		plot_width = 1;
-	}
-	
-	svg_file = sprintf('%s/day%04d.svg',args[2], day_count); 
-	jpg_file = sprintf('%s/day%04d.jpg',args[2], day_count); 
-
-	svg(sprintf('%s/day%04d.svg',args[2], day_count),width=plot_width);
-	par(bty='n', mgp=c(1.5,0.5,0),mar=c(2.5,2.5,0,0));
-	plot(this_day$Freezer_temp,ylim=c(32,100),typ='l',col='green',
-		 ylab='Temperature (\u00B0F)',xlab='Time (hours ago)',xaxt='n');
-
-	axis(1,at=0:24*60,labels = 0:24);
-
-	mylims <- par("usr");
-
-	relay_on_y = c(mylims[3],mylims[4],mylims[4],mylims[3]);
-	
-	for (i in 1:dim(this_day)[1]) {
-		if (!is.na(this_day$Relay[i]) && this_day$Relay[i]) {
-			polygon(c(i-0.5,i-0.5,i+0.5,i+0.5),relay_on_y,col=rgb(0.25,0.25,0.25,0.25),density=NA);
-		}
-	}
-
-	lines(c(0,dim(this_day)[1]),c(32,32),col=rgb(0.83,0.94,1,0.75),lwd=3);
-	lines(this_week$Target_temp,col=rgb(0,0,1,0.75),lwd=3);
-	lines(this_week$Freezer_temp,col=rgb(0,1,0,0.75),lwd=3);
-	lines(this_week$Outside_Temp,col=rgb(1,0,0,0.75),lwd=3);
-
-	graphics.off();
-	
-	system(sprintf('convert -strip -interlace Plane -quality 85%% %s %s', svg_file, jpg_file));
-	system(sprintf('chmod a+wrx %s %s', svg_file, jpg_file));
-
-	day_count = day_count - 1;
-	
-	#for some reason the while loop isn't working with longer data sets, this
-	#is my hacky fix
-
-	if (dim(temp)[1] == dim(this_day)[1]) {
-		break;
-	}
-
-	days_to_plot = days_to_plot - 1;
-}
+ggsave(file.path(args[1],'day.svg'),tempPlotDay,width=6,height=3)
+convertSVGtoTarget(file.path(args[1],'day.svg'),target = 'jpg')
