@@ -21,8 +21,7 @@ temp$Time = seq(along=temp$Time,from=7,to=0);
 #missing values throw an error with ggplot, replacing missing vals with 0
 temp$Relay[is.na(temp$Relay)] = 0;
 temp$Relay = temp$Relay * temp$Time;
-
-lineWidth = temp$Time[1] - temp$Time[2]
+temp$Relay[temp$Relay == 0] = NA;
 
 tempPlot = ggplot(temp,aes(x=Time)) + 
   geom_vline(aes(xintercept = Relay),size=0.1,alpha=0.25) +
