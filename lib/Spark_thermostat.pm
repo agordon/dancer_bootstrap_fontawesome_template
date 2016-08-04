@@ -51,7 +51,10 @@ hook 'before' => sub {
 		@last_hour = $parser->read_file('../utilities/last_hour.csv');
 		my $stat = Statistics::Descriptive::Full->new();
 		foreach my $i (1..$#last_hour) {
-			$stat->add_data($last_hour[$i][1]);
+			if ($last_hour[$i][1] eq "NA") {
+			} else {
+				$stat->add_data($last_hour[$i][1]);
+			}
 		}
 		var hourMean => sprintf('%0.1f',$stat->mean);
 	} else {
