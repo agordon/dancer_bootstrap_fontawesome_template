@@ -1,5 +1,7 @@
 temperature_data.csv
 last_min.csv
 last_hour.csv
+last_week.csv
 spark_core_info.cfg
 test_cmd.sh
+twitter.cfg
