@@ -34,8 +34,8 @@ tempPlot = ggplot(temp,aes(x=Time)) +
   ylab('Temperature (°F)') +
   theme_berginski() +
   coord_cartesian(ylim=c(30,100)) +
-  scale_x_continuous("Time (days ago)",breaks = c(0:7)) +
-  theme(text = element_text(size=6), legend.margin = unit(-0.2,"cm"))
+  scale_x_continuous("Time (days ago)",breaks = c(0:7), expand=c(0,0)) +
+  theme(text = element_text(size=6), legend.margin = unit(0,"cm"))
 
 ggsave(file.path(args[1],'week.jpg'),tempPlot,width=4.25,height=2)
 system(paste("convert -trim ", file.path(args[1],'week.jpg'), file.path(args[1],'week.jpg')))
@@ -46,7 +46,7 @@ tempDay$Relay = tempDay$Relay * 24;
 
 tempPlotDay = tempPlot %+% tempDay;
 tempPlotDay = tempPlotDay + 
-  scale_x_continuous("Time (hours ago)", breaks = c(0:24))
+  scale_x_continuous("Time (hours ago)", breaks = c(0:24), expand=c(0,0))
 
 ggsave(file.path(args[1],'day.jpg'),tempPlotDay,width=4.25,height=2)
 system(paste("convert -trim ", file.path(args[1],'day.jpg'), file.path(args[1],'day.jpg')))
