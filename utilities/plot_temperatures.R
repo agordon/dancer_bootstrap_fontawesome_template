@@ -35,7 +35,9 @@ tempPlot = ggplot(temp,aes(x=Time)) +
   theme_berginski() +
   coord_cartesian(ylim=c(30,100)) +
   scale_x_continuous("Time (days ago)",breaks = c(0:7), expand=c(0,0)) +
-  theme(text = element_text(size=6), legend.margin = unit(0,"cm"))
+  theme(text = element_text(size=6), legend.margin = unit(0,"cm"),
+	axis.title.x=element_text(margin=margin(1.5,0,0,0)),
+	axis.title.y=element_text(margin=margin(0,1.5,0,0)))
 
 ggsave(file.path(args[1],'week.jpg'),tempPlot,width=4.25,height=2)
 system(paste("convert -trim ", file.path(args[1],'week.jpg'), file.path(args[1],'week.jpg')))
