@@ -21,7 +21,7 @@ my $target_file = "temperature_data.csv";
 # Main
 ###############################################################################
 
-my $all_json = `curl -m 10 --silent "https://api.spark.io/v1/devices/$device_ID/tempInfo?access_token=$access_token"`;
+my $all_json = `curl -m 10 --silent "https://api.particle.io/v1/devices/$device_ID/tempInfo?access_token=$access_token"`;
 
 #If there was no response from the server, this string will be empty
 if ($all_json eq '') {
