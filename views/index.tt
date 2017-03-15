@@ -76,6 +76,15 @@ $(document).ready(function() {
 						</select>
 					</div>
 				</div>
+				<div class="form-group">
+					<label for="tempType" class="col-sm-6 control-label">Temp Type Mode</label>
+					<div class="col-sm-6">
+						<select id="tempType" class="form-control" name="tempType">
+							<option>Cold</option>
+							<option>Heat</option>
+						</select>
+					</div>
+				</div>
 				<div id="const-controls">
 					<div class="form-group">
 						<label for="targetTemp" class="col-sm-6 control-label">Target Temperature</label>

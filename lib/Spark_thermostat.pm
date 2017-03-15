@@ -112,6 +112,12 @@ post '/' => sub {
 					&setRampMode(params->{'rampStart'},params->{'rampEnd'},params->{'rampTime'});
 				}
 			}
+
+			if (params->{'tempMode'} eq 'Cold') {
+				&setColdMode();
+			} else {
+				&setHeatMode();
+			}
 		}
 		$password_info{update_message} = 'Success, mode updated.';
 	} else {
@@ -158,6 +164,24 @@ sub setRampMode {
 	my %cmd_props = %spark_core_props;
 	$cmd_props{args} = "$rampStartTemp,$rampEndTemp,$rampDays";
 	$cmd_props{cmd} = "setRampMode";
+
+	my $command = &makeSparkFuncRequest(%cmd_props);	
+	# warning $command;
+	system("$command > /dev/null 2> /dev/null");
+}
+
+sub setColdMode {
+	my %cmd_props = %spark_core_props;
+	$cmd_props{cmd} = "setColdMode";
+
+	my $command = &makeSparkFuncRequest(%cmd_props);	
+	# warning $command;
+	system("$command > /dev/null 2> /dev/null");
+}
+
+sub setHeatMode {
+	my %cmd_props = %spark_core_props;
+	$cmd_props{cmd} = "setHeatMode";
 
 	my $command = &makeSparkFuncRequest(%cmd_props);	
 	# warning $command;
