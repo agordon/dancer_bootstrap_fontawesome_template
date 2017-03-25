@@ -46,7 +46,6 @@ if ($all_json eq '') {
 my %all_data = %{decode_json $all_json};
 my %temp_data = %{decode_json $all_data{result}};
 
-
 if (! -e $target_file) {
 	open OUTPUT, ">>$target_file";
 	print OUTPUT "Time,Freezer_temp,Outside_Temp,Relay,Target_temp\n";
@@ -56,6 +55,7 @@ if (! -e $target_file) {
 open OUTPUT, ">>$target_file";
 print OUTPUT "$all_data{coreInfo}{last_heard},$temp_data{temp},$temp_data{tempOut},$temp_data{relayOn},$temp_data{targetTemp}\n";
 close OUTPUT;
+
 
 system("head -n 1 $target_file > last_min.csv");
 system("tail -n 1 $target_file >> last_min.csv");
