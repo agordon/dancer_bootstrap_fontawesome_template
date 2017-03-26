@@ -40,8 +40,8 @@ hook 'before' => sub {
 		var recordingEnabled => 1;
 	} else {
 		#Fake data for the cases when there isn't a data file available, format:
-		#	-Date,Freezer Temp,Outside Temp,Relay Status,Target Temp
-		@last_data = ("2015-01-06T19:13:01.629Z","NA","NA",0,"NA");
+		#	-Date,Freezer Temp,Outside Temp,Relay Status,Target Temp,Temp Mode
+		@last_data = ("2015-01-06T19:13:01.629Z","NA","NA",0,"NA","Cold");
 		var recordingEnabled => 0;
 	}
 	
@@ -71,6 +71,13 @@ hook 'before' => sub {
 		var relay_color => '"Green"';
 	}
 	
+	var tempMode_status => "Cold";	
+	var tempMode_color => '"blue"';
+	if ($last_data[5] eq "heat") {
+		var tempMode_status => "Heat";
+		var tempMode_color => '"red"';
+	}
+
 	my $dt = DateTime::Format::ISO8601->parse_datetime($last_data[0]) or die $!;	
 	$dt->set_time_zone('UTC');
 	$dt->set_time_zone('local');
@@ -89,6 +96,8 @@ get '/' => sub {
 		last_time => vars->{last_time},
 		hourMean => vars->{hourMean},
 		recordingEnabled => vars->{recordingEnabled},
+		tempMode_status => vars->{tempMode_status},
+		tempMode_color => vars->{tempMode_color},
 	};
 };
 

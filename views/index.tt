@@ -46,6 +46,7 @@ $(document).ready(function() {
 				<h2>Hour Average Temp: [% hourMean %]</h2>
 				<h2>Last Time: [% last_time %]</h2>
 				<font color= [% relay_color %]><h2>Relay: [% relay_status %]</h2></font>
+				<font color= [% tempMode_color %]><h2>Temp Mode: [% tempMode_status %]</h2></font>
 			[% ELSE %]
 			<h2>Recording is currently disabled.</h2>
 			Submit the password below to renable recording.

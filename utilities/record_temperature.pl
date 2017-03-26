@@ -48,12 +48,12 @@ my %temp_data = %{decode_json $all_data{result}};
 
 if (! -e $target_file) {
 	open OUTPUT, ">>$target_file";
-	print OUTPUT "Time,Freezer_temp,Outside_Temp,Relay,Target_temp\n";
+	print OUTPUT "Time,Freezer_temp,Outside_Temp,Relay,Target_temp,tempMode\n";
 	close OUTPUT;
 }
 
 open OUTPUT, ">>$target_file";
-print OUTPUT "$all_data{coreInfo}{last_heard},$temp_data{temp},$temp_data{tempOut},$temp_data{relayOn},$temp_data{targetTemp}\n";
+print OUTPUT "$all_data{coreInfo}{last_heard},$temp_data{temp},$temp_data{tempOut},$temp_data{relayOn},$temp_data{targetTemp},$temp_data{tempMode}\n";
 close OUTPUT;
 
 
