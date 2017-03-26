@@ -59,7 +59,21 @@ close OUTPUT;
 
 system("head -n 1 $target_file > last_min.csv");
 system("tail -n 1 $target_file >> last_min.csv");
-system("head -n 1 $target_file > last_hour.csv");
-system("tail -n 60 $target_file >> last_hour.csv");
-system("head -n 1 $target_file > last_week.csv");
-system("tail -n 10080 $target_file >> last_week.csv");
+
+my $line_count = `wc -l < $target_file`;
+if ($line_count < 61) {
+	system("cp $target_file last_hour.csv");
+} else {
+	system("head -n 1 $target_file > last_hour.csv");
+	system("tail -n 60 $target_file >> last_hour.csv");
+}
+
+my $min_in_week = 60*24*7;
+
+#Add 1 for the header line
+if ($line_count < (1+$min_in_week)) {
+	system("cp $target_file last_week.csv");
+} else {
+	system("head -n 1 $target_file > last_week.csv");
+	system("tail -n 10080 $target_file >> last_week.csv");
+}
