@@ -1,11 +1,11 @@
 #!/usr/bin/Rscript --vanilla
 
-#One parameter ais expected:
+#One parameter is expected:
 #	-1st: folder to put images
 args <- commandArgs(TRUE);
 
 if (length(args) != 1) {
-	print("Expected one parameter: a target folder");
+	print("Expected one parameter: a target folder for the images.");
 	quit();
 }
 
