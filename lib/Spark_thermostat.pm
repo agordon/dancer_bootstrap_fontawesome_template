@@ -122,7 +122,7 @@ post '/' => sub {
 				}
 			}
 
-			if (params->{'tempMode'} eq 'Cold') {
+			if (params->{'tempType'} eq 'Cold') {
 				&setColdMode();
 			} else {
 				&setHeatMode();
