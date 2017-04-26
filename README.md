@@ -12,3 +12,4 @@ Any of the particle.io microprocessors should work with this code. The firmware 
 
 ## Server Setup
 
+This should be able to be run on any linux server, but I've only ever used an AWS ubuntu server. I'm working on writing some more extensive instructions, please get in touch if they would be helpful.
