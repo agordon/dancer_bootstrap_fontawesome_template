@@ -5,3 +5,11 @@ I had an old chest freezer, which I had previously used with an arduino-based te
 wasn't connected to the internet though. This repository uses a 
 [Particle Photon](https://www.particle.io/products/hardware/photon-wifi-dev-kit) to connect the temperature control 
 system to the internet.
+
+## Hardware
+
+Any of the particle.io microprocessors should work with this code. The firmware used to control the board is avialble under utilities/firmware.txt and can be uploaded to your microprocessor though particle's website. I used Adafruit's [tutorial](https://learn.adafruit.com/thermistor/using-a-thermistor) to setup the thermisters.
+
+## Server Setup
+
+This should be able to be run on any linux server, but I've only ever used an AWS ubuntu server. I'm working on writing some more extensive instructions, please get in touch if they would be helpful.
