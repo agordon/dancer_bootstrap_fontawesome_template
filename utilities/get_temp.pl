@@ -23,4 +23,12 @@ my $target_file = "temperature_data.csv";
 
 my $all_json = `curl -m 10 --silent "https://api.particle.io/v1/devices/$device_ID/tempInfo?access_token=$access_token"`;
 
-print $all_json;
+my %all_data = %{decode_json $all_json};
+
+if (not exists($all_data{result})) {
+  die "Improper response from device: $all_json";
+}
+
+my %temp_data = %{decode_json $all_data{result}};
+local $Data::Dumper::Sortkeys = 1;
+print Dumper(\%temp_data);

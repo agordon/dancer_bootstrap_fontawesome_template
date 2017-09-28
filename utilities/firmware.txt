@@ -26,7 +26,7 @@ const int powerPin = 0;
 int modeSta = 1;
 
 //Temp mode settings, should either be "heat" or any other value to for cold
-String tempMode = "heat";
+String tempMode = "cold";
 
 //Ramp variables
 double rampSta = millis();
@@ -47,8 +47,6 @@ unsigned int minOffTime = 10*60*1000;
 double temp = 0.0;
 double tempOut = 0.0;
 
-double fracThr = 0;
-
 char tempInfo[622];
 
 double fracThroughRamp = 0;
@@ -67,13 +65,8 @@ void setup() {
   Particle.function("setColdMode", setColdMode);
   Particle.function("setHeatMode", setHeatMode);
   
-  // take control of the RGB LED
+  //Take control of LED
   RGB.control(true);
-
-  RGB.brightness(32);
-  
-  // resume normal operation
-  RGB.control(false);
 }
 
 void loop() {
@@ -133,18 +126,22 @@ void loop() {
             }
         }
     }
+    
+    if (temp > tarTemp) {
+        RGB.color(255, 0, 0);
+    } else {
+        RGB.color(0, 0, 255);
+    }
+    double fracFromTarget = 255*(fabs(temp - tarTemp)/(tempTolerance/2));
+    RGB.brightness((int)fracFromTarget);
 
-    //Logic for high temp mode
-    
-    //char *charTempMode = tempMode.c_str();
-    
     sprintf(tempInfo,
             "{\"temp\":%0.1f,\"tempOut\":%0.1f,\"targetTemp\":%0.1f,\"relayOn\":%d,\"rampFrac\":%0.2f,\
             \"mode\":%d,\"rampStartTime\":%0.f,\"rampStartTemp\":%0.1f,\"rampEndTemp\":%0.1f,\
-            \"rampDays\":%0.10f,\"tempMode\":\"%s\"}",
+            \"rampDays\":%0.10f,\"tempMode\":\"%s\",\"fracFromTarget\":%0.10f}",
             temp,tempOut,tarTemp,relayOn,fracThroughRamp,
             modeSta,rampSta,rampStart,rampEnd,
-            rampDays,tempMode.c_str());
+            rampDays,tempMode.c_str(),fracFromTarget);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
