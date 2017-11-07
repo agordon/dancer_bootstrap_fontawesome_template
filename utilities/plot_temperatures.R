@@ -1,17 +1,34 @@
 #!/usr/bin/Rscript --vanilla
 
-#One parameter is expected:
-#	-1st: folder to put images
-args <- commandArgs(TRUE);
+###############################################################################
+# Command Line Processing
+###############################################################################
+suppressPackageStartupMessages(library(argparse));
 
-if (length(args) != 1) {
-	print("Expected one parameter: a target folder for the images.");
-	quit();
+# create parser object
+parser <- ArgumentParser()
+
+# specify our desired options 
+# by default ArgumentParser will add an help option 
+parser$add_argument("-f", "--folder", type="character", 
+                    help="Folder to save images",
+                    metavar="folder")
+
+# get command line options, if help option encountered print help and exit,
+# otherwise if options not found on command line then set defaults, 
+args <- parser$parse_args()
+
+if (is.null(args$folder)) {
+  print("Expected one parameter: a target folder for the images, see usage data`.");
+  parser$print_help();
+  quit();
 }
 
-dir.create(args[1], showWarnings = FALSE)
+###############################################################################
+# Plotting
+###############################################################################
 
-#args = c(".");
+dir.create(args$folder[1], showWarnings = FALSE)
 
 library(ggplot2)
 library(BerginskiRMisc)
@@ -39,8 +56,8 @@ tempPlot = ggplot(temp,aes(x=Time)) +
 	axis.title.x=element_text(margin=margin(1.5,0,0,0)),
 	axis.title.y=element_text(margin=margin(0,1.5,0,0)))
 
-ggsave(file.path(args[1],'week.jpg'),tempPlot,width=4.25,height=2)
-system(paste("convert -trim ", file.path(args[1],'week.jpg'), file.path(args[1],'week.jpg')))
+ggsave(file.path(args$folder,'week.jpg'),tempPlot,width=4.25,height=2)
+system(paste("convert -trim ", file.path(args$folder,'week.jpg'), file.path(args$folder,'week.jpg')))
 
 tempDay = subset(temp, Time < 1);
 tempDay$Time = seq(along=tempDay$Time,from=24,to=0)
@@ -50,5 +67,5 @@ tempPlotDay = tempPlot %+% tempDay;
 tempPlotDay = tempPlotDay + 
   scale_x_continuous("Time (hours ago)", breaks = c(0:24), expand=c(0,0))
 
-ggsave(file.path(args[1],'day.jpg'),tempPlotDay,width=4.25,height=2)
-system(paste("convert -trim ", file.path(args[1],'day.jpg'), file.path(args[1],'day.jpg')))
+ggsave(file.path(args$folder,'day.jpg'),tempPlotDay,width=4.25,height=2)
+system(paste("convert -trim ", file.path(args$folder,'day.jpg'), file.path(args$folder,'day.jpg')))
