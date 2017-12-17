@@ -59,17 +59,6 @@ angular.module('beerCalcs', []).controller('CalcsController', function() {
 		</div>
 	</div>
 	
-	[% IF alert_message %]
-	<div class="row">
-		<div class="col-md-12">
-			<div data-dismiss="alert" class="alert [% alert_class %] alert-dismissible fade in" role="alert">
-			<button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-			[% alert_message %]
-			</div>
-		</div>
-	</div>
-	[% END %]
-
 	<div class="row">
 		<div class="col-md-1"></div>
 		<div class="col-md-4">
@@ -78,13 +67,13 @@ angular.module('beerCalcs', []).controller('CalcsController', function() {
 				<div class="form-group">
 					<label for="startGrav" class="col-sm-4 control-label">Starting Gravity</label>
 					<div class="col-sm-6">
-						<input type="text" class="form-control" id="startGrav" name="startGrav" ng-model="calcs.startGrav">
+						<input type="number" class="form-control" id="startGrav" name="startGrav" ng-model="calcs.startGrav">
 					</div>
 				</div>
 				<div class="form-group">
 					<label for="endGrav" class="col-sm-4 control-label">Ending Gravity</label>
 					<div class="col-sm-6">
-						<input type="text" class="form-control" id="endGrav" name="endGrav" ng-model="calcs.endGrav">
+						<input type="number" class="form-control" id="endGrav" name="endGrav" ng-model="calcs.endGrav">
 					</div>
 				</div>
 			</form>
@@ -97,13 +86,13 @@ angular.module('beerCalcs', []).controller('CalcsController', function() {
 				<div class="form-group">
 					<label for="startGrav" class="col-sm-4 control-label">Starting Gravity</label>
 					<div class="col-sm-6">
-						<input type="text" class="form-control" id="startGravRefract" ng-model="calcs.startGravRefract" placeholder="in brix">
+						<input type="number" class="form-control" id="startGravRefract" ng-model="calcs.startGravRefract" placeholder="in brix">
 					</div>
 				</div>
 				<div class="form-group">
 					<label for="endGrav" class="col-sm-4 control-label">Ending Gravity</label>
 					<div class="col-sm-6">
-						<input type="text" class="form-control" id="endGrav" ng-model="calcs.endGravRefract" placeholder='in brix'>
+						<input type="number" class="form-control" id="endGrav" ng-model="calcs.endGravRefract" placeholder='in brix'>
 					</div>
 				</div>
 			</form>
@@ -124,7 +113,7 @@ angular.module('beerCalcs', []).controller('CalcsController', function() {
 				<div class="form-group">
 					<label for="startGrav" class="col-sm-4 control-label">Gravity</label>
 					<div class="col-sm-6">
-						<input type="text" class="form-control" id="gravToBrix" name="gravToBrix" ng-model="calcs.gravToBrix">
+						<input type="number" class="form-control" id="gravToBrix" name="gravToBrix" ng-model="calcs.gravToBrix">
 					</div>
 				</div>
 			</form>
@@ -137,7 +126,7 @@ angular.module('beerCalcs', []).controller('CalcsController', function() {
 				<div class="form-group">
 					<label for="startGrav" class="col-sm-4 control-label">Brix</label>
 					<div class="col-sm-6">
-						<input type="text" class="form-control" id="brixToGrav" name="brixToGrav" ng-model="calcs.brixToGrav">
+						<input type="number" class="form-control" id="brixToGrav" name="brixToGrav" ng-model="calcs.brixToGrav">
 					</div>
 				</div>
 			</form>
@@ -158,28 +147,28 @@ angular.module('beerCalcs', []).controller('CalcsController', function() {
 				<div class="form-group">
 					<label for="startGrav" class="col-sm-4 control-label">Grain Amount</label>
 					<div class="col-sm-6">
-						<input type="text" class="form-control" id="grainAmount" 
+						<input type="number" class="form-control" id="grainAmount" 
 						       name="grainAmount" ng-model="calcs.grainAmount" placeholder="in lb" value=10>
 					</div>
 				</div>
 				<div class="form-group">
 					<label for="startGrav" class="col-sm-4 control-label">Water Volume</label>
 					<div class="col-sm-6">
-						<input type="text" class="form-control" id="waterVol" 
+						<input type="number" class="form-control" id="waterVol" 
 						       name="waterVol" ng-model="calcs.waterVol" placeholder="in gallons">
 					</div>
 				</div>
 				<div class="form-group">
 					<label for="startGrav" class="col-sm-4 control-label">Grain Start Temp</label>
 					<div class="col-sm-6">
-						<input type="text" class="form-control" id="grainTempStart" 
+						<input type="number" class="form-control" id="grainTempStart" 
 						       name="grainTempStart" ng-model="calcs.grainTempStart" placeholder="in F">
 					</div>
 				</div>
 				<div class="form-group">
 					<label class="col-sm-4 control-label">Target Temp</label>
 					<div class="col-sm-6">
-						<input type="text" class="form-control" id="targetTemp" 
+						<input type="number" class="form-control" id="targetTemp" 
 						       name="targetTemp" ng-model="calcs.targetTemp" placeholder="in F">
 					</div>
 				</div>
