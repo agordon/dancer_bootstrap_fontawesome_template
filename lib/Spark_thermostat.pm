@@ -37,12 +37,10 @@ hook 'before' => sub {
 	if (-e '../utilities/last_min.csv') {
 		@last_data = $parser->read_file('../utilities/last_min.csv');
 		@last_data = @{$last_data[-1]};
-		var recordingEnabled => 1;
 	} else {
 		#Fake data for the cases when there isn't a data file available, format:
 		#	-Date,Freezer Temp,Outside Temp,Relay Status,Target Temp,Temp Mode
 		@last_data = ("2015-01-06T19:13:01.629Z","NA","NA",0,"NA","Cold");
-		var recordingEnabled => 0;
 	}
 	
 	$parser = Text::CSV::Simple->new;
@@ -95,7 +93,6 @@ get '/' => sub {
 		image_set => vars->{image_set},
 		last_time => vars->{last_time},
 		hourMean => vars->{hourMean},
-		recordingEnabled => vars->{recordingEnabled},
 		tempMode_status => vars->{tempMode_status},
 		tempMode_color => vars->{tempMode_color},
 	};
@@ -108,26 +105,22 @@ post '/' => sub {
 	my %password_info = &verifyPassword(params->{'password'}, $cfg->param('hash_pass'));
 	
 	if ($password_info{match}) {
-		if (defined params->{'enableRecording'}) {
-			&enableRecording;
-		} else {
-			if (params->{'mode'} eq 'Constant') {
-				if (not(params->{'targetTemp'} eq '')) {
-					&setConstMode(params->{'targetTemp'});
-				}
-			} elsif (params->{'mode'} eq 'Ramp') {
-				if (not(params->{'rampStart'} eq '') && not(params->{'rampEnd'} eq '') &&
-					not(params->{'rampTime'} eq '')) {
-					&setRampMode(params->{'rampStart'},params->{'rampEnd'},params->{'rampTime'});
-				}
-			}
+          if (params->{'mode'} eq 'Constant') {
+              if (not(params->{'targetTemp'} eq '')) {
+                  &setConstMode(params->{'targetTemp'});
+              }
+          } elsif (params->{'mode'} eq 'Ramp') {
+              if (not(params->{'rampStart'} eq '') && not(params->{'rampEnd'} eq '') &&
+                  not(params->{'rampTime'} eq '')) {
+                  &setRampMode(params->{'rampStart'},params->{'rampEnd'},params->{'rampTime'});
+              }
+          }
 
-			if (params->{'tempType'} eq 'Cold') {
-				&setColdMode();
-			} else {
-				&setHeatMode();
-			}
-		}
+          if (params->{'tempType'} eq 'Cold') {
+              &setColdMode();
+          } else {
+              &setHeatMode();
+          }
 		$password_info{update_message} = 'Success, mode updated.';
 	} else {
 		$password_info{update_message} = 'Password doesn\'t match, no change made in settings.<br/>';

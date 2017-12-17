@@ -38,31 +38,14 @@ $(document).ready(function() {
 	<div class="row">
 		<div class="col-md-1"></div>
 		<div class="col-md-4">
-			<h1>Current Status</h1>
-			[% IF recordingEnabled %]
-				<h2>Freezer Temp: [% freezer_temp %]</h2>
-				<h2>Outside Temp: [% outside_temp %]</h2>
-				<h2>Target Temp: [% target_temp %]</h2>
-				<h2>Hour Average Temp: [% hourMean %]</h2>
-				<h2>Last Time: [% last_time %]</h2>
-				<font color= [% relay_color %]><h2>Relay: [% relay_status %]</h2></font>
-				<font color= [% tempMode_color %]><h2>Temp Mode: [% tempMode_status %]</h2></font>
-			[% ELSE %]
-			<h2>Recording is currently disabled.</h2>
-			Submit the password below to renable recording.
-			<form class="form-horizontal" role="form" method="post">
-				<div class="form-group">
-					<label for="password" class="col-sm-6 control-label">Password</label>
-					<div class="col-sm-6">
-						<input type="password" class="form-control" id="password" name="password">
-					</div>
-				</div>
-				<div class="col-sm-6"></div>
-				<div class="col-sm-6">
-					<button type="submit" class="btn btn-default" name="enableRecording" value="Post">Submit</button>
-				</div>
-			</form>
-			[% END %]
+          <h1>Current Status</h1>
+          <h2>Freezer Temp: [% freezer_temp %]</h2>
+          <h2>Outside Temp: [% outside_temp %]</h2>
+          <h2>Target Temp: [% target_temp %]</h2>
+          <h2>Hour Average Temp: [% hourMean %]</h2>
+          <h2>Last Time: [% last_time %]</h2>
+          <font color= [% relay_color %]><h2>Relay: [% relay_status %]</h2></font>
+          <font color= [% tempMode_color %]><h2>Temp Mode: [% tempMode_status %]</h2></font>
 
 		</div>
 		<div class="col-md-4">
