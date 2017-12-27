@@ -71,9 +71,13 @@ hook 'before' => sub {
 	
 	var tempMode_status => "Cold";	
 	var tempMode_color => '"blue"';
+	var tempMode_cold_selected => 'selected="selected"';
+    var tempMode_heat_selected => '';
 	if ($last_data[5] eq "heat") {
 		var tempMode_status => "Heat";
 		var tempMode_color => '"red"';
+	    var tempMode_heat_selected => 'selected="selected"';
+	    var tempMode_cold_selected => '';
 	}
 
 	my $dt = DateTime::Format::ISO8601->parse_datetime($last_data[0]) or die $!;	
@@ -95,6 +99,8 @@ get '/' => sub {
 		hourMean => vars->{hourMean},
 		tempMode_status => vars->{tempMode_status},
 		tempMode_color => vars->{tempMode_color},
+		tempMode_cold_selected => vars->{tempMode_cold_selected},
+		tempMode_heat_selected => vars->{tempMode_heat_selected},
 	};
 };
 

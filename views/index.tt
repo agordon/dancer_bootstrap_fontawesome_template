@@ -63,10 +63,10 @@ $(document).ready(function() {
 				<div class="form-group">
 					<label for="tempType" class="col-sm-6 control-label">Temp Type Mode</label>
 					<div class="col-sm-6">
-						<select id="tempType" class="form-control" name="tempType">
-							<option>Cold</option>
-							<option>Heat</option>
-						</select>
+                      <select id="tempType" class="form-control" name="tempType" value="[% tempMode_status %]">
+                        <option [% tempMode_cold_selected %] value="Cold">Cold</option>
+						<option [% tempMode_heat_selected %] value="Heat">Heat</option>
+					  </select>
 					</div>
 				</div>
 				<div id="const-controls">
