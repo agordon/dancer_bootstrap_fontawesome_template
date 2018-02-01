@@ -1,0 +1,68 @@
+<div class="container-fluid">
+	<div class="page-header">
+		<div class="row">
+			<div class="col-md-12">
+				<h1>Thermostat Monitoring</h1>
+			</div>
+		</div>
+	</div>
+	
+	[% IF alert_message %]
+	<div class="row">
+		<div class="col-md-12">
+			<div data-dismiss="alert" class="alert [% alert_class %] alert-dismissible fade in" role="alert">
+			<button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+	[% alert_message %]
+			</div>
+		</div>
+	</div>
+	[% END %]
+
+	<div class="row">
+		<div class="col-md-1"></div>
+		<div class="col-md-4">
+			<h1>Archive</h1>
+			This form archives the raw data and the associated visualizations from the current brew. It also turns off data recording.<br/><br/>
+			<form class="form-horizontal" role="form" method="post">
+				<div class="form-group">
+					<label for="archiveName" class="col-sm-5 control-label">Archive File</label>
+					<div class="col-sm-7">
+						<input data-toggle="tooltip" data-placement="bottom" title="" type="text" class="form-control" id="archiveName" name="archiveName" value="[% suggested_name %]">
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="password" class="col-sm-5 control-label">Password</label>
+					<div class="col-sm-7">
+						<input type="password" class="form-control" id="password" name="password">
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="reset" class="col-sm-5 control-label">Clear Saved Data</label>
+					<div class="col-sm-7">
+						<input type="checkbox" class="form-control" id="reset" name="reset">
+					</div>
+				</div>
+				
+				<div class="form-group">
+					<label for="stopRecording" class="col-sm-5 control-label">Stop Recording</label>
+					<div class="col-sm-7">
+						<input type="checkbox" class="form-control" id="stopRecording" name="stopRecording">
+					</div>
+				</div>
+				<div class="col-sm-12">
+					<button type="submit" class="btn btn-default" value="Post">Submit</button>
+				</div>
+			</form>
+		</div>
+		<div class="col-md-4">
+			<h1>Archived Brews</h1>
+
+			<ul>
+				[% FOREACH file IN archive_set %]
+				<li><a href=archive/[% file %]>[% file %]</a></li>
+				[% END %]
+			</ul>
+		</div>
+		<div class="col-md-3"></div>
+	</div>
+</div>

@@ -3,7 +3,7 @@ use strict;
 use warnings;
 
 # the order is important
-use dancer_bootstrap_fontawesome_template;
+use Spark_thermostat;
 use Dancer::Test;
 
 route_exists [GET => '/'], 'a route handler is defined for /';

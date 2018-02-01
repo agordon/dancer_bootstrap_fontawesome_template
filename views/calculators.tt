@@ -1,0 +1,184 @@
+
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.3/angular.min.js"></script>
+<script>
+angular.module('beerCalcs', []).controller('CalcsController', function() {
+
+	this.gravToABV = function gravToABV() {
+		if (this.startGrav > 1.5 || this.endGrav > 1.5) {
+			return (this.startGrav/1000 - this.endGrav/1000)*131.25;
+		} else {
+			return (this.startGrav - this.endGrav)*131.25;
+		}
+	};
+	
+	this.correctRefract = function correctRefract() {
+		var fGrav = 1.001843 - 0.002318474*this.startGravRefract - 
+			0.000007775*Math.pow(this.startGravRefract,2) - 
+			0.000000034*Math.pow(this.startGravRefract,3) + 
+			0.00574*this.endGravRefract + 
+			0.00003344*Math.pow(this.endGravRefract,2) + 
+			0.000000086*Math.pow(this.endGravRefract,3);
+		return fGrav;
+	};
+	
+	this.convertToBrix = function convertToBrix() {
+		var grav = this.gravToBrix;
+		if (grav > 1.5) {
+			grav = 1 + grav/1000;
+		}
+		var brix = grav * (1262.7794 + grav * (182.4601 * grav - 775.6821)) - 669.5622;
+		return brix;
+	};
+
+	this.convertToGrav = function convertToGrav() {
+		var brix = this.brixToGrav
+		var grav = (brix / (258.6-((brix / 258.2)*227.1))) + 1;
+		return grav;
+	};
+	
+	this.BIAB = function BIAB() {
+		var grain = this.grainAmount;
+		var waterVol = this.waterVol;
+		var grainTemp = this.grainTempStart;
+		var targetTemp = this.targetTemp;
+		var R = 0.2/((waterVol*4.0)/grain); 
+		var strike = R*(targetTemp - grainTemp) + Number(targetTemp); 
+		return strike;
+	};
+
+});
+</script>
+
+<div class="container-fluid" ng-app="beerCalcs" ng-controller="CalcsController as calcs">
+
+	<div class="page-header">
+		<div class="row">
+			<div class="col-md-12">
+				<h1>Beer Calculators</h1>
+			</div>
+		</div>
+	</div>
+	
+	<div class="row">
+		<div class="col-md-1"></div>
+		<div class="col-md-4">
+			<h2><div class="ABV">ABV: </div></h2>
+			<form class="form-horizontal" role="form">
+				<div class="form-group">
+					<label for="startGrav" class="col-sm-4 control-label">Starting Gravity</label>
+					<div class="col-sm-6">
+						<input type="number" class="form-control" id="startGrav" name="startGrav" ng-model="calcs.startGrav">
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="endGrav" class="col-sm-4 control-label">Ending Gravity</label>
+					<div class="col-sm-6">
+						<input type="number" class="form-control" id="endGrav" name="endGrav" ng-model="calcs.endGrav">
+					</div>
+				</div>
+			</form>
+			<h2>The ABV is: {{calcs.gravToABV() | number:1}}%</h2>
+
+		</div>
+		<div class="col-md-4">
+			<h2><div class="ABV">Refractometer Correction: </div></h2>
+			<form class="form-horizontal" role="form">
+				<div class="form-group">
+					<label for="startGrav" class="col-sm-4 control-label">Starting Gravity</label>
+					<div class="col-sm-6">
+						<input type="number" class="form-control" id="startGravRefract" ng-model="calcs.startGravRefract" placeholder="in brix">
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="endGrav" class="col-sm-4 control-label">Ending Gravity</label>
+					<div class="col-sm-6">
+						<input type="number" class="form-control" id="endGrav" ng-model="calcs.endGravRefract" placeholder='in brix'>
+					</div>
+				</div>
+			</form>
+			<h2>The FG is: {{calcs.correctRefract() | number:3}}</h2> 
+
+		</div>
+		<div class="col-md-3">
+		</div>
+	</div>
+	
+	<hr>
+
+	<div class="row">
+		<div class="col-md-1"></div>
+		<div class="col-md-4">
+			<h2><div class="ABV">Gravity to Brix: </div></h2>
+			<form class="form-horizontal" role="form">
+				<div class="form-group">
+					<label for="startGrav" class="col-sm-4 control-label">Gravity</label>
+					<div class="col-sm-6">
+						<input type="number" class="form-control" id="gravToBrix" name="gravToBrix" ng-model="calcs.gravToBrix">
+					</div>
+				</div>
+			</form>
+			<h2>The Brix is: {{ calcs.convertToBrix() | number:1}}</h2>
+		</div>
+
+		<div class="col-md-4">
+			<h2><div class="ABV">Brix to Gravity: </div></h2>
+			<form class="form-horizontal" role="form">
+				<div class="form-group">
+					<label for="startGrav" class="col-sm-4 control-label">Brix</label>
+					<div class="col-sm-6">
+						<input type="number" class="form-control" id="brixToGrav" name="brixToGrav" ng-model="calcs.brixToGrav">
+					</div>
+				</div>
+			</form>
+			<h2>The Gravity is: {{ calcs.convertToGrav() | number:3}}</h2>
+		</div>
+
+		<div class="col-md-3">
+		</div>
+	</div>
+	
+	<hr>
+
+	<div class="row">
+		<div class="col-md-1"></div>
+		<div class="col-md-4">
+			<h2><div class="ABV">Brew in a Bag: </div></h2>
+			<form class="form-horizontal" role="form">
+				<div class="form-group">
+					<label for="startGrav" class="col-sm-4 control-label">Grain Amount</label>
+					<div class="col-sm-6">
+						<input type="number" class="form-control" id="grainAmount" 
+						       name="grainAmount" ng-model="calcs.grainAmount" placeholder="in lb" value=10>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="startGrav" class="col-sm-4 control-label">Water Volume</label>
+					<div class="col-sm-6">
+						<input type="number" class="form-control" id="waterVol" 
+						       name="waterVol" ng-model="calcs.waterVol" placeholder="in gallons">
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="startGrav" class="col-sm-4 control-label">Grain Start Temp</label>
+					<div class="col-sm-6">
+						<input type="number" class="form-control" id="grainTempStart" 
+						       name="grainTempStart" ng-model="calcs.grainTempStart" placeholder="in F">
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-4 control-label">Target Temp</label>
+					<div class="col-sm-6">
+						<input type="number" class="form-control" id="targetTemp" 
+						       name="targetTemp" ng-model="calcs.targetTemp" placeholder="in F">
+					</div>
+				</div>
+			</form>
+			<h2>Strike Temp: {{ calcs.BIAB() | number:1}}</h2>
+		</div>
+
+
+		<div class="col-md-3">
+		</div>
+	</div>
+
+</div>

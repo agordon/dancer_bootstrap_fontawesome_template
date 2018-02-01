@@ -1,0 +1,226 @@
+// This #include statement was automatically added by the Spark IDE."
+#include <math.h>
+#include <string.h>
+
+////////////////////////////////////////////////////////////////////////////////
+// Variable Definitions
+////////////////////////////////////////////////////////////////////////////////
+
+// resistance at 25 degrees C
+#define THERMISTORNOMINAL 10000      
+// temp. for nominal resistance (almost always 25 C)
+#define TEMPERATURENOMINAL 25   
+// The beta coefficient of the thermistor (usually 3000-4000)
+#define BCOEFFICIENT 3950
+// the value of the 'other' resistor
+#define SERIESRESISTOR 10000
+
+const int numReadings = 500;
+double tempTolerance = 1;
+
+int relayOn = 0;
+const int powerPin = 0;
+
+//The modeSta variable can either be 1 or 2, mode 1 is constant temp, while 
+//mode 2 is ramp mode
+int modeSta = 1;
+
+//Temp mode settings, should either be "heat" or any other value to for cold
+String tempMode = "cold";
+
+//Ramp variables
+double rampSta = millis();
+//This ramp setting is 10 minutes
+//double rampDays = 0.00694444444;
+double rampDays = 0.25;
+
+double millisInDay = 86400000;
+
+double rampStart = 65;
+double rampEnd = 55;
+
+double tarTemp = 68;
+unsigned long lastOffT = 0;
+unsigned long curT = 0;
+unsigned int minOffTime = 10*60*1000; 
+
+double temp = 0.0;
+double tempOut = 0.0;
+
+char tempInfo[622];
+
+double fracThroughRamp = 0;
+
+////////////////////////////////////////////////////////////////////////////////
+// Main Program
+////////////////////////////////////////////////////////////////////////////////
+
+void setup() {
+  pinMode(powerPin, OUTPUT);
+  
+  Particle.variable("tempInfo", tempInfo, STRING);
+
+  Particle.function("setConstMode", setConstMode);
+  Particle.function("setRampMode", setRampMode);
+  Particle.function("setColdMode", setColdMode);
+  Particle.function("setHeatMode", setHeatMode);
+  
+  //Take control of LED
+  RGB.control(true);
+}
+
+void loop() {
+    temp = getTempReading(A0,0);
+    tempOut = getTempReading(A7,0);
+    
+    //Activating the relay seems to shift all the temps down by one
+    if (relayOn == 1) {
+        tempOut = tempOut + 1;
+        temp = temp + 1;
+    }
+    curT = millis();
+    
+    if (modeSta == 2) {
+        fracThroughRamp = ((millis() - rampSta)/(double)(rampDays*millisInDay));
+        if (fracThroughRamp > 1) {
+            fracThroughRamp = 1;
+        }
+        if (rampStart > rampEnd) {
+            tarTemp = (double)rampStart - fracThroughRamp * ((double)rampStart - (double)rampEnd);
+        } else {
+            tarTemp = (fracThroughRamp * ((double)rampEnd - (double)rampStart)) + (double)rampStart;
+        }
+        
+        //Round the resulting temp to one decimal place
+        tarTemp = round(tarTemp*(double)10)/(double)10;
+    }
+    
+    bool longEnough = (millis() - lastOffT) > minOffTime || (millis() < minOffTime && lastOffT == 0);
+    
+    //Logic for temp controls
+    if (tempMode == "heat") {
+        if (temp < (tarTemp - (tempTolerance/2)) && longEnough) {
+            digitalWrite(powerPin,HIGH);
+            relayOn = 1;
+        } else {
+            if (temp > (tarTemp + (tempTolerance/2))) {
+                digitalWrite(powerPin,LOW);
+                if (relayOn == 1) {
+                    lastOffT = millis();    
+                }
+
+                relayOn = 0;
+            }
+        }
+    } else {
+        if (temp > (tarTemp + tempTolerance/2) && longEnough) {
+            digitalWrite(powerPin,HIGH);
+            relayOn = 1;
+        } else {
+            if (temp < (tarTemp - tempTolerance/2)) {
+                digitalWrite(powerPin,LOW);
+                if (relayOn == 1) {
+                    lastOffT = millis();    
+                }
+                relayOn = 0;
+            }
+        }
+    }
+    
+    if (temp > tarTemp) {
+        RGB.color(255, 0, 0);
+    } else {
+        RGB.color(0, 0, 255);
+    }
+    double fracFromTarget = 255*(fabs(temp - tarTemp)/(tempTolerance/2));
+    RGB.brightness((int)fracFromTarget);
+
+    sprintf(tempInfo,
+            "{\"temp\":%0.1f,\"tempOut\":%0.1f,\"targetTemp\":%0.1f,\"relayOn\":%d,\"rampFrac\":%0.2f,\
+            \"mode\":%d,\"rampStartTime\":%0.f,\"rampStartTemp\":%0.1f,\"rampEndTemp\":%0.1f,\
+            \"rampDays\":%0.10f,\"tempMode\":\"%s\",\"fracFromTarget\":%0.10f}",
+            temp,tempOut,tarTemp,relayOn,fracThroughRamp,
+            modeSta,rampSta,rampStart,rampEnd,
+            rampDays,tempMode.c_str(),fracFromTarget);
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// Functions
+////////////////////////////////////////////////////////////////////////////////
+
+//Mostly from adafruit's tutorial 
+//  http://learn.adafruit.com/thermistor/using-a-thermistor
+double getTempReading(int sensor_pin, double correction) {
+  double readingTotal = 0;
+  for (int i=0; i < numReadings; i++) {
+    readingTotal += analogRead(sensor_pin);
+  }
+    
+  double average = readingTotal/numReadings;
+  
+  average = 4095 / average - 1;
+  average = SERIESRESISTOR / average;
+  //return(average);
+  
+  double steinhart;
+  steinhart = average / THERMISTORNOMINAL;     // (R/Ro)
+  steinhart = log(steinhart);                  // ln(R/Ro)
+  steinhart /= BCOEFFICIENT;                   // 1/B * ln(R/Ro)
+  steinhart += 1.0 / (TEMPERATURENOMINAL + 273.15); // + (1/To)
+  steinhart = 1.0 / steinhart;                 // Invert
+  steinhart -= 273.15;                         // convert to C
+  steinhart = steinhart * 1.8 + 32;            //convert to F
+
+  //Round the resulting temp to one decimal place
+  steinhart *= 10;
+  steinhart = round(steinhart);
+  steinhart /= 10;
+  return steinhart - correction;
+}
+
+//Constant Mode Controls
+int setConstMode(String args) {
+    modeSta = 1;
+    
+    //char * params = new char[args.length() + 1];
+    //strcpy(params, args.c_str());
+    //tarTemp = atof(params);
+    tarTemp = atof(args.c_str());
+    return 1;
+}
+
+//Ramp mode controls
+int setRampMode(String args) {
+    //Expected parameters in CSV format
+    // 1. Ramp Start Temp
+    // 2. Ramp End Temp
+    // 3. Ramp Time (days)
+    
+    char copyStr[64];
+    args.toCharArray(copyStr,64);
+    char *p = strtok(copyStr, ",");
+    
+    rampStart = atof(p);
+    p = strtok(NULL,",");
+    rampEnd = atof(p);
+    p = strtok(NULL,",");
+    rampDays = atof(p);
+
+
+    modeSta = 2;
+    rampSta = millis();
+    
+    return 1;
+}
+
+//Cold Mode Controls
+int setColdMode(String args) {
+    tempMode = "cold";
+    return 1;
+}
+
+//Heat Mode Controls
+int setHeatMode(String args) {
+    tempMode = "heat";
+    return 1;
+}

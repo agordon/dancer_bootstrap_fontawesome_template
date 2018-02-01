@@ -2,5 +2,6 @@
 .*.swp
 *~
 
-public/bootstrap*
-public/fontawesome*
+public/images
+public/archive
+logs

@@ -1,183 +1,126 @@
-<!-- BootStrap NavBar -->
-<div class="navbar">
-  <div class="navbar-inner">
-    <div class="container">
-	<h3><a class="brand" href="[% request.uri_base %]"><img src="images/dancer_man.png"> Perl Dancer</a></h3>
-    </div>
-  </div>
-</div>
+<script>
+$(document).ready(function() {
+		$("[data-toggle='tooltip']").tooltip();
+		$('#ramp-controls').hide();
+		$('#mode').change(function(){
+			if($('#mode').val() == 'Ramp') {
+				$('#ramp-controls').show(); 
+				$('#const-controls').hide(); 
+			} else {
+				$('#ramp-controls').hide(); 
+				$('#const-controls').show(); 
+			} 
+			});
+		});
+</script>
 
+<div class="container-fluid">
 
-
-<!-- Main content -->
-
-
-<!-- HEADER line -->
-<div class="container">
-
-<div class="page-header">
-	<div class="row">
-		<div class="span12">
-			<h1>Dancer Template, now with more cowbell</h1>
+	<div class="page-header">
+		<div class="row">
+			<div class="col-md-12">
+				<h1>Thermostat Monitoring</h1>
+			</div>
 		</div>
 	</div>
-</div>
-
-
-<div class="row">
-	<div class="span4">
-		<h2><i class="icon-twitter-sign icon-large"></i> Twitter Bootstrap</h2>
-		<p>
-		Twitter's <a target="_blank" href="http://twitter.github.com/bootstrap/index.html">bootstrap</a> is simple and flexible HTML, CSS, and Javascript for popular user interface components and interactions.
-		</p>
-		<p>
-		This <b>Dancer</b> template is pre-configured to use bootstrap, and contains a script to easily upgrade to the latest bootstrap version.
-		</p>
-	</div>
-
-	<div class="span4">
-		<h2><i class="icon-flag icon-large"></i> Font-Awesome</h2>
-		<p>
-		Fort-Awesome's <a target="_blank" href="http://fortawesome.github.com/Font-Awesome/">Font-Awesome</a> is an iconic font designed for use with Twitter Bootstrap (overriding bootstrap's default "glyphicons" set).
-		</p>
-		<p>
-		This <b>Dancer</b> template is pre-configured to use Font-Awesome, and contains a script to easily upgrade to the latest Font-Awesome version.
-		</p>
-	</div>
-
-	<div class="span4">
-		<h2><i class="icon-cogs icon-large"></i> jQuery-1.7.2</h2>
-		<p>
-		<a target="_blank" href="http://jquery.com/">jQuery</a> is a fast and concise JavaScript Library that simplifies HTML document traversing, event handling, animating, and Ajax interactions for rapid web development.
-		</p>
-		<p>
-		Dancer always used jQuery by default, so there's nothing really new here, except upgrading to 1.7.2 (and not using CDN).
-		</p>
-	</div>
-</div>
-
-<div class="row">
-	<div class="span4">
-		<h2><i class="icon-random icon-large"></i> Template::Toolkit</h2>
-		<p>
-		<a target="_blank" href="http://template-toolkit.org/">Template::Toolkit</a> is a fast, flexible and highly extensible template processing system.
-		</p>
-		<p>
-		Dancer always worked with Template::Toolkit, so there's nothing really new here, except:
-		<ul>
-			<li>Dancer's default template was <a href="https://metacpan.org/module/Template::Simple" target="_blank">Template::Simple</a>, and in this template it's changed to the more powerful Template::Toolkit.</li>
-			<li>Dancer's default tags were <span class="label">&lt;%</span> and <span class="label">%&gt;</span>,<br/>and in this template there are changed to <span class="label">[&#37;</span> and <span class="label">&#37;]</span>.</li>
-		</ul>
-
-		</p>
-
-	</div>
-
-	<div class="span4">
-		<h2><i class="icon-music icon-large"></i> Dancer inside</h2>
-		<a href="http://perldancer.org" target="_blank">What more could you ask for?
-		<br/>
-		<img src="images/dancer_star.png">
-		</a>
-	</div>
-
-	<div class="span4">
-		<h2><i class="icon-gift icon-large"></i> Working Examples</h2>
-		Don't re-invent the wheel! Here are ready-to-use examples, just copy, paste &amp; adapt the code &amp; templates to your needs:
-		<ul>
-			<li><a href="[% request.uri_for("/simple_form")%]">Simple &lt;FORM&gt; processing</a></li>
-			<li><a href="[% request.uri_for("/navbar_login")%]">Login Form and NavBar Dropdown Menu</a></li>
-			<li><a href="[% request.uri_for("/tabs")%]">Tabs/Pills</a></li>
-			<li><a href="[% request.uri_for("/photo_carousel")%]">Photo Gallery Carousel</a></li>
-			<li><a href="[% request.uri_for("/photo_grid")%]">Photo Gallery Grid / Thumbnails</a></li>
-			<li><a href="[% request.uri_for("/markdown")%]">Markdown Text Rendering</a></li>
-			<li><a href="[% request.uri_for("/template_plugins")%]">Template::Toolkit plugins</a></li>
-			<li><a href="[% request.uri_for("/error_handling")%]">Dancer's Error Handling</a></li>
-			<li><a href="[% request.uri_for("/dynamic_content")%]">Generate Dynamic Content</a></li>
-		</ul>
-	</div>
-</div>
-
-<br/>
-<br/>
-
-
-<div class="page-header">
+	
+	[% IF alert_message %]
 	<div class="row">
-		<div class="span12">
-			<h1>Technical Stuff</h1>
+		<div class="col-md-12">
+			<div data-dismiss="alert" class="alert [% alert_class %] alert-dismissible fade in" role="alert">
+			<button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+			[% alert_message %]
+			</div>
 		</div>
 	</div>
-</div>
+	[% END %]
 
+	<div class="row">
+		<div class="col-md-1"></div>
+		<div class="col-md-4">
+          <h1>Current Status</h1>
+          <h2>Freezer Temp: [% freezer_temp %]</h2>
+          <h2>Outside Temp: [% outside_temp %]</h2>
+          <h2>Target Temp: [% target_temp %]</h2>
+          <h2>Hour Average Temp: [% hourMean %]</h2>
+          <h2>Last Time: [% last_time %]</h2>
+          <font color= [% relay_color %]><h2>Relay: [% relay_status %]</h2></font>
+          <font color= [% tempMode_color %]><h2>Temp Mode: [% tempMode_status %]</h2></font>
 
-<div class="row">
-	<div class="span12">
-		<h2><i class="icon-share-alt icon-large"></i> Start here</h2>
-
-		<ol>
-			<li><a href="https://github.com/agordon/dancer_bootstrap_fontawesome_template/zipball/master">Download</a> the latest template files</li>
-			<li>Extract the files</li>
-			<li>run <code>update_bootstrap</code> and <code>update_fontawesome</code> to download the latest versions</li>
-			<li>run <code>update_app_name</code> to set your application name (instead of the hardcoded <b>dancer_bootstrap_fontawesome_template</b>).</li>
-			<li>run <code>./bin/app.pl</code> (in the usual Dancer way)</li>
-		</ol>
-
-		<pre>
-$ wget -O dancer.zip https://github.com/agordon/dancer_bootstrap_fontawesome_template/zipball/master
-$ unzip dancer.zip
-$ cd agordon-dancer_bootstrap_fontawesome_template-*
-$ ./bin/update_bootstrap
-$ ./bin/update_fontawesome
-$ ./bin/update_app_name MyNewApp  # or any name you like
-$ ./bin/app.pl
-## and visit http://localhost:3000 to dance
-		</pre>
+		</div>
+		<div class="col-md-4">
+			<h1>Freezer Controls</h1>
+			<form class="form-horizontal" role="form" method="post">
+				<div class="form-group">
+					<label for="mode" class="col-sm-6 control-label">Temp Control Mode</label>
+					<div class="col-sm-6">
+						<select id="mode" class="form-control" name="mode">
+							<option>Constant</option>
+							<option>Ramp</option>
+						</select>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="tempType" class="col-sm-6 control-label">Temp Type Mode</label>
+					<div class="col-sm-6">
+                      <select id="tempType" class="form-control" name="tempType" value="[% tempMode_status %]">
+                        <option [% tempMode_cold_selected %] value="Cold">Cold</option>
+						<option [% tempMode_heat_selected %] value="Heat">Heat</option>
+					  </select>
+					</div>
+				</div>
+				<div id="const-controls">
+					<div class="form-group">
+						<label for="targetTemp" class="col-sm-6 control-label">Target Temperature</label>
+						<div class="col-sm-6">
+							<input data-toggle="tooltip" data-placement="right" title="32&deg-78&deg" type="number" class="form-control" id="targetTemp" name="targetTemp">
+						</div>
+					</div>
+				</div>
+				<div id="ramp-controls">
+					<div class="form-group">
+						<label for="rampStart" class="col-sm-6 control-label">Ramp Start Temperature</label>
+						<div class="col-sm-6">
+							<input data-toggle="tooltip" data-placement="right" title="32&deg-78&deg" type="text" class="form-control" id="rampStart" name="rampStart">
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="rampEnd" class="col-sm-6 control-label">Ramp End Temperature</label>
+						<div class="col-sm-6">
+							<input data-toggle="tooltip" data-placement="right" title="32&deg-78&deg" type="text" class="form-control" id="rampEnd" name="rampEnd">
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="rampTime" class="col-sm-6 control-label">Ramp Time (days)</label>
+						<div class="col-sm-6">
+							<input data-toggle="tooltip" data-placement="right" title="Fractional Days Fine" type="text" class="form-control" id="rampTime" name="rampTime">
+						</div>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="password" class="col-sm-6 control-label">Password</label>
+					<div class="col-sm-6">
+						<input type="password" class="form-control" id="password" name="password">
+					</div>
+				</div>
+				<div class="col-sm-6"></div>
+				<div class="col-sm-6">
+					<button type="submit" class="btn btn-default" value="Post">Submit</button>
+				</div>
+			</form>
+		</div>
+		<div class="col-md-3">
+		</div>
 	</div>
-</div>
 
-<br/>
-<br/>
+	<div class="row">
+		<div class="col-md-12">
+			<h1>Historic Temperature Readings</h1>
+		</div>
+	</div>	
 
+	[% FOREACH i_name IN image_set %]
+	<img src='images/[% i_name %]'>
+	[% END %]
 
-<div class="row">
-	<div class="span9">
-		<h2><i class="icon-question-sign icon-large"></i> How to</h2>
-		<ul>
-			<li>Learn about Dancer: <a target="_blank" href="http://perldancer.org">http://perldancer.org</a></li>
-			<li>Learn about Bootstrap's CSS: <a target="_blank" href="http://twitter.github.com/bootstrap/index.html">http://twitter.github.com/bootstrap/index.html</a></li>
-			<li>Learn about Font-Awesome: <a target="_blank" href="http://fortawesome.github.com/Font-Awesome">http://fortawesome.github.com/Font-Awesome</a></li>
-
-			<li>Override Bootstrap's CSS settings: change <code>&lt;dancer_directory&gt;/public/css/style.css</code> - it will be loaded <b>after</b> Bootstrap's CSS.</li>
-			<li>Tweak the CSS/JS loading: see <code>&lt;dancer_directory&gt;/views/layout/main.tt</code></li>
-			<li>Add Javascript code to be loaded when the document is ready: see <code>&lt;dancer_directory&gt;/views/layout/main.tt</code> (the <code>&lt;javascript&gt;</code> at the bottom).</li>
-			<li>Update bootstrap: run <code>&lt;dancer_directory&gt;/bin/update_bootstrap</code></li>
-			<li>Update Font-Awesome: run <code>&lt;dancer_directory&gt;/bin/update_fontawesome</code></li>
-			<li>Update jQuery: You'll have to do it manually. See the <a href="https://github.com/agordon/dancer_bootstrap_fontawesome_template/blob/master/README" target="_blank">README</a> file.</li>
-		</ul>
-
-	</div>
-
-	<div class="span3">
-		<h2><i class="icon-road icon-large"></i> Deploy</h2>
-		Try the Dancing <a href="[% request.uri_base %]/deploy">Deployment wizard</a>.
-
-		<br/>
-		<br/>
-		<h2><i class="icon-github-sign icon-large"></i> Fork me</h2>
-		<a target="_blank" href="https://github.com/agordon/dancer_bootstrap_fontawesome_template">GitHub repository</a>
-
-		<br/>
-		<br/>
-
-		<h2><i class="icon-envelope icon-large"></i> Email me</h2>
-		<a target="_blank" href="mailto: gordon at cshl dot edu">gordon at cshl dot edu</a>
-	</div>
-
-</div>
-
-<br/>
-<br/>
-<br/>
-<br/>
 </div>

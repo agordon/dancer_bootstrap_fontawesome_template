@@ -6,7 +6,7 @@ environments/production.yml
 views/index.tt
 views/layouts/main.tt
 MANIFEST.SKIP
-lib/dancer_bootstrap_fontawesome_template.pm
+lib/Spark_thermostat.pm
 public/css/style.css
 public/css/error.css
 public/images/perldancer-bg.jpg

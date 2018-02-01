@@ -3,9 +3,9 @@ use warnings;
 use ExtUtils::MakeMaker;
 
 WriteMakefile(
-    NAME                => 'dancer_bootstrap_fontawesome_template',
+    NAME                => 'Spark_thermostat',
     AUTHOR              => q{YOUR NAME <youremail@example.com>},
-    VERSION_FROM        => 'lib/dancer_bootstrap_fontawesome_template.pm',
+    VERSION_FROM        => 'lib/Spark_thermostat.pm',
     ABSTRACT            => 'YOUR APPLICATION ABSTRACT',
     ($ExtUtils::MakeMaker::VERSION >= 6.3002
       ? ('LICENSE'=> 'perl')
@@ -18,5 +18,5 @@ WriteMakefile(
         'Template'   => 0,
     },
     dist                => { COMPRESS => 'gzip -9f', SUFFIX => 'gz', },
-    clean               => { FILES => 'dancer_bootstrap_fontawesome_template-*' },
+    clean               => { FILES => 'Spark_thermostat-*' },
 );
